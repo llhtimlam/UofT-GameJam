@@ -1,9 +1,23 @@
-[gd_scene format=3 uid="uid://dar61yhoanucs"]
+[gd_scene format=4 uid="uid://dar61yhoanucs"]
 
 [ext_resource type="Script" uid="uid://ux4q5evgyks" path="res://scenes/game_scene/map.gd" id="1_2m4d5"]
 [ext_resource type="PackedScene" uid="uid://bwtadq8hefle0" path="res://scenes/game_scene/home_territory/home_territory.tscn" id="1_qfx02"]
 [ext_resource type="PackedScene" uid="uid://u1ulorklcu5g" path="res://scenes/game_scene/player/player.tscn" id="2_2m4d5"]
 [ext_resource type="PackedScene" uid="uid://cfvki6wv7gg4c" path="res://scenes/game_scene/rope/rope.tscn" id="3_4op6w"]
+[ext_resource type="Texture2D" uid="uid://miqo1wbx3pow" path="res://icon.svg" id="5_iqgdr"]
+[ext_resource type="Script" uid="uid://c7eov0s1wjapv" path="res://scenes/game_scene/tile_map_layer.gd" id="6_d327o"]
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_geu3a"]
+texture = ExtResource("5_iqgdr")
+texture_region_size = Vector2i(128, 128)
+0:0/0 = 0
+0:0/0/physics_layer_0/polygon_0/points = PackedVector2Array(-64, -64, 64, -64, 64, -45.84556, -64, -45.253998)
+0:0/0/physics_layer_0/polygon_0/one_way = true
+
+[sub_resource type="TileSet" id="TileSet_xrivr"]
+tile_size = Vector2i(128, 128)
+physics_layer_0/collision_layer = 1
+sources/0 = SubResource("TileSetAtlasSource_geu3a")
 
 [node name="Map" type="Node2D" unique_id=1264092394 node_paths=PackedStringArray("PLAYER1", "PLAYER2")]
 script = ExtResource("1_2m4d5")
@@ -11,20 +25,20 @@ PLAYER1 = NodePath("Player1")
 PLAYER2 = NodePath("Player2")
 
 [node name="HomeTerritory1" parent="." unique_id=716161642 instance=ExtResource("1_qfx02")]
-position = Vector2(-1000, 0)
+position = Vector2(-2000, 0)
 
 [node name="HomeTerritory2" parent="." unique_id=1552762188 instance=ExtResource("1_qfx02")]
 position = Vector2(2000, 0)
 scale = Vector2(-1, 1)
 
 [node name="Rope" parent="." unique_id=915885 instance=ExtResource("3_4op6w")]
-position = Vector2(-1100, 0)
+position = Vector2(-2100, 0)
 
 [node name="Player1" parent="." unique_id=25147227 instance=ExtResource("2_2m4d5")]
-position = Vector2(-1296, -239)
+position = Vector2(-2296, -239)
 
 [node name="Camera2D" type="Camera2D" parent="Player1" unique_id=1545230877]
-zoom = Vector2(0.4, 0.4)
+zoom = Vector2(0.15, 0.15)
 position_smoothing_enabled = true
 
 [node name="Player2" parent="." unique_id=817086128 instance=ExtResource("2_2m4d5")]
@@ -34,8 +48,13 @@ TEAM_ID = 2
 PLAYER_ID = 2
 
 [node name="Camera2D" type="Camera2D" parent="Player2" unique_id=737629106]
-zoom = Vector2(0.4, 0.4)
+zoom = Vector2(0.15, 0.15)
 position_smoothing_enabled = true
+
+[node name="TileMapLayer" type="TileMapLayer" parent="." unique_id=1628842144]
+tile_map_data = PackedByteArray("AAAOAAAAAAAAAAAAAADw/wAAAAAAAAAAAADx/wAAAAAAAAAAAADy/wAAAAAAAAAAAADz/wAAAAAAAAAAAAD0/wAAAAAAAAAAAAD1/wAAAAAAAAAAAAD2/wAAAAAAAAAAAAD3/wAAAAAAAAAAAAD4/wAAAAAAAAAAAAD5/wAAAAAAAAAAAAD6/wAAAAAAAAAAAAD7/wAAAAAAAAAAAAD8/wAAAAAAAAAAAAD9/wAAAAAAAAAAAAD+/wAAAAAAAAAAAAD//wAAAAAAAAAAAAAAAAAAAAAAAAAAAAABAAAAAAAAAAAAAAACAAAAAAAAAAAAAAADAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAFAAAAAAAAAAAAAAAGAAAAAAAAAAAAAAAHAAAAAAAAAAAAAAAIAAAAAAAAAAAAAAAJAAAAAAAAAAAAAAAKAAAAAAAAAAAAAAALAAAAAAAAAAAAAAAMAAAAAAAAAAAAAAANAAAAAAAAAAAAAAAPAAAAAAAAAAAAAAA=")
+tile_set = SubResource("TileSet_xrivr")
+script = ExtResource("6_d327o")
 
 [editable path="HomeTerritory1"]
 [editable path="HomeTerritory2"]
