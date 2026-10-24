@@ -1,0 +1,49 @@
+[gd_scene format=3 uid="uid://u1ulorklcu5g"]
+
+[ext_resource type="Script" uid="uid://b0iohuh6rl7g5" path="res://scenes/game_scene/player/player.gd" id="1_tcwrj"]
+[ext_resource type="Texture2D" uid="uid://miqo1wbx3pow" path="res://icon.svg" id="2_7k1jl"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_xrivr"]
+size = Vector2(128, 128)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_b1lj4"]
+size = Vector2(64, 144)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_13qdw"]
+size = Vector2(64, 128)
+
+[node name="Player" type="CharacterBody2D" unique_id=25147227]
+collision_layer = 7
+script = ExtResource("1_tcwrj")
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=91982507]
+texture = ExtResource("2_7k1jl")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=962338468]
+shape = SubResource("RectangleShape2D_xrivr")
+
+[node name="Melee" type="Marker2D" parent="." unique_id=996811342]
+position = Vector2(128, 0)
+
+[node name="ClimbDownDetector" type="Area2D" parent="." unique_id=153682031]
+collision_layer = 0
+collision_mask = 8
+
+[node name="ClimbDownHitbox" type="CollisionShape2D" parent="ClimbDownDetector" unique_id=1466038387]
+shape = SubResource("RectangleShape2D_b1lj4")
+
+[node name="ClimbUpDetector" type="Area2D" parent="." unique_id=715796249]
+collision_layer = 0
+collision_mask = 8
+
+[node name="ClimbUpHitbox" type="CollisionShape2D" parent="ClimbUpDetector" unique_id=1186343360]
+shape = SubResource("RectangleShape2D_13qdw")
+
+[node name="Center" type="Marker2D" parent="." unique_id=1906815753]
+
+[node name="LaunchPoint" type="Marker2D" parent="Center" unique_id=1244710761]
+position = Vector2(128, 0)
+
+[node name="AimDot" type="Sprite2D" parent="Center/LaunchPoint" unique_id=906158970]
+scale = Vector2(0.125, 0.125)
+texture = ExtResource("2_7k1jl")
