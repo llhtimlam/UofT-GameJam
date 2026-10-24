@@ -5,10 +5,12 @@
 [ext_resource type="PackedScene" uid="uid://u1ulorklcu5g" path="res://scenes/game_scene/player/player.tscn" id="2_2m4d5"]
 [ext_resource type="PackedScene" uid="uid://cfvki6wv7gg4c" path="res://scenes/game_scene/rope/rope.tscn" id="3_4op6w"]
 
-[node name="Map" type="Node2D" unique_id=1264092394]
+[node name="Map" type="Node2D" unique_id=1264092394 node_paths=PackedStringArray("PLAYER1", "PLAYER2")]
 script = ExtResource("1_2m4d5")
+PLAYER1 = NodePath("Player1")
+PLAYER2 = NodePath("Player2")
 
-[node name="HomeTerritory" parent="." unique_id=716161642 instance=ExtResource("1_qfx02")]
+[node name="HomeTerritory1" parent="." unique_id=716161642 instance=ExtResource("1_qfx02")]
 position = Vector2(-1000, 0)
 
 [node name="HomeTerritory2" parent="." unique_id=1552762188 instance=ExtResource("1_qfx02")]
@@ -22,6 +24,8 @@ position = Vector2(-1100, 0)
 position = Vector2(-1296, -239)
 
 [node name="Camera2D" type="Camera2D" parent="Player1" unique_id=1545230877]
+zoom = Vector2(0.4, 0.4)
+position_smoothing_enabled = true
 
 [node name="Player2" parent="." unique_id=817086128 instance=ExtResource("2_2m4d5")]
 position = Vector2(2349, -234)
@@ -30,6 +34,8 @@ TEAM_ID = 2
 PLAYER_ID = 2
 
 [node name="Camera2D" type="Camera2D" parent="Player2" unique_id=737629106]
+zoom = Vector2(0.4, 0.4)
+position_smoothing_enabled = true
 
-[editable path="HomeTerritory"]
+[editable path="HomeTerritory1"]
 [editable path="HomeTerritory2"]

@@ -92,6 +92,9 @@ var is_aiming: bool = false
 @onready var aim_dot: Sprite2D = $Center/LaunchPoint/AimDot
 const PROJECTILE_SCENE = preload("res://scenes/game_scene/projectile/projectile.tscn")
 
+# World Boundary
+const Y_BOUNDARY = 1500
+
 # User Input Mapping
 func _input(event: InputEvent) -> void:
 	if !is_spawned:
@@ -151,6 +154,13 @@ func _read_player_input(up: String, down: String, left: String, right: String, j
 		input_shoot = Input.is_action_just_pressed(shoot)
 		input_dialup = Input.is_action_pressed(up)
 		input_dialdown = Input.is_action_pressed(down)
+	
+func reset_state():
+	is_stun = false
+	if is_aiming:
+		exit_aiming()
+	is_dead = false
+	is_climbing = false
 	
 func _ready() -> void:
 	add_to_group("player")
@@ -297,6 +307,10 @@ func _physics_process(delta: float) -> void:
 	melee_cd = max(melee_cd - delta, 0.0)
 	aim_cd = max(aim_cd - delta, 0.0)
 	shoot_cd = max(shoot_cd - delta, 0.0)
+	
+	# World Boundary
+	if position.y > Y_BOUNDARY:
+		take_damage(100,0,0)
 	
 func take_damage(amount: float, attacker_id: int, attacker_team: int) -> void:
 	if is_dead:
