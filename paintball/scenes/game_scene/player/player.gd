@@ -161,6 +161,10 @@ func reset_state():
 		exit_aiming()
 	is_dead = false
 	is_climbing = false
+	HEALTH = 100.0
+	base_velocity = 0.0
+	knockback_velocity = 0.0
+	velocity = Vector2.ZERO
 	
 func _ready() -> void:
 	add_to_group("player")
@@ -297,9 +301,12 @@ func _physics_process(delta: float) -> void:
 			if input_shoot and aim_cd <= 0:
 				shoot_projectile(PROJECTILE_DMG, shoot_angle, PLAYER_ID ,TEAM_ID)
 				exit_aiming()
+				shoot_cd = SHOOT_CD
 			if input_melee:
 				exit_aiming()
 	# Cooldown
+	if stun_cd <= 0:
+		is_stun = false
 	stun_cd = max(stun_cd - delta, 0.0)
 	climb_cd = max(climb_cd - delta, 0.0)
 	dash_cd = max(dash_cd - delta, 0.0)
@@ -317,10 +324,9 @@ func take_damage(amount: float, attacker_id: int, attacker_team: int) -> void:
 		return
 	
 	HEALTH -= amount * damage_reduction
-	
 	if HEALTH <= 0.0:
-		
 		is_dead = true
+		velocity = Vector2.ZERO
 		base_velocity = 0.0
 		knockback_velocity = 0.0
 		
@@ -382,6 +388,7 @@ func _climb_target(target: Node, hit: bool, is_up_detector: bool) -> void:
 			can_climb = false
 
 	can_climb = can_climb_up or can_climb_down
+	
 func set_climbing(state: bool) -> void:
 	is_climbing = state
 	climb_cd = CLIMB_CD
@@ -394,6 +401,7 @@ func melee(base_damage: float, facing_dir: float, attacker_id: int, attacker_tea
 	melee_instance.ATTACKER_ID = attacker_id
 	melee_instance.ATTACKER_TEAM = attacker_team
 	melee_instance.facing_dir = facing_dir
+	melee_instance.damage = base_damage
 	melee_hitbox.position.x = abs(melee_hitbox.position.x) * facing_dir
 	melee_hitbox.add_child(melee_instance)
 	
@@ -413,6 +421,7 @@ func shoot_projectile(base_damage: float, angle: float, attacker_id: int, attack
 	projectile_instance.global_position = projectile.global_position
 	projectile_instance.facing_angle = angle
 	projectile_instance.facing_dir = facing_dir
+	projectile_instance.damage = base_damage
 	get_tree().current_scene.add_child(projectile_instance)
 
 func enemy_ai() -> void:

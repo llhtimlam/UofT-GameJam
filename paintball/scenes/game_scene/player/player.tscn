@@ -13,7 +13,7 @@ size = Vector2(64, 144)
 size = Vector2(64, 128)
 
 [node name="Player" type="CharacterBody2D" unique_id=25147227]
-collision_layer = 7
+collision_layer = 6
 script = ExtResource("1_tcwrj")
 
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=91982507]

@@ -7,7 +7,7 @@ var ATTACKER_TEAM: int
 # Stat
 var velocity: Vector2
 var damage: float
-var knockback: float = 100.0
+var knockback: float = 1000.0
 
 # Physic
 var facing_dir: float = 0.0
