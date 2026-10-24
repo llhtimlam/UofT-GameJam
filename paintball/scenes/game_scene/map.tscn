@@ -1,0 +1,27 @@
+[gd_scene format=3 uid="uid://dar61yhoanucs"]
+
+[ext_resource type="Script" uid="uid://ux4q5evgyks" path="res://scenes/game_scene/map.gd" id="1_2m4d5"]
+[ext_resource type="PackedScene" uid="uid://bwtadq8hefle0" path="res://scenes/game_scene/home_territory/home_territory.tscn" id="1_qfx02"]
+[ext_resource type="PackedScene" uid="uid://u1ulorklcu5g" path="res://scenes/game_scene/player/player.tscn" id="2_2m4d5"]
+[ext_resource type="PackedScene" uid="uid://cfvki6wv7gg4c" path="res://scenes/game_scene/rope/rope.tscn" id="3_4op6w"]
+
+[node name="Map" type="Node2D" unique_id=1264092394]
+script = ExtResource("1_2m4d5")
+
+[node name="HomeTerritory" parent="." unique_id=716161642 instance=ExtResource("1_qfx02")]
+position = Vector2(-1000, 0)
+
+[node name="HomeTerritory2" parent="." unique_id=1552762188 instance=ExtResource("1_qfx02")]
+position = Vector2(2000, 0)
+scale = Vector2(-1, 1)
+
+[node name="Rope" parent="." unique_id=915885 instance=ExtResource("3_4op6w")]
+position = Vector2(-1100, 0)
+
+[node name="Player" parent="." unique_id=25147227 instance=ExtResource("2_2m4d5")]
+position = Vector2(-1296, -239)
+
+[node name="Camera2D" type="Camera2D" parent="Player" unique_id=1545230877]
+
+[editable path="HomeTerritory"]
+[editable path="HomeTerritory2"]
