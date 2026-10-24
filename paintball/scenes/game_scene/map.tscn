@@ -18,10 +18,18 @@ scale = Vector2(-1, 1)
 [node name="Rope" parent="." unique_id=915885 instance=ExtResource("3_4op6w")]
 position = Vector2(-1100, 0)
 
-[node name="Player" parent="." unique_id=25147227 instance=ExtResource("2_2m4d5")]
+[node name="Player1" parent="." unique_id=25147227 instance=ExtResource("2_2m4d5")]
 position = Vector2(-1296, -239)
 
-[node name="Camera2D" type="Camera2D" parent="Player" unique_id=1545230877]
+[node name="Camera2D" type="Camera2D" parent="Player1" unique_id=1545230877]
+
+[node name="Player2" parent="." unique_id=817086128 instance=ExtResource("2_2m4d5")]
+position = Vector2(2349, -234)
+control_type = "P2"
+TEAM_ID = 2
+PLAYER_ID = 2
+
+[node name="Camera2D" type="Camera2D" parent="Player2" unique_id=737629106]
 
 [editable path="HomeTerritory"]
 [editable path="HomeTerritory2"]

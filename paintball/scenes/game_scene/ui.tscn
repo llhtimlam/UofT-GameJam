@@ -1,0 +1,45 @@
+[gd_scene format=3 uid="uid://blhw8a315mdip"]
+
+[ext_resource type="PackedScene" uid="uid://dar61yhoanucs" path="res://scenes/game_scene/map.tscn" id="1_vc43c"]
+
+[node name="UI" type="CanvasLayer" unique_id=2008955717]
+
+[node name="ColorRect" type="ColorRect" parent="." unique_id=2045100640]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 1)
+
+[node name="HBoxContainer" type="HBoxContainer" parent="." unique_id=200107295]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_right = -1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="SubViewportContainer1" type="SubViewportContainer" parent="HBoxContainer" unique_id=685893217]
+layout_mode = 2
+size_flags_horizontal = 3
+stretch = true
+
+[node name="Viewport1" type="SubViewport" parent="HBoxContainer/SubViewportContainer1" unique_id=1904170426]
+disable_3d = true
+handle_input_locally = false
+size = Vector2i(573, 648)
+render_target_update_mode = 4
+
+[node name="Map" parent="HBoxContainer/SubViewportContainer1/Viewport1" unique_id=1264092394 instance=ExtResource("1_vc43c")]
+
+[node name="SubViewportContainer2" type="SubViewportContainer" parent="HBoxContainer" unique_id=1850222501]
+layout_mode = 2
+size_flags_horizontal = 3
+stretch = true
+
+[node name="Viewport2" type="SubViewport" parent="HBoxContainer/SubViewportContainer2" unique_id=641527814]
+disable_3d = true
+handle_input_locally = false
+size = Vector2i(574, 648)
+render_target_update_mode = 4
