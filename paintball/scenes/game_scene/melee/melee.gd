@@ -6,7 +6,7 @@ var ATTACKER_TEAM: int
 
 # Stat
 var damage: float
-var knockback: float = 500.0
+var knockback: float
 
 # Setup
 var lifetime: float = 0.1

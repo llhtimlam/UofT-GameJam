@@ -7,7 +7,7 @@ var ATTACKER_TEAM: int
 # Stat
 var velocity: Vector2
 var damage: float
-var knockback: float = 1000.0
+var knockback: float
 
 # Physic
 var facing_dir: float = 0.0
@@ -15,6 +15,7 @@ var facing_angle: float = 0.0
 var speed: float = 500.0
 
 # Setup
+var lifetime: float = 1.0
 var iframe: float = 0.15
 var is_shot: bool = false
 	
@@ -32,7 +33,11 @@ func take_damage(amount: float, attacker_id: int, attacker_team: int) -> void:
 
 func _physics_process(delta: float) -> void:
 	iframe = max(iframe - delta, 0.0)
-	
+	# Despawn timer
+	lifetime -= delta
+	if lifetime <= 0.0:
+		call_deferred("queue_free")
+		
 	velocity = Vector2.from_angle(facing_angle) * speed
 	# Final Movement
 	global_position += velocity * delta

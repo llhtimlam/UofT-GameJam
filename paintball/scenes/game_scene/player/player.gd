@@ -15,24 +15,26 @@ var aim_angle: float
 var shoot_angle : float
 
 # Physics
-var GRAVITY: float = 1500.0
-var MAX_SPEED: float = 300.0
-var GROUND_ACCELERATION: float = 50.0
-var JUMP_ACCELERATION: float = 5.0
-var GROUND_DECELERATION: float = 10.0
+var GRAVITY: float = 4800.0
+var MAX_SPEED: float = 400.0
+var GROUND_ACCELERATION: float = 60.0
+var JUMP_ACCELERATION: float = 6.0
+var GROUND_DECELERATION: float = 40.0
 var JUMP_DECELERATION: float = 3.0
-var CLIMB_SPEED: float = 100.0
-var CLIMB_ACCELERATION: float = 50.0
-var CLIMB_DECELERATION: float = 50.0
+var CLIMB_SPEED: float = 800.0
+var CLIMB_ACCELERATION: float = 400.0
+var CLIMB_DECELERATION: float = 400.0
 
 # Stat
 @export var HEALTH: float = 100.0
 @export var MELEE_DMG: float = 30.0
+@export var MELEE_KNOCKBACK: float = 450.0
 @export var PROJECTILE_DMG: float = 3.0
-const JUMP_VELOCITY = -700.0
+@export var PROJECTILE_KNOCKBACK: float = 500.0
+const JUMP_VELOCITY = -1200.0
 @export var DASH_CD: float = 10.0
 var DASH_DURATION: float = 1.0
-var DASH_DISTANCE: float = 25.0
+var DASH_DISTANCE: float = 10.0
 @export var MELEE_CD: float = 1.0
 var AIM_CD: float = 1.0
 @export var SHOOT_CD: float = 3.0
@@ -228,13 +230,14 @@ func _physics_process(delta: float) -> void:
 	# Horizontal movement
 	if input_right:
 		facing_dir = 1.0
-		if not is_aiming or is_stun:
-			dir = 1.0
+		dir = 1.0
 	elif input_left:
 		facing_dir = -1.0
-		if not is_aiming or is_stun:
-			dir = -1.0
+		dir = -1.0
 	else:
+		dir = 0.0
+	# Debuff override
+	if is_aiming or is_stun:
 		dir = 0.0
 	# Jumping action
 	if input_jump and is_on_floor() and not is_aiming:
@@ -275,7 +278,7 @@ func _physics_process(delta: float) -> void:
 		# Melee
 		if input_melee and melee_cd <= 0 and not is_aiming:
 			melee_cd = MELEE_CD
-			melee(MELEE_DMG, facing_dir, PLAYER_ID ,TEAM_ID)
+			melee(MELEE_DMG, MELEE_KNOCKBACK, facing_dir, PLAYER_ID ,TEAM_ID)
 	
 	if not is_climbing:
 		# Range
@@ -299,7 +302,7 @@ func _physics_process(delta: float) -> void:
 			center.rotation = shoot_angle
 			
 			if input_shoot and aim_cd <= 0:
-				shoot_projectile(PROJECTILE_DMG, shoot_angle, PLAYER_ID ,TEAM_ID)
+				shoot_projectile(PROJECTILE_DMG, PROJECTILE_KNOCKBACK, shoot_angle, PLAYER_ID ,TEAM_ID)
 				exit_aiming()
 				shoot_cd = SHOOT_CD
 			if input_melee:
@@ -375,17 +378,12 @@ func _climb_target(target: Node, hit: bool, is_up_detector: bool) -> void:
 			can_climb_down = true
 	# Exit
 	else:
-		# Smaller Detector Hitbox for leaving
-		if not is_up_detector:
-			return
 		# Clear the rope
-		if not is_climbing or active_rope == rope:
-			if is_climbing:
-				set_climbing(false)
-			active_rope = null
-			can_climb_up = false
-			can_climb_down = false
-			can_climb = false
+		set_climbing(false)
+		active_rope = null
+		can_climb_up = false
+		can_climb_down = false
+		can_climb = false
 
 	can_climb = can_climb_up or can_climb_down
 	
@@ -395,13 +393,14 @@ func set_climbing(state: bool) -> void:
 	# Disable platform Collision 1 for passthrough
 	set_collision_mask_value(1, not state)
 		
-func melee(base_damage: float, facing_dir: float, attacker_id: int, attacker_team: int) -> void:
+func melee(base_damage: float, knockback: float, facing_dir: float, attacker_id: int, attacker_team: int) -> void:
 	var melee_instance = MELEE_SCENE.instantiate()
 	# Melee Collision 3
 	melee_instance.ATTACKER_ID = attacker_id
 	melee_instance.ATTACKER_TEAM = attacker_team
 	melee_instance.facing_dir = facing_dir
 	melee_instance.damage = base_damage
+	melee_instance.knockback = knockback
 	melee_hitbox.position.x = abs(melee_hitbox.position.x) * facing_dir
 	melee_hitbox.add_child(melee_instance)
 	
@@ -413,7 +412,7 @@ func exit_aiming() -> void:
 	is_aiming = false
 	aim_dot.visible = false
 	
-func shoot_projectile(base_damage: float, angle: float, attacker_id: int, attacker_team: int) -> void:
+func shoot_projectile(base_damage: float, knockback: float, angle: float, attacker_id: int, attacker_team: int) -> void:
 	var projectile_instance = PROJECTILE_SCENE.instantiate()
 	# Projectile Collision 2
 	projectile_instance.ATTACKER_ID = attacker_id
@@ -422,7 +421,8 @@ func shoot_projectile(base_damage: float, angle: float, attacker_id: int, attack
 	projectile_instance.facing_angle = angle
 	projectile_instance.facing_dir = facing_dir
 	projectile_instance.damage = base_damage
-	get_tree().current_scene.add_child(projectile_instance)
+	projectile_instance.knockback = knockback
+	get_parent().add_child(projectile_instance)
 
 func enemy_ai() -> void:
 	pass
