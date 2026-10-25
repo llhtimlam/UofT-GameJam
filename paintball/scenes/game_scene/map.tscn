@@ -6,6 +6,7 @@
 [ext_resource type="PackedScene" uid="uid://cfvki6wv7gg4c" path="res://scenes/game_scene/rope/rope.tscn" id="3_4op6w"]
 [ext_resource type="Texture2D" uid="uid://miqo1wbx3pow" path="res://icon.svg" id="5_iqgdr"]
 [ext_resource type="Script" uid="uid://c7eov0s1wjapv" path="res://scenes/game_scene/tile_map_layer.gd" id="6_d327o"]
+[ext_resource type="PackedScene" uid="uid://chbxu3qvg1pqe" path="res://scenes/game_scene/colour_zone/color_zone.tscn" id="7_d327o"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_geu3a"]
 texture = ExtResource("5_iqgdr")
@@ -35,7 +36,7 @@ scale = Vector2(-1, 1)
 position = Vector2(-2100, 0)
 
 [node name="Player1" parent="." unique_id=25147227 instance=ExtResource("2_2m4d5")]
-position = Vector2(-2296, -239)
+position = Vector2(1161, -209)
 
 [node name="Camera2D" type="Camera2D" parent="Player1" unique_id=1545230877]
 zoom = Vector2(0.15, 0.15)
@@ -55,6 +56,9 @@ position_smoothing_enabled = true
 tile_map_data = PackedByteArray("AAAOAAAAAAAAAAAAAADw/wAAAAAAAAAAAADx/wAAAAAAAAAAAADy/wAAAAAAAAAAAADz/wAAAAAAAAAAAAD0/wAAAAAAAAAAAAD1/wAAAAAAAAAAAAD2/wAAAAAAAAAAAAD3/wAAAAAAAAAAAAD4/wAAAAAAAAAAAAD5/wAAAAAAAAAAAAD6/wAAAAAAAAAAAAD7/wAAAAAAAAAAAAD8/wAAAAAAAAAAAAD9/wAAAAAAAAAAAAD+/wAAAAAAAAAAAAD//wAAAAAAAAAAAAAAAAAAAAAAAAAAAAABAAAAAAAAAAAAAAACAAAAAAAAAAAAAAADAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAFAAAAAAAAAAAAAAAGAAAAAAAAAAAAAAAHAAAAAAAAAAAAAAAIAAAAAAAAAAAAAAAJAAAAAAAAAAAAAAAKAAAAAAAAAAAAAAALAAAAAAAAAAAAAAAMAAAAAAAAAAAAAAANAAAAAAAAAAAAAAAPAAAAAAAAAAAAAAA=")
 tile_set = SubResource("TileSet_xrivr")
 script = ExtResource("6_d327o")
+
+[node name="ColorZone" parent="." unique_id=248434155 instance=ExtResource("7_d327o")]
+position = Vector2(231, -349)
 
 [editable path="HomeTerritory1"]
 [editable path="HomeTerritory2"]

@@ -2,6 +2,8 @@ extends Node2D
 
 @export var PLAYER1: Node2D
 @export var PLAYER2: Node2D
+var player1Colour : Color = Color(0,0,0)
+var player2Colour : Color = Color(0,0,0)
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
