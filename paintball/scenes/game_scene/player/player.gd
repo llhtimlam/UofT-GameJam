@@ -98,6 +98,14 @@ const PROJECTILE_SCENE = preload("res://scenes/game_scene/projectile/projectile.
 # World Boundary
 const Y_BOUNDARY = 1500
 
+# Camera
+const MIN_SCREEN_HEIGHT = 520
+const CAMERA_MIN_X = -4100
+const CAMERA_MAX_X = 4200
+@onready var camera: Camera2D = $Camera2D
+@onready var camera_pos: Vector2 = clamp(position,Vector2(CAMERA_MIN_X,0),Vector2(CAMERA_MAX_X,0))
+var camera_i: Vector2 = Vector2.ZERO
+
 # User Input Mapping
 func _input(event: InputEvent) -> void:
 	if !is_spawned:
@@ -327,6 +335,9 @@ func _physics_process(delta: float) -> void:
 	if position.y > Y_BOUNDARY:
 		take_damage(100,0,0)
 	
+	# Camera
+	move_and_scale_camera()
+	
 func take_damage(amount: float, attacker_id: int, attacker_team: int) -> void:
 	if is_dead:
 		return
@@ -428,3 +439,17 @@ func shoot_projectile(base_damage: float, knockback: float, angle: float, attack
 
 func enemy_ai() -> void:
 	pass
+
+func move_and_scale_camera():
+	var camera_target = Vector2(clamp(position.x,CAMERA_MIN_X,CAMERA_MAX_X),0)
+	if get_viewport().size.y > MIN_SCREEN_HEIGHT:
+		camera.zoom = Vector2.ONE * .5 * floor(get_viewport().size.y/MIN_SCREEN_HEIGHT)
+	else:
+		var covered_area = MIN_SCREEN_HEIGHT - get_viewport().size.y
+		camera.zoom = Vector2.ONE * .5
+		camera_target.y = clamp(position.y,-covered_area,covered_area)
+	var P = camera_target - camera_pos
+	camera_i += P
+	camera_pos += P * .08 + camera_i * .0007
+	camera.global_position = camera_pos
+	

@@ -64,6 +64,7 @@ func player_killed(player):
 	else:
 		spawnpoint = P2Spawn.position
 	player.position = spawnpoint
+	player.reset_physics_interpolation()
 	player.reset_state()
 
 func _physics_process(delta: float) -> void:
