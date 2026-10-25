@@ -17,24 +17,24 @@ var shoot_angle : float
 # Physics
 var GRAVITY: float = 4800.0
 var MAX_SPEED: float = 400.0
-var GROUND_ACCELERATION: float = 60.0
+var GROUND_ACCELERATION: float = 50.0
 var JUMP_ACCELERATION: float = 6.0
-var GROUND_DECELERATION: float = 40.0
-var JUMP_DECELERATION: float = 3.0
-var CLIMB_SPEED: float = 800.0
-var CLIMB_ACCELERATION: float = 400.0
-var CLIMB_DECELERATION: float = 400.0
+var GROUND_DECELERATION: float = 20.0
+var JUMP_DECELERATION: float = 10.0
+var CLIMB_SPEED: float = 400.0
+var CLIMB_ACCELERATION: float = 50.0
+var CLIMB_DECELERATION: float = 50.0
 
 # Stat
 @export var HEALTH: float = 100.0
 @export var MELEE_DMG: float = 30.0
-@export var MELEE_KNOCKBACK: float = 450.0
+@export var MELEE_KNOCKBACK: float = 600.0
 @export var PROJECTILE_DMG: float = 3.0
-@export var PROJECTILE_KNOCKBACK: float = 500.0
+@export var PROJECTILE_KNOCKBACK: float = 800.0
 const JUMP_VELOCITY = -1200.0
 @export var DASH_CD: float = 10.0
-var DASH_DURATION: float = 1.0
-var DASH_DISTANCE: float = 10.0
+var DASH_DURATION: float = 0.5
+var DASH_DISTANCE: float = 5.0
 @export var MELEE_CD: float = 1.0
 var AIM_CD: float = 1.0
 @export var SHOOT_CD: float = 3.0
@@ -76,7 +76,8 @@ var can_climb: bool = false
 var is_climbing: bool = false
 var was_climbing: bool = false
 var active_rope: Line2D = null
-var JUMPOFF_SPEED: float = 150.0
+var JUMPOFF_SPEED_X: float = 300.0
+var JUMPOFF_SPEED_Y: float = -800.0
 var CLIMB_CD: float = 0.2
 
 # Debuff
@@ -204,7 +205,7 @@ func _physics_process(delta: float) -> void:
 	var grounded = is_on_floor()
 	# Climbing start action
 	if can_climb:
-		if not is_aiming and not is_stun:
+		if not is_aiming or not is_stun:
 			if not is_climbing and climb_cd <= 0:
 				if input_up and can_climb_up:
 					set_climbing(true)
@@ -245,7 +246,7 @@ func _physics_process(delta: float) -> void:
 	else:
 		dir = 0.0
 	# Debuff override
-	if is_aiming or is_stun:
+	if is_aiming or is_stun or is_climbing:
 		dir = 0.0
 	# Jumping action
 	if input_jump and is_on_floor() and not is_aiming:
@@ -262,16 +263,18 @@ func _physics_process(delta: float) -> void:
 	if input_jump and is_climbing:
 		if input_right:
 			set_climbing(false)
-			velocity.y = JUMP_VELOCITY
-			base_velocity = facing_dir * JUMPOFF_SPEED
+			velocity.y = JUMPOFF_SPEED_Y
+			base_velocity = facing_dir * JUMPOFF_SPEED_X
+			climb_cd = CLIMB_CD
 		elif input_left:
 			set_climbing(false)
-			velocity.y = JUMP_VELOCITY
-			base_velocity = facing_dir * JUMPOFF_SPEED
+			velocity.y = JUMPOFF_SPEED_Y
+			base_velocity = facing_dir * JUMPOFF_SPEED_X
+			climb_cd = CLIMB_CD
 	
 	velocity.x = base_velocity + knockback_velocity
 	move_and_slide()
-	if not is_aiming or not is_climbing:
+	if not is_aiming and not is_climbing:
 		# Dash
 		if input_dash and dash_cd <= 0:
 				dash_dir = facing_dir
@@ -282,11 +285,13 @@ func _physics_process(delta: float) -> void:
 			var dash_progress : float = (dash_duration / DASH_DURATION) ** 3
 			var dash_distance : float = dash_dir * DASH_DISTANCE * sin(dash_progress * PI)
 			can_climb = false
+			velocity.y = 0.0
 			move_and_collide(Vector2(dash_distance, 0))
 		# Melee
 		if input_melee and melee_cd <= 0 and not is_aiming:
 			melee_cd = MELEE_CD
 			melee(MELEE_DMG, MELEE_KNOCKBACK, facing_dir, PLAYER_ID ,TEAM_ID)
+			print(is_climbing)
 	
 	if not is_climbing:
 		# Range
@@ -370,8 +375,6 @@ func _on_climb_down_area_exited(area: Area2D) -> void:
 	
 # Climbing Hitbox
 func _climb_target(target: Node, hit: bool, is_up_detector: bool) -> void:
-	if is_stun:
-		return
 	var rope: Node = target
 	# ClimbDetector Collision 4
 	if target is Area2D:
@@ -379,7 +382,7 @@ func _climb_target(target: Node, hit: bool, is_up_detector: bool) -> void:
 	if not (rope is Line2D and rope.is_in_group("rope")):
 		return
 	# Enter
-	if hit:
+	if hit and not is_stun:
 		active_rope = rope
 		# Smaller Detector Hitbox for climbing up
 		if is_up_detector:
@@ -400,7 +403,6 @@ func _climb_target(target: Node, hit: bool, is_up_detector: bool) -> void:
 	
 func set_climbing(state: bool) -> void:
 	is_climbing = state
-	climb_cd = CLIMB_CD
 	# Disable platform Collision 1 for passthrough
 	set_collision_mask_value(1, not state)
 		

@@ -65,4 +65,4 @@ func _hit_target(target: Node) -> void:
 		is_shot = true
 		target.take_damage(damage, ATTACKER_ID, ATTACKER_TEAM)
 		target.apply_knockback(facing_dir, knockback)
-		call_deferred("queue_free")
+	call_deferred("queue_free")
