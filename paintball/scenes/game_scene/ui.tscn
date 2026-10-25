@@ -10,7 +10,6 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-color = Color(0, 0, 0, 1)
 
 [node name="HBoxContainer" type="HBoxContainer" parent="." unique_id=200107295]
 anchors_preset = 15
@@ -28,7 +27,7 @@ stretch = true
 [node name="Viewport1" type="SubViewport" parent="HBoxContainer/SubViewportContainer1" unique_id=1904170426]
 disable_3d = true
 handle_input_locally = false
-size = Vector2i(573, 648)
+size = Vector2i(1149, 1296)
 render_target_update_mode = 4
 
 [node name="Map" parent="HBoxContainer/SubViewportContainer1/Viewport1" unique_id=1264092394 instance=ExtResource("1_vc43c")]
@@ -41,5 +40,5 @@ stretch = true
 [node name="Viewport2" type="SubViewport" parent="HBoxContainer/SubViewportContainer2" unique_id=641527814]
 disable_3d = true
 handle_input_locally = false
-size = Vector2i(574, 648)
+size = Vector2i(1150, 1296)
 render_target_update_mode = 4
