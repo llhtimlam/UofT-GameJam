@@ -40,6 +40,7 @@ var DASH_DISTANCE: float = 5.0
 var AIM_CD: float = 2.0
 @export var SHOOT_CD: float = 0.2
 var DIAL_SPEED: float = 2.0
+var FINE_DIAL_SPEED: float = 0.5
 
 # Initialize
 var damage_reduction: float = 1.0
@@ -55,6 +56,7 @@ var input_melee: bool = false
 var input_shoot: bool = false
 var input_dialup: bool = false
 var input_dialdown: bool = false
+var input_finedial: bool = false
 
 var stun_cd: float = 0.0
 var climb_cd: float = 0.0
@@ -169,6 +171,7 @@ func _read_player_input(up: String, down: String, left: String, right: String, j
 		input_shoot = Input.is_action_just_released(shoot)
 		input_dialup = Input.is_action_pressed(up)
 		input_dialdown = Input.is_action_pressed(down)
+		input_finedial = Input.is_action_pressed(jump)
 	
 func reset_state():
 	is_stun = false
@@ -312,9 +315,15 @@ func _physics_process(delta: float) -> void:
 		
 		elif is_aiming:
 			if input_dialup:
-				aim_angle -= delta * DIAL_SPEED
+				if input_finedial:
+					aim_angle -= delta * FINE_DIAL_SPEED
+				else:
+					aim_angle -= delta * DIAL_SPEED
 			if input_dialdown:
-				aim_angle += delta * DIAL_SPEED
+				if input_finedial:
+					aim_angle += delta * FINE_DIAL_SPEED
+				else:
+					aim_angle += delta * DIAL_SPEED
 			aim_angle = clamp(aim_angle, -PI/2, PI/2)
 		
 			if facing_dir == -1.0:
