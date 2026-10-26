@@ -52,7 +52,7 @@ func _ready() -> void:
 	var rope_instance_p2_base = ROPE_SCENE.instantiate()
 	add_child(rope_instance_p2_base)
 	rope_instance_p2_base.tilemap = rope_tile
-	rope_instance_p2_base.setup_rope(Vector2i(21,-23), Vector2i(21,-9))
+	rope_instance_p2_base.setup_rope(Vector2i(20,-23), Vector2i(20,-9))
 	# Setup Platform for spawning
 	platform_spawn_interval = PLATFORM_LIFETIME - PLATFORM_VARIANCE
 	
