@@ -88,8 +88,8 @@ func _physics_process(delta: float) -> void:
 			break_preset3 = true
 		if preset == 2:
 			set_platform(Vector2i(-11, -9), Vector2i(-5, -9), 0)
-			set_platform(Vector2i(-3, -17), Vector2i(3, -17), 0)
-			set_platform(Vector2i(5, -15), Vector2i(11, -15), 0)
+			set_platform(Vector2i(-3, -18), Vector2i(3, -18), 0)
+			set_platform(Vector2i(5, -16), Vector2i(11, -16), 0)
 			break_preset1 = true
 			break_preset2 = false
 			break_preset3 = true
@@ -109,7 +109,7 @@ func _physics_process(delta: float) -> void:
 		if break_preset2:
 			set_platform(Vector2i(-11, -9), Vector2i(-5, -9), -1)
 			set_platform(Vector2i(-3, -17), Vector2i(3, -17), -1)
-			set_platform(Vector2i(5, -15), Vector2i(11, -15), -1)
+			set_platform(Vector2i(5, -16), Vector2i(11, -16), -1)
 		if break_preset3:
 			set_platform(Vector2i(-11, -20), Vector2i(-5, -20), -1)
 			set_platform(Vector2i(-3, -19), Vector2i(3, -19), -1)

@@ -12,6 +12,7 @@ shader = ExtResource("2_r2uu1")
 gradient = SubResource("Gradient_r2uu1")
 
 [node name="UI" type="CanvasLayer" unique_id=2008955717]
+follow_viewport_enabled = true
 
 [node name="ColorRect" type="ColorRect" parent="." unique_id=2045100640]
 anchors_preset = 15
