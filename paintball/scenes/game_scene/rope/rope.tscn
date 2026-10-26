@@ -1,6 +1,5 @@
 [gd_scene format=3 uid="uid://cfvki6wv7gg4c"]
 
-[ext_resource type="Texture2D" uid="uid://miqo1wbx3pow" path="res://icon.svg" id="1_i1ucp"]
 [ext_resource type="Script" uid="uid://cn0gk5v3nrpw1" path="res://scenes/game_scene/rope/rope.gd" id="2_m7ghx"]
 
 [sub_resource type="SegmentShape2D" id="SegmentShape2D_xrivr"]
@@ -9,16 +8,13 @@ b = Vector2(0, 5)
 
 [node name="Rope" type="Line2D" unique_id=1179439]
 points = PackedVector2Array(0, 0, 0, 10)
+default_color = Color(1, 1, 1, 0)
 script = ExtResource("2_m7ghx")
 
 [node name="Area2D" type="Area2D" parent="." unique_id=20895246]
 position = Vector2(0, 5)
 collision_layer = 8
 collision_mask = 0
-
-[node name="Sprite2D" type="Sprite2D" parent="Area2D" unique_id=1731614936]
-scale = Vector2(0.024, 0.08)
-texture = ExtResource("1_i1ucp")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D" unique_id=1160825010]
 shape = SubResource("SegmentShape2D_xrivr")

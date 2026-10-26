@@ -1,18 +1,19 @@
 extends Line2D
 
-@onready var HIT_VISUAL: Sprite2D = $Area2D/Sprite2D
 @onready var HITBOX: CollisionShape2D = $Area2D/CollisionShape2D
 @onready var ROPE_AREA: Area2D = $Area2D
+
+var tilemap: TileMapLayer
 
 func _ready() -> void:
 	add_to_group("rope")
 	
-func setup_rope(tilemap: TileMapLayer, top_cell: Vector2i, bottom_cell: Vector2i) -> void:
+func setup_rope(top_cell: Vector2i, bottom_cell: Vector2i) -> void:
 	# Request global coordinate
 	var top := tilemap.to_global(tilemap.map_to_local(top_cell))
 	var bottom := tilemap.to_global(tilemap.map_to_local(bottom_cell))
 	# top.y cover whole tile, bottom.y cover top half tile (center)
-	var tile_height: float = tilemap.tile_set.tile_size.y
+	var tile_height: float = tilemap.tile_set.tile_size.y * tilemap.scale.y
 	var top_y: float = top.y - tile_height / 2.0
 	var bottom_y: float = bottom.y
 	# top.x should equal to bottom.x
@@ -28,11 +29,9 @@ func setup_rope(tilemap: TileMapLayer, top_cell: Vector2i, bottom_cell: Vector2i
 	var rope_length := top_pos.distance_to(bottom_pos)
 	# Area2D origin at center (local coordinate)
 	ROPE_AREA.position = (Vector2.ZERO + to_local(bottom_pos)) / 2.0
-	# Sprite2D origin at center (local coordinate)
-	HIT_VISUAL.position = Vector2.ZERO
-	HIT_VISUAL.scale.y = rope_length / HIT_VISUAL.texture.get_height()
 	# CollisionShape2D origin at center (local coordinate)
-	var shape := HITBOX.shape as SegmentShape2D
+	var shape := HITBOX.shape.duplicate() as SegmentShape2D
+	HITBOX.shape = shape
 	HITBOX.position = Vector2.ZERO
 	shape.a = Vector2(0, -rope_length / 2.0)
 	shape.b = Vector2(0, rope_length / 2.0)

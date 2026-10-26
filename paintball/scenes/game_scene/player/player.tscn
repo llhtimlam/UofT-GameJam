@@ -4,26 +4,27 @@
 [ext_resource type="Texture2D" uid="uid://miqo1wbx3pow" path="res://icon.svg" id="2_7k1jl"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_xrivr"]
-size = Vector2(128, 128)
+size = Vector2(32, 64)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_b1lj4"]
-size = Vector2(64, 144)
+size = Vector2(32, 65)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_13qdw"]
-size = Vector2(64, 128)
+size = Vector2(32, 64)
 
 [node name="Player" type="CharacterBody2D" unique_id=25147227]
 collision_layer = 6
 script = ExtResource("1_tcwrj")
 
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=91982507]
+scale = Vector2(0.25, 0.5)
 texture = ExtResource("2_7k1jl")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=962338468]
 shape = SubResource("RectangleShape2D_xrivr")
 
 [node name="Melee" type="Marker2D" parent="." unique_id=996811342]
-position = Vector2(128, 0)
+position = Vector2(32, 0)
 
 [node name="ClimbDownDetector" type="Area2D" parent="." unique_id=153682031]
 collision_layer = 0
@@ -42,8 +43,13 @@ shape = SubResource("RectangleShape2D_13qdw")
 [node name="Center" type="Marker2D" parent="." unique_id=1906815753]
 
 [node name="LaunchPoint" type="Marker2D" parent="Center" unique_id=1244710761]
-position = Vector2(128, 0)
+position = Vector2(32, 0)
 
 [node name="AimDot" type="Sprite2D" parent="Center/LaunchPoint" unique_id=906158970]
 scale = Vector2(0.125, 0.125)
+texture = ExtResource("2_7k1jl")
+
+[node name="Sprite2D" type="Sprite2D" parent="Center/LaunchPoint" unique_id=1009896978]
+position = Vector2(392, 0)
+scale = Vector2(7, 0.05)
 texture = ExtResource("2_7k1jl")
