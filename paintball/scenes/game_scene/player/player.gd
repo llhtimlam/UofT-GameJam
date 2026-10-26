@@ -37,9 +37,10 @@ const JUMP_VELOCITY = -1200.0
 var DASH_DURATION: float = 0.5
 var DASH_DISTANCE: float = 5.0
 @export var MELEE_CD: float = 0.8
-var AIM_CD: float = 0.5
-@export var SHOOT_CD: float = 0.8
-var DIAL_SPEED: float = 4.0
+var AIM_CD: float = 2.0
+@export var SHOOT_CD: float = 0.2
+var DIAL_SPEED: float = 2.0
+var FINE_DIAL_SPEED: float = 0.5
 
 # Initialize
 var damage_reduction: float = 1.0
@@ -55,6 +56,7 @@ var input_melee: bool = false
 var input_shoot: bool = false
 var input_dialup: bool = false
 var input_dialdown: bool = false
+var input_finedial: bool = false
 
 var stun_cd: float = 0.0
 var climb_cd: float = 0.0
@@ -93,7 +95,7 @@ const MELEE_SCENE = preload("res://scenes/game_scene/melee/melee.tscn")
 var is_aiming: bool = false
 @onready var center: Marker2D = $Center
 @onready var projectile: Marker2D = $Center/LaunchPoint
-@onready var aim_dot: Sprite2D = $Center/LaunchPoint/AimDot
+@onready var aim_dot: Sprite2D = $Center/LaunchPoint/Sprite2D
 const PROJECTILE_SCENE = preload("res://scenes/game_scene/projectile/projectile.tscn")
 
 # World Boundary
@@ -154,7 +156,7 @@ func _read_player_input(up: String, down: String, left: String, right: String, j
 	input_jump = Input.is_action_just_pressed(jump)
 	input_dash = Input.is_action_just_pressed(dash)
 	input_melee = Input.is_action_just_pressed(melee)
-	input_shoot = Input.is_action_just_pressed(shoot)
+	input_shoot = Input.is_action_pressed(shoot)
 	input_dialup = false
 	input_dialdown = false
 	
@@ -166,9 +168,10 @@ func _read_player_input(up: String, down: String, left: String, right: String, j
 		input_jump = false
 		input_dash = false
 		input_melee = Input.is_action_just_pressed(melee)
-		input_shoot = Input.is_action_just_pressed(shoot)
+		input_shoot = Input.is_action_just_released(shoot)
 		input_dialup = Input.is_action_pressed(up)
 		input_dialdown = Input.is_action_pressed(down)
+		input_finedial = Input.is_action_pressed(jump)
 	
 func reset_state():
 	is_stun = false
@@ -305,15 +308,22 @@ func _physics_process(delta: float) -> void:
 		# Range
 		if input_shoot and shoot_cd <= 0 and not is_aiming:
 			shoot_cd = SHOOT_CD
+			if aim_cd <= 0:
+				aim_angle = 0
 			aim_cd = AIM_CD
-			aim_angle = randf_range(-PI/2, PI/2)
 			enter_aiming()
 		
 		elif is_aiming:
 			if input_dialup:
-				aim_angle -= delta * DIAL_SPEED
+				if input_finedial:
+					aim_angle -= delta * FINE_DIAL_SPEED
+				else:
+					aim_angle -= delta * DIAL_SPEED
 			if input_dialdown:
-				aim_angle += delta * DIAL_SPEED
+				if input_finedial:
+					aim_angle += delta * FINE_DIAL_SPEED
+				else:
+					aim_angle += delta * DIAL_SPEED
 			aim_angle = clamp(aim_angle, -PI/2, PI/2)
 		
 			if facing_dir == -1.0:
@@ -322,7 +332,7 @@ func _physics_process(delta: float) -> void:
 				shoot_angle = aim_angle
 			center.rotation = shoot_angle
 			
-			if input_shoot and aim_cd <= 0:
+			if input_shoot and shoot_cd <= 0:
 				shoot_projectile(PROJECTILE_DMG, PROJECTILE_SPEED, PROJECTILE_KNOCKBACK, shoot_angle, PLAYER_ID ,TEAM_ID)
 				exit_aiming()
 				shoot_cd = SHOOT_CD
