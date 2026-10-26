@@ -2,6 +2,7 @@
 
 [ext_resource type="Script" uid="uid://iy2r0q3mhbub" path="res://scenes/game_scene/ui.gd" id="1_om0p0"]
 [ext_resource type="PackedScene" uid="uid://dar61yhoanucs" path="res://scenes/game_scene/map.tscn" id="1_vc43c"]
+[ext_resource type="PackedScene" uid="uid://dlf86r28uod0r" path="res://scenes/game_scene/player_ui/player_ui.tscn" id="2_1e8iq"]
 [ext_resource type="Shader" uid="uid://b3vi2r6d6t7ja" path="res://assets/color_mix.gdshader" id="2_r2uu1"]
 
 [sub_resource type="Environment" id="Environment_6amc0"]
@@ -42,7 +43,7 @@ script = ExtResource("1_om0p0")
 red = Color(1, 0.27316666, 0.110000014, 1)
 green = Color(0.110000014, 1, 0.24349988, 1)
 blue = Color(0.110000014, 0.5253334, 1, 1)
-player_1_color = Vector3(255, 128, 55)
+player_1_color = Vector3(255, 255, 255)
 player_2_color = Vector3(0, 16, 200)
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=1182529437]
@@ -95,6 +96,12 @@ render_target_update_mode = 4
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="SubViewportContainer2/Viewport2" unique_id=1933334175]
 environment = SubResource("Environment_om0p0")
+
+[node name="PlayerUI1" parent="." unique_id=2014902624 instance=ExtResource("2_1e8iq")]
+
+[node name="PlayerUI2" parent="." unique_id=927157008 instance=ExtResource("2_1e8iq")]
+anchor_left = 0.501
+anchor_right = 1.0
 
 [node name="P1Cols" type="ColorRect" parent="." unique_id=296962404]
 material = SubResource("ShaderMaterial_6amc0")
