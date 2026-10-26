@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" uid="uid://ux4q5evgyks" path="res://scenes/game_scene/map.gd" id="1_2m4d5"]
 [ext_resource type="PackedScene" uid="uid://u1ulorklcu5g" path="res://scenes/game_scene/player/player.tscn" id="2_2m4d5"]
-[ext_resource type="Texture2D" uid="uid://b2gvlwcx4ca3c" path="res://assets/tileset/Retro-Lines-16x16/Environment.png" id="4_s5bfy"]
+[ext_resource type="TileSet" uid="uid://bxqaip45xp2lo" path="res://assets/tileset/tileset.tres" id="2_4op6w"]
 [ext_resource type="Texture2D" uid="uid://miqo1wbx3pow" path="res://icon.svg" id="5_iqgdr"]
 [ext_resource type="Texture2D" uid="uid://1xqsaideea2n" path="res://assets/tileset/Retro-Lines-16x16/With-Background/Environment.png" id="5_s5bfy"]
 
@@ -11626,6 +11626,3 @@ texture = ExtResource("5_iqgdr")
 position = Vector2(1060, -324)
 scale = Vector2(0.25, 1)
 texture = ExtResource("5_iqgdr")
-
-[node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=911073293]
-environment = SubResource("Environment_4op6w")

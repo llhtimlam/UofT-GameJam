@@ -10,8 +10,8 @@ func load_game():
 	ui_instance = UI_SCENE.instantiate()
 	add_child(ui_instance)
 	
-	var viewport1 = ui_instance.get_node("HBoxContainer/SubViewportContainer1/Viewport1")
-	var viewport2 = ui_instance.get_node("HBoxContainer/SubViewportContainer2/Viewport2")
+	var viewport1 = ui_instance.get_node("SubViewportContainer1/Viewport1")
+	var viewport2 = ui_instance.get_node("SubViewportContainer2/Viewport2")
 	var camera1 = viewport1.get_node("Map/Player1/Camera2D")
 	var camera2 = viewport1.get_node("Map/Player2/Camera2D")
 	

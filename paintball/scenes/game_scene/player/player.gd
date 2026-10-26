@@ -178,6 +178,10 @@ func reset_state():
 	base_velocity = 0.0
 	knockback_velocity = 0.0
 	velocity = Vector2.ZERO
+	dash_cd = 0
+	melee_cd = 0
+	shoot_cd = 0
+	climb_cd = 0
 	
 func _ready() -> void:
 	add_to_group("player")
