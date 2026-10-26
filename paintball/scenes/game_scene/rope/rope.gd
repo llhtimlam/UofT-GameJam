@@ -13,7 +13,7 @@ func setup_rope(top_cell: Vector2i, bottom_cell: Vector2i) -> void:
 	var top := tilemap.to_global(tilemap.map_to_local(top_cell))
 	var bottom := tilemap.to_global(tilemap.map_to_local(bottom_cell))
 	# top.y cover whole tile, bottom.y cover top half tile (center)
-	var tile_height: float = tilemap.tile_set.tile_size.y
+	var tile_height: float = tilemap.tile_set.tile_size.y * tilemap.scale.y
 	var top_y: float = top.y - tile_height / 2.0
 	var bottom_y: float = bottom.y
 	# top.x should equal to bottom.x

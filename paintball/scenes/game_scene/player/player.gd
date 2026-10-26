@@ -100,10 +100,11 @@ const Y_BOUNDARY = 1500
 
 # Camera
 const MIN_SCREEN_HEIGHT = 520
-const CAMERA_MIN_X = -4100
-const CAMERA_MAX_X = 4200
+const CAMERA_MIN_X = -800
+const CAMERA_MAX_X = 800
+const CAMERA_Y = -648.5
 @onready var camera: Camera2D = $Camera2D
-@onready var camera_pos: Vector2 = clamp(position,Vector2(CAMERA_MIN_X,0),Vector2(CAMERA_MAX_X,0))
+@onready var camera_pos: Vector2 = position.clamp(Vector2(CAMERA_MIN_X,CAMERA_Y),Vector2(CAMERA_MAX_X,CAMERA_Y))
 var camera_i: Vector2 = Vector2.ZERO
 
 # User Input Mapping
@@ -181,6 +182,8 @@ func _ready() -> void:
 	add_to_group("player")
 	aim_dot.visible = false
 	is_spawned = true
+	print(camera_pos, "ready")
+	camera.position = camera_pos
 	climbup_hitbox.area_entered.connect(_on_climb_up_area_entered)
 	climbup_hitbox.area_exited.connect(_on_climb_up_area_exited)
 	climbdown_hitbox.area_entered.connect(_on_climb_down_area_entered)
@@ -441,13 +444,14 @@ func enemy_ai() -> void:
 	pass
 
 func move_and_scale_camera():
-	var camera_target = Vector2(clamp(position.x,CAMERA_MIN_X,CAMERA_MAX_X),0)
+	var camera_target = Vector2(clamp(position.x,CAMERA_MIN_X,CAMERA_MAX_X),CAMERA_Y)
 	if get_viewport().size.y > MIN_SCREEN_HEIGHT:
 		camera.zoom = Vector2.ONE * .5 * floor(get_viewport().size.y/MIN_SCREEN_HEIGHT)
 	else:
 		var covered_area = MIN_SCREEN_HEIGHT - get_viewport().size.y
 		camera.zoom = Vector2.ONE * .5
-		camera_target.y = clamp(position.y,-covered_area,covered_area)
+		camera_target.y = clamp(position.y,CAMERA_Y-covered_area,CAMERA_Y+covered_area)
+	print(camera_pos, camera_target, "move")
 	var P = camera_target - camera_pos
 	camera_i += P
 	camera_pos += P * .08 + camera_i * .0007
