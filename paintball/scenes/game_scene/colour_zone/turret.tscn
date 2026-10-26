@@ -4,21 +4,21 @@
 [ext_resource type="Texture2D" uid="uid://dn847ueisewdg" path="res://sprites/placeholders/turret.png" id="2_l57n1"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_28kot"]
-size = Vector2(138, 747)
+size = Vector2(54, 177)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_hou0b"]
-size = Vector2(209, 714)
+size = Vector2(53, 174)
 
 [node name="Turret" type="StaticBody2D" unique_id=305425919 groups=["turret"]]
 collision_layer = 7
 script = ExtResource("1_lmt7v")
 
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=320547932]
-scale = Vector2(0.15, 0.25)
+scale = Vector2(0.04, 0.06)
 texture = ExtResource("2_l57n1")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=653568251]
-position = Vector2(-40, -21.5)
+position = Vector2(-12, 1.5)
 shape = SubResource("RectangleShape2D_28kot")
 
 [node name="CaptureBar" type="ProgressBar" parent="." unique_id=523128885]
@@ -33,7 +33,7 @@ collision_layer = 7
 collision_mask = 0
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Hurtbox" unique_id=1734797793]
-position = Vector2(-46.5, 4)
+position = Vector2(-11.5, 3)
 shape = SubResource("RectangleShape2D_hou0b")
 debug_color = Color(0.78717804, 0, 0.30879337, 0.41960785)
 

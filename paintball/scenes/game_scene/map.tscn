@@ -4,9 +4,8 @@
 [ext_resource type="PackedScene" uid="uid://u1ulorklcu5g" path="res://scenes/game_scene/player/player.tscn" id="2_2m4d5"]
 [ext_resource type="Texture2D" uid="uid://b2gvlwcx4ca3c" path="res://assets/tileset/Retro-Lines-16x16/Environment.png" id="4_s5bfy"]
 [ext_resource type="Texture2D" uid="uid://miqo1wbx3pow" path="res://icon.svg" id="5_iqgdr"]
-[ext_resource type="Script" uid="uid://c7eov0s1wjapv" path="res://scenes/game_scene/tile_map_layer.gd" id="6_d327o"]
-[ext_resource type="PackedScene" uid="uid://chbxu3qvg1pqe" path="res://scenes/game_scene/colour_zone/color_zone.tscn" id="7_d327o"]
 [ext_resource type="Texture2D" uid="uid://1xqsaideea2n" path="res://assets/tileset/Retro-Lines-16x16/With-Background/Environment.png" id="5_s5bfy"]
+[ext_resource type="PackedScene" uid="uid://chbxu3qvg1pqe" path="res://scenes/game_scene/colour_zone/color_zone.tscn" id="7_d327o"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_s5bfy"]
 texture = ExtResource("4_s5bfy")
@@ -11600,18 +11599,8 @@ PLAYER_ID = 2
 [node name="Player1SpawnPoint" type="Marker2D" parent="." unique_id=324260113]
 position = Vector2(-980, -250)
 
-[node name="ColorZone" parent="." unique_id=248434155 instance=ExtResource("7_d327o")]
-position = Vector2(231, -349)
-
-[editable path="HomeTerritory1"]
-[editable path="HomeTerritory2"]
 [node name="Player2SpawnPoint" type="Marker2D" parent="." unique_id=1644131078]
 position = Vector2(980, -250)
-
-[node name="TurretPlaceHolder" type="Sprite2D" parent="." unique_id=391787787]
-position = Vector2(0, -1188)
-scale = Vector2(0.25, 1)
-texture = ExtResource("5_iqgdr")
 
 [node name="P1Base" type="Sprite2D" parent="." unique_id=1949499172]
 position = Vector2(-1060, -324)
@@ -11622,3 +11611,6 @@ texture = ExtResource("5_iqgdr")
 position = Vector2(1060, -324)
 scale = Vector2(0.25, 1)
 texture = ExtResource("5_iqgdr")
+
+[node name="ColorZone" parent="." unique_id=248434155 instance=ExtResource("7_d327o")]
+position = Vector2(23, -1108)

@@ -13,11 +13,7 @@ func _ready() -> void:
 	capture_bar.max_value = MAX_HP
 	capture_bar.value = hp
 
-#
-#func _on_hurtbox_area_entered(area: Area2D) -> void:
-	#if area.is_in_group("attack"):
-		#hp -= area.damage
-		#take_damage(area.ATTACKER_TEAM)
+
 func apply_knockback(_facing_dir, _knockback) -> void:
 	pass
 
