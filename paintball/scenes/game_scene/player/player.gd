@@ -182,7 +182,6 @@ func _ready() -> void:
 	add_to_group("player")
 	aim_dot.visible = false
 	is_spawned = true
-	print(camera_pos, "ready")
 	camera.position = camera_pos
 	climbup_hitbox.area_entered.connect(_on_climb_up_area_entered)
 	climbup_hitbox.area_exited.connect(_on_climb_up_area_exited)
@@ -451,7 +450,6 @@ func move_and_scale_camera():
 		var covered_area = MIN_SCREEN_HEIGHT - get_viewport().size.y
 		camera.zoom = Vector2.ONE * .5
 		camera_target.y = clamp(position.y,CAMERA_Y-covered_area,CAMERA_Y+covered_area)
-	print(camera_pos, camera_target, "move")
 	var P = camera_target - camera_pos
 	camera_i += P
 	camera_pos += P * .08 + camera_i * .0007

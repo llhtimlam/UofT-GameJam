@@ -5,7 +5,6 @@
 [ext_resource type="Texture2D" uid="uid://b2gvlwcx4ca3c" path="res://assets/tileset/Retro-Lines-16x16/Environment.png" id="4_s5bfy"]
 [ext_resource type="Texture2D" uid="uid://miqo1wbx3pow" path="res://icon.svg" id="5_iqgdr"]
 [ext_resource type="Texture2D" uid="uid://1xqsaideea2n" path="res://assets/tileset/Retro-Lines-16x16/With-Background/Environment.png" id="5_s5bfy"]
-[ext_resource type="Shader" uid="uid://b3vi2r6d6t7ja" path="res://assets/color_mix.gdshader" id="6_iqgdr"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_s5bfy"]
 texture = ExtResource("4_s5bfy")
@@ -11558,9 +11557,6 @@ glow_levels/5 = 2.0
 glow_bloom = 0.1
 glow_hdr_threshold = 0.4
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_bgvnt"]
-shader = ExtResource("6_iqgdr")
-
 [node name="Map" type="Node2D" unique_id=1264092394 node_paths=PackedStringArray("PLAYER1", "PLAYER2")]
 script = ExtResource("1_2m4d5")
 PLAYER1 = NodePath("Player1")
@@ -11613,9 +11609,3 @@ texture = ExtResource("5_iqgdr")
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=911073293]
 environment = SubResource("Environment_4op6w")
-
-[node name="Sprite2D" type="Sprite2D" parent="." unique_id=1956518711]
-material = SubResource("ShaderMaterial_bgvnt")
-position = Vector2(-598, -429.00003)
-scale = Vector2(5.05664, 4.28125)
-texture = ExtResource("5_iqgdr")
