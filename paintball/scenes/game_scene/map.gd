@@ -7,13 +7,16 @@ extends Node2D
 
 # Platform
 @onready var platform_tile: TileMapLayer = $TileMapLayer
+@onready var platform1_tile: TileMapLayer = $BreakablePlatform1
+@onready var platform2_tile: TileMapLayer = $BreakablePlatform2
+@onready var platform3_tile: TileMapLayer = $BreakablePlatform3
 const PLATFORM_ATLAS: Vector2i = Vector2i(1,0)
 var platform_spawn_interval: float = 0.0
 var platform_lifetime: float = 0.0
 
-var PLATFORM_LIFETIME: float = 5.0
-var PLATFORM_VARIANCE: float = 2.0
-var PLATFORM_OVERLAP_TIME: float = 2.0
+var PLATFORM_LIFETIME: float = 8.0
+var PLATFORM_VARIANCE: float = 1.0
+var PLATFORM_OVERLAP_TIME: float = 5.0
 
 var BREAKABLE_BOUND_TOP: int = -25
 var BREAKABLE_BOUND_BOTTOM: int = -10
@@ -27,6 +30,7 @@ var platform_storage: Array[Array] = []
 var break_preset1: bool = false
 var break_preset2: bool = false
 var break_preset3: bool = false
+var preset: int = 3
 
 # Rope
 @onready var rope_tile: TileMapLayer = $RopeLayer
@@ -40,21 +44,23 @@ func _ready() -> void:
 	var rope_instance_p1_base = ROPE_SCENE.instantiate()
 	add_child(rope_instance_p1_base)
 	rope_instance_p1_base.tilemap = rope_tile
-	rope_instance_p1_base.setup_rope(Vector2i(-21,-23), Vector2i(-21,-9))
+	rope_instance_p1_base.setup_rope(Vector2i(-23,-28), Vector2i(-23,-9))
 	var rope_instance_turret_left = ROPE_SCENE.instantiate()
 	add_child(rope_instance_turret_left)
 	rope_instance_turret_left.tilemap = rope_tile
-	rope_instance_turret_left.setup_rope(Vector2i(-14,-27), Vector2i(-14,-9))
+	rope_instance_turret_left.setup_rope(Vector2i(-23,-28), Vector2i(-23,-9))
 	var rope_instance_turret_right = ROPE_SCENE.instantiate()
 	add_child(rope_instance_turret_right)
 	rope_instance_turret_right.tilemap = rope_tile
-	rope_instance_turret_right.setup_rope(Vector2i(14,-27), Vector2i(14,-9))
+	rope_instance_turret_right.setup_rope(Vector2i(23,-28), Vector2i(23,-9))
 	var rope_instance_p2_base = ROPE_SCENE.instantiate()
 	add_child(rope_instance_p2_base)
 	rope_instance_p2_base.tilemap = rope_tile
-	rope_instance_p2_base.setup_rope(Vector2i(20,-23), Vector2i(20,-9))
+	rope_instance_p2_base.setup_rope(Vector2i(23,-28), Vector2i(23,-9))
 	# Setup Platform for spawning
-	platform_spawn_interval = PLATFORM_LIFETIME - PLATFORM_VARIANCE
+	platform1_tile.enabled = false
+	platform2_tile.enabled = false
+	platform3_tile.enabled = false
 	
 func player_killed(player):
 	#TODO: mobile spawn point once capture points exist
@@ -77,43 +83,28 @@ func _physics_process(delta: float) -> void:
 							PLATFORM_LIFETIME - PLATFORM_VARIANCE,
 							PLATFORM_LIFETIME + PLATFORM_VARIANCE
 						)
+						
 		platform_lifetime = PLATFORM_OVERLAP_TIME # Must be smaller than platform_spawn_interval
-		var preset: int = randi_range(1, 3)
-		if preset == 1:
-			set_platform(Vector2i(-11, -15), Vector2i(-5, -15), 0)
-			set_platform(Vector2i(-3, -18), Vector2i(3, -18), 0)
-			set_platform(Vector2i(5, -16), Vector2i(11, -16), 0)
-			break_preset1 = false
-			break_preset2 = true
-			break_preset3 = true
-		if preset == 2:
-			set_platform(Vector2i(-11, -9), Vector2i(-5, -9), 0)
-			set_platform(Vector2i(-3, -18), Vector2i(3, -18), 0)
-			set_platform(Vector2i(5, -16), Vector2i(11, -16), 0)
-			break_preset1 = true
-			break_preset2 = false
-			break_preset3 = true
-		if preset == 3:
-			set_platform(Vector2i(-11, -20), Vector2i(-5, -20), 0)
-			set_platform(Vector2i(-3, -19), Vector2i(3, -19), 0)
-			set_platform(Vector2i(5, -21), Vector2i(11, -21), 0)
-			break_preset1 = true
-			break_preset2 = true
-			break_preset3 = false
+		var current_preset = _get_platform(preset)
+		current_preset.enabled = true
+		break_preset1 = (preset != 1)
+		break_preset2 = (preset != 2)
+		break_preset3 = (preset != 3)
+		preset = (preset % 3) + 1
 	
 	if platform_lifetime <= 0.0:
 		if break_preset1:
-			set_platform(Vector2i(-11, -15), Vector2i(-5, -15), -1)
-			set_platform(Vector2i(-3, -18), Vector2i(3, -18), -1)
-			set_platform(Vector2i(5, -16), Vector2i(11, -16), -1)
+			platform1_tile.enabled = false
 		if break_preset2:
-			set_platform(Vector2i(-11, -9), Vector2i(-5, -9), -1)
-			set_platform(Vector2i(-3, -17), Vector2i(3, -17), -1)
-			set_platform(Vector2i(5, -16), Vector2i(11, -16), -1)
+			platform2_tile.enabled = false
 		if break_preset3:
-			set_platform(Vector2i(-11, -20), Vector2i(-5, -20), -1)
-			set_platform(Vector2i(-3, -19), Vector2i(3, -19), -1)
-			set_platform(Vector2i(5, -21), Vector2i(11, -21), -1)
+			platform3_tile.enabled = false
+	
+func _get_platform(id: int) -> TileMapLayer:
+	match id:
+		1: return platform1_tile
+		2: return platform2_tile
+		_: return platform3_tile
 	
 func change_platform() -> void:
 	for attempt in 100:
