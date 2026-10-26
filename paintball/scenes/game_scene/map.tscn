@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" uid="uid://ux4q5evgyks" path="res://scenes/game_scene/map.gd" id="1_2m4d5"]
 [ext_resource type="PackedScene" uid="uid://u1ulorklcu5g" path="res://scenes/game_scene/player/player.tscn" id="2_2m4d5"]
-[ext_resource type="TileSet" uid="uid://bxqaip45xp2lo" path="res://assets/tileset/tileset.tres" id="2_4op6w"]
+[ext_resource type="Texture2D" uid="uid://b2gvlwcx4ca3c" path="res://assets/tileset/Retro-Lines-16x16/Environment.png" id="4_s5bfy"]
 [ext_resource type="Texture2D" uid="uid://miqo1wbx3pow" path="res://icon.svg" id="5_iqgdr"]
 [ext_resource type="Texture2D" uid="uid://1xqsaideea2n" path="res://assets/tileset/Retro-Lines-16x16/With-Background/Environment.png" id="5_s5bfy"]
 
@@ -11547,17 +11547,6 @@ texture = ExtResource("5_s5bfy")
 
 [sub_resource type="TileSet" id="TileSet_13qdw"]
 sources/0 = SubResource("TileSetAtlasSource_iqgdr")
-
-[sub_resource type="Environment" id="Environment_4op6w"]
-background_mode = 3
-glow_enabled = true
-glow_levels/1 = 2.0
-glow_levels/2 = 2.0
-glow_levels/3 = 2.0
-glow_levels/4 = 2.0
-glow_levels/5 = 2.0
-glow_bloom = 0.1
-glow_hdr_threshold = 0.4
 
 [node name="Map" type="Node2D" unique_id=1264092394 node_paths=PackedStringArray("PLAYER1", "PLAYER2")]
 script = ExtResource("1_2m4d5")
