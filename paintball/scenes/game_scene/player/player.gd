@@ -29,16 +29,17 @@ var CLIMB_DECELERATION: float = 50.0
 @export var HEALTH: float = 100.0
 @export var MELEE_DMG: float = 30.0
 @export var MELEE_KNOCKBACK: float = 600.0
-@export var PROJECTILE_DMG: float = 3.0
+@export var PROJECTILE_DMG: float = 20.0
+@export var PROJECTILE_SPEED: float = 800.0
 @export var PROJECTILE_KNOCKBACK: float = 800.0
 const JUMP_VELOCITY = -1200.0
-@export var DASH_CD: float = 10.0
+@export var DASH_CD: float = 0.8
 var DASH_DURATION: float = 0.5
 var DASH_DISTANCE: float = 5.0
-@export var MELEE_CD: float = 1.0
-var AIM_CD: float = 1.0
-@export var SHOOT_CD: float = 3.0
-var DIAL_SPEED: float = 2.5
+@export var MELEE_CD: float = 0.8
+var AIM_CD: float = 0.5
+@export var SHOOT_CD: float = 0.8
+var DIAL_SPEED: float = 4.0
 
 # Initialize
 var damage_reduction: float = 1.0
@@ -99,7 +100,7 @@ const PROJECTILE_SCENE = preload("res://scenes/game_scene/projectile/projectile.
 const Y_BOUNDARY = 1500
 
 # Camera
-const MIN_SCREEN_HEIGHT = 520
+const MIN_SCREEN_HEIGHT = 550
 const CAMERA_MIN_X = -800
 const CAMERA_MAX_X = 800
 const CAMERA_Y = -648.5
@@ -290,14 +291,13 @@ func _physics_process(delta: float) -> void:
 		if dash_duration > 0:
 			var dash_progress : float = (dash_duration / DASH_DURATION) ** 3
 			var dash_distance : float = dash_dir * DASH_DISTANCE * sin(dash_progress * PI)
-			can_climb = false
-			velocity.y = 0.0
+			if dash_duration > DASH_DURATION / 2:
+				velocity.y = 0.0
 			move_and_collide(Vector2(dash_distance, 0))
 		# Melee
 		if input_melee and melee_cd <= 0 and not is_aiming:
 			melee_cd = MELEE_CD
 			melee(MELEE_DMG, MELEE_KNOCKBACK, facing_dir, PLAYER_ID ,TEAM_ID)
-			print(is_climbing)
 	
 	if not is_climbing:
 		# Range
@@ -321,7 +321,7 @@ func _physics_process(delta: float) -> void:
 			center.rotation = shoot_angle
 			
 			if input_shoot and aim_cd <= 0:
-				shoot_projectile(PROJECTILE_DMG, PROJECTILE_KNOCKBACK, shoot_angle, PLAYER_ID ,TEAM_ID)
+				shoot_projectile(PROJECTILE_DMG, PROJECTILE_SPEED, PROJECTILE_KNOCKBACK, shoot_angle, PLAYER_ID ,TEAM_ID)
 				exit_aiming()
 				shoot_cd = SHOOT_CD
 			if input_melee:
@@ -431,7 +431,7 @@ func exit_aiming() -> void:
 	is_aiming = false
 	aim_dot.visible = false
 	
-func shoot_projectile(base_damage: float, knockback: float, angle: float, attacker_id: int, attacker_team: int) -> void:
+func shoot_projectile(base_damage: float, speed: float, knockback: float, angle: float, attacker_id: int, attacker_team: int) -> void:
 	var projectile_instance = PROJECTILE_SCENE.instantiate()
 	# Projectile Collision 2
 	projectile_instance.ATTACKER_ID = attacker_id
@@ -440,6 +440,7 @@ func shoot_projectile(base_damage: float, knockback: float, angle: float, attack
 	projectile_instance.facing_angle = angle
 	projectile_instance.facing_dir = facing_dir
 	projectile_instance.damage = base_damage
+	projectile_instance.speed = speed
 	projectile_instance.knockback = knockback
 	get_parent().add_child(projectile_instance)
 
