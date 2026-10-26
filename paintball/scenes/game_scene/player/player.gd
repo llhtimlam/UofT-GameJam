@@ -107,6 +107,8 @@ const CAMERA_Y = -648.5
 @onready var camera: Camera2D = $Camera2D
 @onready var camera_pos: Vector2 = position.clamp(Vector2(CAMERA_MIN_X,CAMERA_Y),Vector2(CAMERA_MAX_X,CAMERA_Y))
 var camera_i: Vector2 = Vector2.ZERO
+var screens_merging = false
+var camera_target = Vector2.ZERO
 
 # User Input Mapping
 func _input(event: InputEvent) -> void:
@@ -422,6 +424,7 @@ func melee(base_damage: float, knockback: float, facing_dir: float, attacker_id:
 	melee_instance.damage = base_damage
 	melee_instance.knockback = knockback
 	melee_hitbox.position.x = abs(melee_hitbox.position.x) * facing_dir
+	melee_hitbox.reset_physics_interpolation()
 	melee_hitbox.add_child(melee_instance)
 	
 func enter_aiming() -> void:
@@ -449,13 +452,15 @@ func enemy_ai() -> void:
 	pass
 
 func move_and_scale_camera():
-	var camera_target = Vector2(clamp(position.x,CAMERA_MIN_X,CAMERA_MAX_X),CAMERA_Y)
+	if not screens_merging: #let ui.gd override the target if merging
+		camera_target = Vector2(clamp(position.x,CAMERA_MIN_X,CAMERA_MAX_X),CAMERA_Y)
 	if get_viewport().size.y > MIN_SCREEN_HEIGHT:
 		camera.zoom = Vector2.ONE * .5 * floor(get_viewport().size.y/MIN_SCREEN_HEIGHT)
 	else:
 		var covered_area = MIN_SCREEN_HEIGHT - get_viewport().size.y
 		camera.zoom = Vector2.ONE * .5
-		camera_target.y = clamp(position.y,CAMERA_Y-covered_area,CAMERA_Y+covered_area)
+		if not screens_merging:
+			camera_target.y = clamp(position.y,CAMERA_Y-covered_area,CAMERA_Y+covered_area)
 	var P = camera_target - camera_pos
 	camera_i += P
 	camera_pos += P * .08 + camera_i * .0007
