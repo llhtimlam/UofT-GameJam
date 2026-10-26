@@ -42,8 +42,8 @@ script = ExtResource("1_om0p0")
 red = Color(1, 0.27316666, 0.110000014, 1)
 green = Color(0.110000014, 1, 0.24349988, 1)
 blue = Color(0.110000014, 0.5253334, 1, 1)
-player_1_color = Vector3(255, 128, 55)
-player_2_color = Vector3(0, 16, 200)
+player_1_color = Vector3(255, 255, 0)
+player_2_color = Vector3(0, 0, 255)
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=1182529437]
 environment = SubResource("Environment_6amc0")
