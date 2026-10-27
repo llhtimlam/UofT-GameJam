@@ -7,7 +7,6 @@ var capturable : bool = false
 func _ready() -> void:
 	turret.can_capture.connect(can_be_captured)
 
-
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
 	pass

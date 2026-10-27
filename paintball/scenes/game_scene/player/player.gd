@@ -74,6 +74,10 @@ var held_bucket: Node2D = null
 
 var is_dead: bool = false
 
+# Crouching
+var is_crouching: bool = false
+@onready var hurtbox: CollisionShape2D = $Hurtbox
+
 # Climbing
 @onready var climbup_hitbox: Area2D = $ClimbUpDetector
 @onready var climbdown_hitbox: Area2D = $ClimbDownDetector
@@ -108,8 +112,8 @@ const Y_BOUNDARY = 1500
 
 # Camera
 const MIN_SCREEN_HEIGHT = 550
-const CAMERA_MIN_X = -800
-const CAMERA_MAX_X = 800
+const CAMERA_MIN_X = -848
+const CAMERA_MAX_X = 864
 const CAMERA_Y = -648.5
 @onready var camera: Camera2D = $Camera2D
 @onready var camera_pos: Vector2 = position.clamp(Vector2(CAMERA_MIN_X,CAMERA_Y),Vector2(CAMERA_MAX_X,CAMERA_Y))
@@ -180,6 +184,7 @@ func _read_player_input(up: String, down: String, left: String, right: String, j
 	
 func reset_state():
 	is_stun = false
+	is_crouching = false
 	is_climbing = false
 	if is_aiming:
 		exit_aiming()
@@ -199,6 +204,8 @@ func reset_state():
 	
 func _ready() -> void:
 	add_to_group("player")
+	if hurtbox and hurtbox.shape:
+		hurtbox.shape = hurtbox.shape.duplicate()
 	aim_dot.visible = false
 	is_spawned = true
 	camera.position = camera_pos
@@ -257,6 +264,23 @@ func _physics_process(delta: float) -> void:
 		# Gravity
 		if not grounded:
 			velocity.y += GRAVITY * delta
+	# Crouching
+	if not is_aiming and not is_stun and not is_climbing and grounded and input_down:
+		is_crouching = true
+	else:
+		is_crouching = false
+	if is_crouching:
+		hurtbox.shape.size = Vector2(52,36)
+		if facing_dir == -1.0:
+			hurtbox.position = Vector2(-10,14)
+			bucket_slot.position = Vector2(-20,-20)
+		else:
+			hurtbox.position = Vector2(10,14)
+			bucket_slot.position = Vector2(20,-20)
+	else:
+		hurtbox.shape.size = Vector2(32,64)
+		hurtbox.position = Vector2.ZERO
+		bucket_slot.position = Vector2(0,-48)
 	# Horizontal movement
 	if input_right:
 		facing_dir = 1.0
@@ -269,7 +293,7 @@ func _physics_process(delta: float) -> void:
 	# Debuff override
 	if is_aiming or is_stun or is_climbing:
 		dir = 0.0
-	if is_slow:
+	if is_slow or is_crouching:
 		dir *= SLOWNESS_MODIFIER
 	# Jumping action
 	if input_jump and is_on_floor() and not is_aiming:
@@ -385,6 +409,7 @@ func take_damage(amount: float, attacker_id: int, attacker_team: int) -> void:
 func apply_knockback(dir: float, knockback: float, stun_time: float = STUN_CD) -> void:
 	if is_climbing == true:
 		is_climbing = false
+	is_crouching = false
 	exit_aiming()
 	is_stun = true
 	if stun_cd < STUN_CD:

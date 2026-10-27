@@ -1,7 +1,7 @@
 extends Area2D
 class_name Bucket
 
-var paint_color: Vector3 = Vector3.ZERO
+var score: Vector3 = Vector3.ZERO # Format: (P1, Turret, P2)
 
 var pickable_players: Array[CharacterBody2D] = []
 var carrier: CharacterBody2D = null
@@ -23,9 +23,9 @@ func _process(_delta: float) -> void:
 		if player.input_up:
 			pickup(player)
 	
-static func spawn(map: Node2D, spawn_position: Vector2, color: Vector3 = Vector3.ZERO) -> Area2D:
+static func spawn(map: Node2D, spawn_position: Vector2, score: Vector3 = Vector3.ZERO) -> Area2D:
 	var bucket = BUCKET_SCENE.instantiate()
-	bucket.paint_color = color
+	bucket.score = score
 	map.add_child.call_deferred(bucket)
 	bucket.global_position = spawn_position
 	return bucket
@@ -34,7 +34,7 @@ func pickup(player: CharacterBody2D) -> void:
 	if carrier != null or delivered:
 		return
 	if player.held_bucket != null:
-		player.held_bucket.paint_color += paint_color
+		player.held_bucket.score += score
 		call_deferred("queue_free")
 		return
 	carrier = player
@@ -50,7 +50,7 @@ func deliver(base: Node2D) -> void:
 	carrier.is_slow = false
 	carrier.held_bucket = null
 	carrier = null
-	base.color += paint_color
+	base.update_score(score)
 	call_deferred("queue_free")
 	
 func transfer(attacker_id: int, attacker_team: int) -> void:
@@ -74,11 +74,11 @@ func transfer(attacker_id: int, attacker_team: int) -> void:
 			position = Vector2.ZERO
 			attacker.is_slow = true
 		else:
-			attacker.held_bucket.paint_color += paint_color
+			attacker.held_bucket.score += score
 			victim.held_bucket = null
 			victim.is_slow = false
 			carrier = null
-			paint_color = Vector3.ZERO
+			score = Vector3.ZERO
 			call_deferred("queue_free")
 		return
 	

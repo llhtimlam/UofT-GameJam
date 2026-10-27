@@ -20,8 +20,9 @@ script = ExtResource("1_tcwrj")
 scale = Vector2(0.25, 0.5)
 texture = ExtResource("2_7k1jl")
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=962338468]
+[node name="Hurtbox" type="CollisionShape2D" parent="." unique_id=962338468]
 shape = SubResource("RectangleShape2D_xrivr")
+debug_color = Color(0.7882353, 0, 0.30980393, 0.41960785)
 
 [node name="Melee" type="Marker2D" parent="." unique_id=996811342]
 position = Vector2(32, 0)

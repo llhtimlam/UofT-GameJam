@@ -40,10 +40,10 @@ shader_parameter/cur_col = Vector3(0, 0, 0)
 [node name="UI" type="CanvasLayer" unique_id=2008955717]
 follow_viewport_enabled = true
 script = ExtResource("1_om0p0")
-red = Color(1, 0.27316666, 0.110000014, 1)
-green = Color(0.110000014, 1, 0.24349988, 1)
-blue = Color(0.110000014, 0.5253334, 1, 1)
-player_1_color = Vector3(255, 255, 255)
+red = Color(1, 0.27450982, 0.078431375, 1)
+green = Color(0.10980392, 1, 0.24313726, 1)
+blue = Color(0.10980392, 0.5254902, 1, 1)
+player_1_color = Vector3(255, 196, 255)
 player_2_color = Vector3(0, 16, 200)
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=1182529437]

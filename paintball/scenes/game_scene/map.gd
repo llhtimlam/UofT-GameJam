@@ -7,8 +7,7 @@ var player_instances: Array[CharacterBody2D] = []
 signal player_eliminated(player: CharacterBody2D)
 @export var PLAYER1: Node2D
 @export var PLAYER2: Node2D
-var player1Colour : Color = Color(255,0,0)
-var player2Colour : Color = Color(0,0,255)
+
 @onready var P1Spawn: Marker2D = $Player1SpawnPoint
 @onready var P2Spawn: Marker2D = $Player2SpawnPoint
 
@@ -16,6 +15,20 @@ var player2Colour : Color = Color(0,0,255)
 @onready var base_p1: Marker2D = $P1BaseSpawnPoint
 @onready var base_p2: Marker2D = $P2BaseSpawnPoint
 const BASE_SCENE = preload("res://scenes/game_scene/base/base.tscn")
+var p1_base_instance: Node2D = null
+var p2_base_instance: Node2D = null
+
+# Display color
+@export var p1_color : Color = Color(255,0,0)
+@export var p2_color : Color = Color(0,0,255)
+@export var turret_color : Color = Color(0,255,0):
+	set(value):
+		turret_color = value
+		turret_normalized_color = Vector3(turret_color.r, turret_color.g, turret_color.b) / 255.0 * Vector3(0,1,0)
+@onready var turret_normalized_color: Vector3 = Vector3(turret_color.r, turret_color.g, turret_color.b) / 255.0 * Vector3(0,1,0)
+@onready var p1_color_wheel: Sprite2D = $Player1ColorWheel
+@onready var p2_color_wheel: Sprite2D = $Player2ColorWheel
+@onready var turret_color_wheel: Sprite2D = $TurretColorWheel
 
 # Platform
 @onready var platform_tile: TileMapLayer = $TileMapLayer
@@ -55,6 +68,13 @@ const BUCKET_SCENE = preload("res://scenes/game_scene/paint_bucket/paint_bucket.
 @onready var bucket_spawn_turret: Marker2D = $TurretPaintBucketSpawnPoint
 
 func _ready() -> void:
+	#Display
+	if p1_color_wheel and p1_color_wheel.material:
+		p1_color_wheel.material = p1_color_wheel.material.duplicate()
+	if p2_color_wheel and p2_color_wheel.material:
+		p2_color_wheel.material = p2_color_wheel.material.duplicate()
+	if turret_color_wheel and turret_color_wheel.material:
+		turret_color_wheel.material = turret_color_wheel.material.duplicate()
 	# Player
 	PLAYER1.player_eliminated.connect(player_killed)
 	PLAYER2.player_eliminated.connect(player_killed)
@@ -79,19 +99,26 @@ func _ready() -> void:
 	add_child.call_deferred(player2_instance)
 	"""
 	# Base
-	var p1_base_instance = BASE_SCENE.instantiate()
+	p1_base_instance = BASE_SCENE.instantiate()
 	p1_base_instance.defender = PLAYER1
 	p1_base_instance.team_id = 1
-	p1_base_instance.color = Vector3(255, 0, 0)
+	p1_base_instance.base_color = p1_color
+	p1_base_instance.enemy_color = p2_color
+	p1_base_instance.turret_color = turret_color
+	p1_base_instance.score = Vector3(255,0,0)
 	add_child.call_deferred(p1_base_instance)
 	p1_base_instance.global_position = base_p1.global_position
 	
-	var p2_base_instance = BASE_SCENE.instantiate()
+	p2_base_instance = BASE_SCENE.instantiate()
 	p2_base_instance.defender = PLAYER2
 	p2_base_instance.team_id = 2
-	p2_base_instance.color = Vector3(0, 0, 255)
+	p2_base_instance.base_color = p2_color
+	p2_base_instance.enemy_color = p1_color
+	p2_base_instance.turret_color = turret_color
+	p2_base_instance.score = Vector3(0,0,255)
 	add_child.call_deferred(p2_base_instance)
 	p2_base_instance.global_position = base_p2.global_position
+	update_color_wheel()
 	
 	# Setup rope
 	var rope_instance_p1_base = ROPE_SCENE.instantiate()
@@ -159,6 +186,20 @@ func _physics_process(delta: float) -> void:
 			platform2_tile.enabled = false
 		if break_preset3:
 			platform3_tile.enabled = false
+	
+func update_color_wheel() -> void:
+	if p1_color_wheel and p1_color_wheel.material is ShaderMaterial:
+		p1_color_wheel.material.set_shader_parameter("custom_color_middle", p1_base_instance.display_self_score)
+		p1_color_wheel.material.set_shader_parameter("custom_color_left", p1_base_instance.display_enemy_score)
+		p1_color_wheel.material.set_shader_parameter("custom_color_right", p1_base_instance.display_turret_score)
+	if p2_color_wheel and p2_color_wheel.material is ShaderMaterial:
+		p2_color_wheel.material.set_shader_parameter("custom_color_middle", p2_base_instance.display_self_score)
+		p2_color_wheel.material.set_shader_parameter("custom_color_left", p2_base_instance.display_turret_score)
+		p2_color_wheel.material.set_shader_parameter("custom_color_right", p2_base_instance.display_enemy_score)
+	if turret_color_wheel and turret_color_wheel.material is ShaderMaterial:
+		turret_color_wheel.material.set_shader_parameter("custom_color_middle", turret_normalized_color)
+		turret_color_wheel.material.set_shader_parameter("custom_color_left", Vector3(0, 0 ,0))
+		turret_color_wheel.material.set_shader_parameter("custom_color_right", Vector3(0, 0, 0))
 	
 func _get_platform(id: int) -> TileMapLayer:
 	match id:
