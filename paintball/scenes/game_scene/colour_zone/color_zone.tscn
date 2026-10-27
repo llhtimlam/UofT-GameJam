@@ -4,7 +4,7 @@
 [ext_resource type="PackedScene" uid="uid://cvjnnhqh4ffut" path="res://scenes/game_scene/colour_zone/turret.tscn" id="2_bukbq"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_28kot"]
-radius = 477.3395
+radius = 100.0
 
 [node name="ColorZone" type="Node2D" unique_id=248434155]
 script = ExtResource("1_fw0og")

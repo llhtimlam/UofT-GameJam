@@ -3,6 +3,7 @@
 [ext_resource type="Script" uid="uid://ux4q5evgyks" path="res://scenes/game_scene/map.gd" id="1_2m4d5"]
 [ext_resource type="PackedScene" uid="uid://u1ulorklcu5g" path="res://scenes/game_scene/player/player.tscn" id="2_2m4d5"]
 [ext_resource type="Texture2D" uid="uid://b2gvlwcx4ca3c" path="res://assets/tileset/Retro-Lines-16x16/Environment.png" id="4_s5bfy"]
+[ext_resource type="Shader" uid="uid://b0rhp3fug4naq" path="res://assets/color_wheel.gdshader" id="5_d327o"]
 [ext_resource type="Texture2D" uid="uid://miqo1wbx3pow" path="res://icon.svg" id="5_iqgdr"]
 [ext_resource type="Texture2D" uid="uid://1xqsaideea2n" path="res://assets/tileset/Retro-Lines-16x16/With-Background/Environment.png" id="5_s5bfy"]
 [ext_resource type="PackedScene" uid="uid://chbxu3qvg1pqe" path="res://scenes/game_scene/colour_zone/color_zone.tscn" id="7_d327o"]
@@ -11549,10 +11550,27 @@ texture = ExtResource("5_s5bfy")
 [sub_resource type="TileSet" id="TileSet_13qdw"]
 sources/0 = SubResource("TileSetAtlasSource_iqgdr")
 
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_13qdw"]
+shader = ExtResource("5_d327o")
+shader_parameter/custom_color_middle = Vector3(1, 0, 0)
+shader_parameter/custom_color_left = Vector3(0, 1, 0)
+shader_parameter/custom_color_right = Vector3(0, 0, 1)
+shader_parameter/fill_percentage = 0.0
+
+[sub_resource type="Gradient" id="Gradient_geu3a"]
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_xrivr"]
+gradient = SubResource("Gradient_geu3a")
+width = 256
+height = 256
+
 [node name="Map" type="Node2D" unique_id=1264092394 node_paths=PackedStringArray("PLAYER1", "PLAYER2")]
 script = ExtResource("1_2m4d5")
 PLAYER1 = NodePath("Player1")
 PLAYER2 = NodePath("Player2")
+p1_color = Color(248.11058, 0, 0, 1)
+p2_color = Color(0, 0, 255.0139, 1)
+turret_color = Color(0, 219.66463, 0, 1)
 
 [node name="TileMapLayer" type="TileMapLayer" parent="." unique_id=594110001]
 texture_filter = 1
@@ -11586,7 +11604,7 @@ tile_set = SubResource("TileSet_13qdw")
 [node name="Player1" parent="." unique_id=25147227 instance=ExtResource("2_2m4d5")]
 position = Vector2(-980, -250)
 
-[node name="Camera2D" type="Camera2D" parent="Player1" unique_id=1545230877]
+[node name="Camera2D2" type="Camera2D" parent="Player1" unique_id=1545230877]
 
 [node name="Player2" parent="." unique_id=817086128 instance=ExtResource("2_2m4d5")]
 position = Vector2(980, -250)
@@ -11594,7 +11612,13 @@ control_type = "P2"
 TEAM_ID = 2
 PLAYER_ID = 2
 
-[node name="Camera2D" type="Camera2D" parent="Player2" unique_id=737629106]
+[node name="Camera2D2" type="Camera2D" parent="Player2" unique_id=737629106]
+
+[node name="Player1ColorWheel" type="Sprite2D" parent="." unique_id=1051621695]
+z_index = -1
+material = SubResource("ShaderMaterial_13qdw")
+position = Vector2(-1088, -580)
+texture = SubResource("GradientTexture2D_xrivr")
 
 [node name="Player1SpawnPoint" type="Marker2D" parent="." unique_id=324260113]
 position = Vector2(-980, -250)
@@ -11615,6 +11639,12 @@ position = Vector2(-1088, -176)
 scale = Vector2(0.25, 0.25)
 texture = ExtResource("5_iqgdr")
 
+[node name="Player2ColorWheel" type="Sprite2D" parent="." unique_id=1372223997]
+z_index = -1
+material = SubResource("ShaderMaterial_13qdw")
+position = Vector2(1120, -580)
+texture = SubResource("GradientTexture2D_xrivr")
+
 [node name="Player2SpawnPoint" type="Marker2D" parent="." unique_id=1644131078]
 position = Vector2(980, -250)
 
@@ -11633,8 +11663,15 @@ position = Vector2(1120, -176)
 scale = Vector2(0.25, 0.25)
 texture = ExtResource("5_iqgdr")
 
+[node name="TurretColorWheel" type="Sprite2D" parent="." unique_id=1651168249]
+z_index = -1
+material = SubResource("ShaderMaterial_13qdw")
+position = Vector2(16, -880)
+scale = Vector2(1, -1)
+texture = SubResource("GradientTexture2D_xrivr")
+
 [node name="TurretPaintBucketSpawnPoint" type="Marker2D" parent="." unique_id=56123915]
-position = Vector2(0, -720)
+position = Vector2(16, -720)
 
 [node name="TurretPaintBucketPlaceHolder" type="Sprite2D" parent="." unique_id=141908768]
 visible = false
@@ -11644,9 +11681,6 @@ texture = ExtResource("5_iqgdr")
 
 [node name="ColorZone" parent="." unique_id=248434155 instance=ExtResource("7_d327o")]
 position = Vector2(23, -1108)
-
-[node name="ColourRangeShape" parent="ColorZone/ColourRange" parent_id_path=PackedInt32Array(248434155, 477532294) index="0" unique_id=1779190220]
-visible = false
 
 [editable path="ColorZone"]
 [editable path="ColorZone/Turret"]

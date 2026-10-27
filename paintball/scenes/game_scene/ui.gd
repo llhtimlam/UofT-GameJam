@@ -11,7 +11,7 @@ extends CanvasLayer
 
 # Split screen
 const MERGE_PROPORTION = .75
-const SPLIT_PROPORTION = .8
+const SPLIT_PROPORTION = .75
 const SCREEN_MERGE_DIST = 5
 const SCREEN_MERGE_DIST_2D = 15
 @onready var container1: SubViewportContainer = $SubViewportContainer1
@@ -29,8 +29,8 @@ func _ready() -> void:
 	var g = green.srgb_to_linear()
 	var b = blue.srgb_to_linear()
 	var col_matrix = Basis(Vector3(r.r, r.g, r.b),Vector3(g.r, g.g, g.b),Vector3(b.r, b.g, b.b))
-	P1Cols.material.set_shader_parameter("colors", col_matrix)
-	P2Cols.material.set_shader_parameter("colors", col_matrix)
+	#P1Cols.material.set_shader_parameter("colors", col_matrix)
+	#P2Cols.material.set_shader_parameter("colors", col_matrix)
 	
 	# Split screen
 	var camera1 = player1.get_node("Camera2D")
