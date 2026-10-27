@@ -1,0 +1,19 @@
+[gd_scene format=3 uid="uid://dl40cnp41ty7u"]
+
+[ext_resource type="Script" uid="uid://ciyxenx2s0jpf" path="res://scenes/game_scene/paint_bucket/paint_bucket.gd" id="1_q5avn"]
+[ext_resource type="Texture2D" uid="uid://miqo1wbx3pow" path="res://icon.svg" id="2_h4cll"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_xrivr"]
+size = Vector2(32, 32)
+
+[node name="PaintBucket" type="Area2D" unique_id=1837286444]
+collision_layer = 0
+collision_mask = 4
+script = ExtResource("1_q5avn")
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=746848099]
+scale = Vector2(0.25, 0.25)
+texture = ExtResource("2_h4cll")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=950568101]
+shape = SubResource("RectangleShape2D_xrivr")

@@ -13,7 +13,8 @@ var lifetime: float = 0.1
 var facing_dir: float = 1.0
 @onready var HIT_VISUAL: Sprite2D = $Sprite2D
 @onready var HITBOX: CollisionShape2D = $CollisionShape2D
-	
+var damaged_targets: Array[Node2D] = []
+
 func _ready() -> void:
 	add_to_group("melee")
 	body_entered.connect(_on_body_entered)
@@ -36,13 +37,15 @@ func _on_area_entered(area: Area2D) -> void:
 
 # Hitbox Manager
 func _hit_target(target: Node) -> void:
-	# Player iframe
+	if damaged_targets.has(target):
+		return
 	if target.is_in_group("player"):
 		if target.PLAYER_ID == ATTACKER_ID:
 			return
-	
+	damaged_targets.append(target)
 	# Damage
 	if target.has_method("take_damage"):
+		
 		target.take_damage(damage, ATTACKER_ID, ATTACKER_TEAM)
-		target.apply_knockback(facing_dir, knockback)
-		call_deferred("queue_free")
+		if target.has_method("apply_knockback"):
+			target.apply_knockback(facing_dir, knockback)

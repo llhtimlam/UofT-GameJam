@@ -8,6 +8,7 @@ var ATTACKER_TEAM: int
 var velocity: Vector2
 var damage: float
 var knockback: float
+var stun_time: float = 1.0
 
 # Physic
 var facing_dir: float = 0.0
@@ -23,14 +24,7 @@ func _ready() -> void:
 	add_to_group("projectile")
 	body_entered.connect(_on_body_entered)
 	area_entered.connect(_on_area_entered)
-
-# Intercept Logic
-func take_damage(amount: float, attacker_id: int, attacker_team: int) -> void:
-	if is_shot:
-		return
-	is_shot = true
-	call_deferred("queue_free")
-
+	
 func _physics_process(delta: float) -> void:
 	iframe = max(iframe - delta, 0.0)
 	# Despawn timer
@@ -54,15 +48,17 @@ func _on_area_entered(area: Area2D) -> void:
 func _hit_target(target: Node) -> void:
 	if is_shot:
 		return
-	
+	# Turret and projectile immunity to projectile
+	if target.is_in_group("projectile"):
+		return
 	# Player iframe
 	if target.is_in_group("player"):
 		if iframe > 0.0 and target.PLAYER_ID == ATTACKER_ID:
 			return
-	
 	# Damage
 	if target.has_method("take_damage"):
 		is_shot = true
 		target.take_damage(damage, ATTACKER_ID, ATTACKER_TEAM)
-		target.apply_knockback(facing_dir, knockback)
+		if target.has_method("apply_knockback"):
+			target.apply_knockback(facing_dir, knockback, stun_time)
 	call_deferred("queue_free")

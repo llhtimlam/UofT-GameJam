@@ -2,6 +2,7 @@
 
 [ext_resource type="Script" uid="uid://dxa1b2iy44agy" path="res://scenes/game_scene/colour_zone/turret.gd" id="1_lmt7v"]
 [ext_resource type="Texture2D" uid="uid://dn847ueisewdg" path="res://sprites/placeholders/turret.png" id="2_l57n1"]
+[ext_resource type="Texture2D" uid="uid://miqo1wbx3pow" path="res://icon.svg" id="3_xt7qw"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_28kot"]
 size = Vector2(54, 177)
@@ -9,8 +10,11 @@ size = Vector2(54, 177)
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_hou0b"]
 size = Vector2(53, 174)
 
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_xrivr"]
+size = Vector2(1244, 1920)
+
 [node name="Turret" type="StaticBody2D" unique_id=305425919 groups=["turret"]]
-collision_layer = 7
+collision_layer = 4
 script = ExtResource("1_lmt7v")
 
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=320547932]
@@ -29,12 +33,31 @@ offset_bottom = -466.0
 show_percentage = false
 
 [node name="Hurtbox" type="Area2D" parent="." unique_id=192725670]
-collision_layer = 7
+collision_layer = 4
 collision_mask = 0
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Hurtbox" unique_id=1734797793]
 position = Vector2(-11.5, 3)
 shape = SubResource("RectangleShape2D_hou0b")
 debug_color = Color(0.78717804, 0, 0.30879337, 0.41960785)
+
+[node name="Center" type="Marker2D" parent="." unique_id=1068166313]
+position = Vector2(-11, -69)
+
+[node name="LaunchPoint" type="Marker2D" parent="Center" unique_id=694286381]
+position = Vector2(50, 0)
+
+[node name="Sprite2D" type="Sprite2D" parent="Center/LaunchPoint" unique_id=982816117]
+position = Vector2(392, 0)
+scale = Vector2(7, 0.05)
+texture = ExtResource("3_xt7qw")
+
+[node name="AttackZone" type="Area2D" parent="." unique_id=681467152]
+collision_layer = 0
+collision_mask = 2
+
+[node name="AttackDetection" type="CollisionShape2D" parent="AttackZone" unique_id=927805890]
+shape = SubResource("RectangleShape2D_xrivr")
+debug_color = Color(0.5388028, 0.5683482, 0, 0.41960785)
 
 [connection signal="area_entered" from="Hurtbox" to="." method="_on_hurtbox_area_entered"]
