@@ -33,6 +33,7 @@ var CLIMB_DECELERATION: float = 50.0
 @export var PROJECTILE_SPEED: float = 800.0
 @export var PROJECTILE_KNOCKBACK: float = 800.0
 const JUMP_VELOCITY = -1200.0
+var SLOWNESS_MODIFIER: float = 0.6
 @export var DASH_CD: float = 0.8
 var DASH_DURATION: float = 0.5
 var DASH_DISTANCE: float = 5.0
@@ -68,6 +69,9 @@ var shoot_cd: float = 0.0
 var dir: float
 var dash_dir: float
 
+var held_bucket: Node2D = null
+@onready var bucket_slot: Marker2D = $BucketPosition
+
 var is_dead: bool = false
 
 # Climbing
@@ -86,6 +90,7 @@ var CLIMB_CD: float = 0.2
 # Debuff
 var is_stun: bool = false
 var STUN_CD: float = 1.0
+var is_slow: bool = false
 
 # Melee
 @onready var melee_hitbox: Marker2D = $Melee
@@ -175,10 +180,14 @@ func _read_player_input(up: String, down: String, left: String, right: String, j
 	
 func reset_state():
 	is_stun = false
+	is_climbing = false
 	if is_aiming:
 		exit_aiming()
+	is_slow = false
+	if is_instance_valid(held_bucket):
+		held_bucket.queue_free()
+	held_bucket = null
 	is_dead = false
-	is_climbing = false
 	HEALTH = 100.0
 	base_velocity = 0.0
 	knockback_velocity = 0.0
@@ -260,6 +269,8 @@ func _physics_process(delta: float) -> void:
 	# Debuff override
 	if is_aiming or is_stun or is_climbing:
 		dir = 0.0
+	if is_slow:
+		dir *= SLOWNESS_MODIFIER
 	# Jumping action
 	if input_jump and is_on_floor() and not is_aiming:
 		velocity.y = JUMP_VELOCITY
@@ -333,7 +344,7 @@ func _physics_process(delta: float) -> void:
 			center.rotation = shoot_angle
 			
 			if input_shoot and shoot_cd <= 0:
-				shoot_projectile(PROJECTILE_DMG, PROJECTILE_SPEED, PROJECTILE_KNOCKBACK, shoot_angle, PLAYER_ID ,TEAM_ID)
+				shoot_projectile(PROJECTILE_DMG, PROJECTILE_SPEED, PROJECTILE_KNOCKBACK, facing_dir, shoot_angle, PLAYER_ID ,TEAM_ID)
 				exit_aiming()
 				shoot_cd = SHOOT_CD
 			if input_melee:
@@ -362,6 +373,8 @@ func take_damage(amount: float, attacker_id: int, attacker_team: int) -> void:
 	
 	HEALTH -= amount * damage_reduction
 	if HEALTH <= 0.0:
+		if is_instance_valid(held_bucket):
+			held_bucket.transfer(attacker_id, attacker_team)
 		is_dead = true
 		velocity = Vector2.ZERO
 		base_velocity = 0.0
@@ -369,12 +382,13 @@ func take_damage(amount: float, attacker_id: int, attacker_team: int) -> void:
 		
 		player_eliminated.emit(self)
 
-func apply_knockback(dir: float, knockback: float) -> void:
+func apply_knockback(dir: float, knockback: float, stun_time: float = STUN_CD) -> void:
 	if is_climbing == true:
 		is_climbing = false
 	exit_aiming()
 	is_stun = true
-	stun_cd = STUN_CD
+	if stun_cd < STUN_CD:
+		stun_cd = STUN_CD
 	knockback_velocity += dir * knockback
 	
 # Utility Function
@@ -444,7 +458,7 @@ func exit_aiming() -> void:
 	is_aiming = false
 	aim_dot.visible = false
 	
-func shoot_projectile(base_damage: float, speed: float, knockback: float, angle: float, attacker_id: int, attacker_team: int) -> void:
+func shoot_projectile(base_damage: float, speed: float, knockback: float, facing_dir: float, angle: float, attacker_id: int, attacker_team: int) -> void:
 	var projectile_instance = PROJECTILE_SCENE.instantiate()
 	# Projectile Collision 2
 	projectile_instance.ATTACKER_ID = attacker_id
@@ -455,7 +469,7 @@ func shoot_projectile(base_damage: float, speed: float, knockback: float, angle:
 	projectile_instance.damage = base_damage
 	projectile_instance.speed = speed
 	projectile_instance.knockback = knockback
-	get_parent().add_child(projectile_instance)
+	get_parent().get_parent().add_child(projectile_instance)
 
 func enemy_ai() -> void:
 	pass

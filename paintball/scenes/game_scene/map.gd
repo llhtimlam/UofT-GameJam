@@ -1,11 +1,21 @@
 extends Node2D
 
+# Player
+const PLAYER_SCENE = preload("res://scenes/game_scene/player/player.tscn")
+var users: Array[String] = ["P1", "P2"]
+var player_instances: Array[CharacterBody2D] = []
+signal player_eliminated(player: CharacterBody2D)
 @export var PLAYER1: Node2D
 @export var PLAYER2: Node2D
-var player1Colour : Color = Color(0,0,0)
-var player2Colour : Color = Color(0,0,0)
+var player1Colour : Color = Color(255,0,0)
+var player2Colour : Color = Color(0,0,255)
 @onready var P1Spawn: Marker2D = $Player1SpawnPoint
 @onready var P2Spawn: Marker2D = $Player2SpawnPoint
+
+# Base
+@onready var base_p1: Marker2D = $P1BaseSpawnPoint
+@onready var base_p2: Marker2D = $P2BaseSpawnPoint
+const BASE_SCENE = preload("res://scenes/game_scene/base/base.tscn")
 
 # Platform
 @onready var platform_tile: TileMapLayer = $TileMapLayer
@@ -38,10 +48,51 @@ var preset: int = 3
 @onready var rope_tile: TileMapLayer = $RopeLayer
 const ROPE_SCENE = preload("res://scenes/game_scene/rope/rope.tscn")
 
-# Called when the node enters the scene tree for the first time.
+# Pickable Paint Bucket
+const BUCKET_SCENE = preload("res://scenes/game_scene/paint_bucket/paint_bucket.tscn")
+@onready var bucket_spawn_p1: Marker2D = $P1PaintBucketSpawnPoint
+@onready var bucket_spawn_p2: Marker2D = $P2PaintBucketSpawnPoint
+@onready var bucket_spawn_turret: Marker2D = $TurretPaintBucketSpawnPoint
+
 func _ready() -> void:
+	# Player
 	PLAYER1.player_eliminated.connect(player_killed)
 	PLAYER2.player_eliminated.connect(player_killed)
+	# Load User
+	"""
+	var player1_instance = PLAYER_SCENE.instantiate()
+	player1_instance.TEAM_ID = 1
+	player1_instance.PLAYER_ID = 1
+	player1_instance.control_type = "P1"
+	player1_instance.global_position = P1Spawn.global_position
+	player1_instance.player_eliminated.connect(player_killed)
+	player_instances.append(player1_instance)
+	add_child.call_deferred(player1_instance)
+	
+	var player2_instance = PLAYER_SCENE.instantiate()
+	player2_instance.TEAM_ID = 2
+	player2_instance.PLAYER_ID = 2
+	player2_instance.control_type = "P2"
+	player2_instance.global_position = P2Spawn.global_position
+	player2_instance.player_eliminated.connect(player_killed)
+	player_instances.append(player2_instance)
+	add_child.call_deferred(player2_instance)
+	"""
+	# Base
+	var p1_base_instance = BASE_SCENE.instantiate()
+	p1_base_instance.defender = PLAYER1
+	p1_base_instance.team_id = 1
+	p1_base_instance.color = Vector3(255, 0, 0)
+	add_child.call_deferred(p1_base_instance)
+	p1_base_instance.global_position = base_p1.global_position
+	
+	var p2_base_instance = BASE_SCENE.instantiate()
+	p2_base_instance.defender = PLAYER2
+	p2_base_instance.team_id = 2
+	p2_base_instance.color = Vector3(0, 0, 255)
+	add_child.call_deferred(p2_base_instance)
+	p2_base_instance.global_position = base_p2.global_position
+	
 	# Setup rope
 	var rope_instance_p1_base = ROPE_SCENE.instantiate()
 	add_child(rope_instance_p1_base)
@@ -63,6 +114,13 @@ func _ready() -> void:
 	platform1_tile.enabled = false
 	platform2_tile.enabled = false
 	platform3_tile.enabled = false
+
+	# Debug
+	Bucket.spawn(
+		self,
+		bucket_spawn_p1.global_position,
+		Vector3(0, 64, 0)
+		)
 	
 func player_killed(player):
 	#TODO: mobile spawn point once capture points exist

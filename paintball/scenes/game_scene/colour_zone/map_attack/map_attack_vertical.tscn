@@ -1,0 +1,19 @@
+[gd_scene format=3 uid="uid://crui4c7ykbqw8"]
+
+[ext_resource type="Script" uid="uid://dg7oijlxwn18r" path="res://map_attack.gd" id="1_7l00v"]
+[ext_resource type="Texture2D" uid="uid://miqo1wbx3pow" path="res://icon.svg" id="2_570ne"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_xrivr"]
+size = Vector2(16, 1920)
+
+[node name="MapAttackVertical" type="Area2D" unique_id=221330300]
+collision_layer = 0
+collision_mask = 2
+script = ExtResource("1_7l00v")
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=523540800]
+scale = Vector2(0.125, 15)
+texture = ExtResource("2_570ne")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=983235287]
+shape = SubResource("RectangleShape2D_xrivr")

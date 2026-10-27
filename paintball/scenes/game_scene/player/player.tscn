@@ -53,3 +53,8 @@ texture = ExtResource("2_7k1jl")
 position = Vector2(392, 0)
 scale = Vector2(7, 0.05)
 texture = ExtResource("2_7k1jl")
+
+[node name="BucketPosition" type="Marker2D" parent="." unique_id=1041089716]
+position = Vector2(0, -48)
+
+[node name="Camera2D" type="Camera2D" parent="." unique_id=1764947080]
