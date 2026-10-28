@@ -126,6 +126,7 @@ const INDICATOR_Y = -60
 const INDICATOR_BUCKET_Y = -90
 @onready var StunBar: TextureProgressBar = $StunBar
 @onready var DashBar: TextureProgressBar = $DashBar
+var stun_max: float = 1.
 
 # User Input Mapping
 #func _input(event: InputEvent) -> void:
@@ -225,7 +226,7 @@ func _physics_process(delta: float) -> void:
 		return
 	
 	# UI
-	StunBar.value = stun_cd/STUN_CD
+	StunBar.value = stun_cd/stun_max
 	StunBar.Scale = camera.zoom.x
 	DashBar.value = dash_cd/DASH_CD
 	DashBar.Scale = camera.zoom.x
@@ -431,8 +432,9 @@ func apply_knockback(k_dir: float, knockback: float, stun_time: float = STUN_CD)
 	is_crouching = false
 	exit_aiming()
 	is_stun = true
-	if stun_cd < STUN_CD:
+	if stun_cd < stun_time:
 		stun_cd = stun_time
+		stun_max = stun_time
 	knockback_velocity += k_dir * knockback
 	
 # Utility Function
