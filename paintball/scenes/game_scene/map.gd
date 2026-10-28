@@ -152,16 +152,20 @@ func _ready() -> void:
 	platform1_tile.enabled = false
 	platform2_tile.enabled = false
 	platform3_tile.enabled = false
-
-	# Debug
-	Bucket.spawn(
-		self,
-		bucket_spawn_p1.global_position,
-		Vector3(0, 64, 0)
-		)
 	
-func player_killed(player):
+func player_killed(player, attacker_id: int, attacker_team: int):
 	#TODO: mobile spawn point once capture points exist
+	if player.TEAM_ID == 1:
+		if attacker_team == 2:
+			p1_base_instance.lost_score_to(p2_base_instance)
+		else:
+			p1_base_instance.lost_score_to()
+	else:
+		if attacker_team == 1:
+			p2_base_instance.lost_score_to(p1_base_instance)
+		else:
+			p2_base_instance.lost_score_to()
+	await get_tree().create_timer(5.0).timeout
 	var spawnpoint
 	if player.TEAM_ID == 1:
 		spawnpoint = P1Spawn.position

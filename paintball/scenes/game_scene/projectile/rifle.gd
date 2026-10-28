@@ -8,7 +8,7 @@ var ATTACKER_TEAM: int
 var velocity: Vector2
 var damage: float
 var knockback: float
-var stun_time: float = 1.5
+var stun_time: float = 1.2
 var WAVE_NUMBER: int = 9
 var WAVE_CD: float = 0.1
 

@@ -48,9 +48,11 @@ var score: Vector3 = Vector3.ZERO: # Format: (P1, Turret, P2)
 const MAX_HP: float = 40
 var hp: float = MAX_HP
 
-var REGEN_AMOUNT: = 32
-var REGEN_CD: float = 10.0
+var REGEN_AMOUNT: = 0.1
+var REGEN_CD: float = 0.2
 var regen_timer : float = 0.0
+
+var LOSS_PERCENTAGE: = 0.05
 
 func _ready() -> void:
 	add_to_group("base")
@@ -61,9 +63,8 @@ func _physics_process(delta: float) -> void:
 	if regen_timer <= 0.0:
 		_get_regen()
 		regen_timer = REGEN_CD
-		
 	
-func update_score(add_score: Vector3) -> void:
+func update_score(add_score: Vector3 = Vector3.ZERO) -> void:
 	score += add_score
 	score = score.clamp(Vector3.ZERO, Vector3(255.0, 255.0, 255.0))
 	get_parent().update_color_wheel()
@@ -77,10 +78,10 @@ func take_damage(damage, attacker_id, _attacker_team) -> void:
 		Bucket.spawn(
 				get_parent(),
 				_get_spawnpoint(),
-				score * 0.01
+				score * 0.1
 				)
 		_get_hurt_animation()
-		score -= score * 0.01
+		score -= score * 0.1
 		score = score.max(Vector3.ZERO)
 	
 func _get_spawnpoint() -> Vector2:
@@ -98,3 +99,13 @@ func _get_regen() -> void:
 		1: score.x += REGEN_AMOUNT
 		_: score.z += REGEN_AMOUNT
 	score = score.clamp(Vector3.ZERO, Vector3(255.0, 255.0, 255.0))
+	update_score()
+	
+func lost_score(attacker_base: Node = null) -> void:
+	var amount_lost: Vector3 = self.score * LOSS_PERCENTAGE
+	self.score -= amount_lost
+	self.score = self.score.max(Vector3.ZERO)
+	_get_hurt_animation()
+	update_score()
+	if attacker_base != null:
+		attacker_base.update_score(amount_lost)
