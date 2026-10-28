@@ -1,8 +1,8 @@
 extends CanvasLayer
 
 # Color labels
-@onready var P1Cols: ColorRect = $P1Cols
-@onready var P2Cols: ColorRect = $P2Cols
+@onready var P1Cols: ColorRect = $PlayerUI1/Cols
+@onready var P2Cols: ColorRect = $PlayerUI2/Cols
 @export var red: Color = Color.RED
 @export var green: Color = Color.GREEN
 @export var blue: Color = Color.BLUE
@@ -25,10 +25,6 @@ var combined: bool = false
 # UI
 @onready var healthbar1: ColorRect = $PlayerUI1/ProgressBar
 @onready var healthbar2: ColorRect = $PlayerUI2/ProgressBar
-#@onready var stunbar1: TextureProgressBar = $PlayerUI1/StunBar
-#@onready var stunbar2: TextureProgressBar = $PlayerUI2/StunBar
-#@onready var dashbar1: TextureProgressBar = $PlayerUI1/DashBar
-#@onready var dashbar2: TextureProgressBar = $PlayerUI2/DashBar
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
@@ -38,6 +34,7 @@ func _ready() -> void:
 	var b = blue.srgb_to_linear()
 	var col_matrix = Basis(Vector3(r.r, r.g, r.b),Vector3(g.r, g.g, g.b),Vector3(b.r, b.g, b.b))
 	P1Cols.material.set_shader_parameter("colors", col_matrix)
+	P2Cols.material = P2Cols.material.duplicate()
 	P2Cols.material.set_shader_parameter("colors", col_matrix)
 	
 	# Split screen
@@ -58,14 +55,8 @@ func _physics_process(_delta: float) -> void:
 	P2Cols.material.set_shader_parameter("cur_col", player_2_color/255.)
 	
 	# Health
-	healthbar1.anchor_right = player1.HEALTH/100.
-	healthbar2.anchor_right = player2.HEALTH/100.
-	
-	# Dash
-	#dashbar1.value = player1.dash_cd / player1.DASH_CD
-	#dashbar2.value = player2.dash_cd / player2.DASH_CD
-	#dashbar1.Location = player1.get_screen_transform().get_origin()
-	#dashbar2.Location = player2.get_screen_transform().get_origin() - Vector2(get_window().size.x*.501,0.)
+	healthbar1.anchor_right = .5 + .5 * (player1.HEALTH/100.)
+	healthbar2.anchor_right = .5 + .5 * player2.HEALTH/100.
 	
 	# Split screen
 	var p1_prop = player1.get_screen_transform().get_origin()/Vector2(get_window().size)
