@@ -23,7 +23,6 @@ glow_levels/2 = 2.0
 glow_levels/3 = 2.0
 glow_levels/4 = 2.0
 glow_levels/5 = 2.0
-glow_bloom = 0.1
 glow_hdr_threshold = 0.4
 
 [node name="UI" type="CanvasLayer" unique_id=2008955717]
