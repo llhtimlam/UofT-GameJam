@@ -14,6 +14,8 @@ var player_instances: Array[CharacterBody2D] = []
 const BASE_SCENE = preload("res://scenes/game_scene/base/base.tscn")
 var p1_base_instance: Node2D = null
 var p2_base_instance: Node2D = null
+var p1_spin_tween: Tween
+var p2_spin_tween: Tween
 
 # Display color
 @export var p1_color : Color = Color(255,0,0)
@@ -114,7 +116,7 @@ func _ready() -> void:
 	p1_base_instance.base_color = p1_color
 	p1_base_instance.enemy_color = p2_color
 	p1_base_instance.turret_color = turret_color
-	p1_base_instance.score = Vector3(255,0,0)
+	p1_base_instance.score = Vector3(64,0,0)
 	add_child.call_deferred(p1_base_instance)
 	p1_base_instance.global_position = p1_color_wheel.global_position
 	
@@ -124,7 +126,7 @@ func _ready() -> void:
 	p2_base_instance.base_color = p2_color
 	p2_base_instance.enemy_color = p1_color
 	p2_base_instance.turret_color = turret_color
-	p2_base_instance.score = Vector3(0,0,255)
+	p2_base_instance.score = Vector3(0,0,64)
 	add_child.call_deferred(p2_base_instance)
 	p2_base_instance.global_position = p2_color_wheel.global_position
 	update_color_wheel()
@@ -215,6 +217,25 @@ func update_color_wheel() -> void:
 	p2_score_progress_self.value = p2_base_instance.progress_self_score
 	p2_score_progress_enemy.value = p2_base_instance.progress_enemy_score
 	p2_score_progress_turret.value = p2_base_instance.progress_turret_score
+
+func p1_base_hurt_animation() -> void:
+	if p1_spin_tween and p1_spin_tween.is_valid():
+		p1_spin_tween.kill()
+	p1_spin_tween = create_tween()
+	p1_spin_tween.set_trans(Tween.TRANS_QUAD)
+	p1_spin_tween.set_ease(Tween.EASE_IN_OUT)
+	var target_rotation: float = p1_color_wheel.rotation + (6 * PI)
+	p1_spin_tween.tween_property(p1_color_wheel, "rotation", target_rotation, 1.0)
+
+func p2_base_hurt_animation() -> void:
+	if p2_spin_tween and p2_spin_tween.is_valid():
+		p2_spin_tween.kill()
+	p2_spin_tween = create_tween()
+	p2_spin_tween.set_trans(Tween.TRANS_QUAD)
+	p2_spin_tween.set_ease(Tween.EASE_IN_OUT)
+	var target_rotation: float = p2_color_wheel.rotation + (6 * PI)
+	p2_spin_tween.tween_property(p2_color_wheel, "rotation", target_rotation, 1.0)
+	
 func _get_platform(id: int) -> TileMapLayer:
 	match id:
 		1: return platform1_tile
