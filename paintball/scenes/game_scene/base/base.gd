@@ -45,14 +45,27 @@ var score: Vector3 = Vector3.ZERO: # Format: (P1, Turret, P2)
 			display_enemy_score = normalized_enemy_color * normalized_score.x
 			display_turret_score = normalized_turret_color * normalized_score.y
 
-const MAX_HP : float = 40
-var hp : float = MAX_HP
+const MAX_HP: float = 40
+var hp: float = MAX_HP
+
+var REGEN_AMOUNT: = 32
+var REGEN_CD: float = 10.0
+var regen_timer : float = 0.0
 
 func _ready() -> void:
 	add_to_group("base")
 	
+func _physics_process(delta: float) -> void:
+	# Timer
+	regen_timer = max(regen_timer - delta, 0.0)
+	if regen_timer <= 0.0:
+		_get_regen()
+		regen_timer = REGEN_CD
+		
+	
 func update_score(add_score: Vector3) -> void:
 	score += add_score
+	score = score.clamp(Vector3.ZERO, Vector3(255.0, 255.0, 255.0))
 	get_parent().update_color_wheel()
 	
 func take_damage(damage, attacker_id, _attacker_team) -> void:
@@ -64,10 +77,24 @@ func take_damage(damage, attacker_id, _attacker_team) -> void:
 		Bucket.spawn(
 				get_parent(),
 				_get_spawnpoint(),
-				score * 0.5
+				score * 0.01
 				)
+		_get_hurt_animation()
+		score -= score * 0.01
+		score = score.max(Vector3.ZERO)
 	
 func _get_spawnpoint() -> Vector2:
 	match team_id:
 		1: return get_parent().bucket_spawn_p1.global_position
 		_: return get_parent().bucket_spawn_p2.global_position
+
+func _get_hurt_animation() -> void:
+	match team_id:
+		1: return get_parent().p1_base_hurt_animation()
+		_: return get_parent().p2_base_hurt_animation()
+
+func _get_regen() -> void:
+	match team_id:
+		1: score.x += REGEN_AMOUNT
+		_: score.z += REGEN_AMOUNT
+	score = score.clamp(Vector3.ZERO, Vector3(255.0, 255.0, 255.0))
