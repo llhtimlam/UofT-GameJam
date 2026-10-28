@@ -15,7 +15,7 @@ var speed: float = 0.0
 
 # Setup
 var lifetime: float = 1.0
-var immune_targets: Array[CharacterBody2D]
+var immune_targets: Array[Node2D]
 	
 func _ready() -> void:
 	add_to_group("map_attack")

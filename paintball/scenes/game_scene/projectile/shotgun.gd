@@ -49,17 +49,17 @@ func _physics_process(delta: float) -> void:
 		shotgun_number -= 1
 		wave_timer = WAVE_CD
 	
-func shoot_projectile(base_damage: float, speed: float, knockback: float, facing_dir: float, angle: float, attacker_id: int, attacker_team: int) -> void:
+func shoot_projectile(base_damage: float, p_speed: float, p_knockback: float, p_facing_dir: float, angle: float, attacker_id: int, attacker_team: int) -> void:
 	var projectile_instance = PROJECTILE_SCENE.instantiate()
 	# Projectile Collision 2
 	projectile_instance.ATTACKER_ID = attacker_id
 	projectile_instance.ATTACKER_TEAM = attacker_team
 	projectile_instance.position = Vector2.ZERO
 	projectile_instance.facing_angle = angle
-	projectile_instance.facing_dir = facing_dir
+	projectile_instance.facing_dir = p_facing_dir
 	projectile_instance.damage = base_damage
-	projectile_instance.speed = speed
-	projectile_instance.knockback = knockback
+	projectile_instance.speed = p_speed
+	projectile_instance.knockback = p_knockback
 	projectile_instance.stun_time = stun_time
 	projectile_instance.lifetime = lifetime
 	add_child.call_deferred(projectile_instance)

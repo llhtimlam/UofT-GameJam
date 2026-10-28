@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://duwveip03nnot"]
 
-[ext_resource type="Script" uid="uid://duwfkkquaswsi" path="res://scenes/game_scene/projectile/riffle.gd" id="1_qycq7"]
+[ext_resource type="Script" uid="uid://duwfkkquaswsi" path="res://scenes/game_scene/projectile/rifle.gd" id="1_qycq7"]
 
 [node name="riffle" type="Node2D" unique_id=1889763378]
 script = ExtResource("1_qycq7")

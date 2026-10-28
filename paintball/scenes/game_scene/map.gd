@@ -4,7 +4,6 @@ extends Node2D
 const PLAYER_SCENE = preload("res://scenes/game_scene/player/player.tscn")
 var users: Array[String] = ["P1", "P2"]
 var player_instances: Array[CharacterBody2D] = []
-signal player_eliminated(player: CharacterBody2D)
 @export var PLAYER1: Node2D
 @export var PLAYER2: Node2D
 
@@ -207,32 +206,32 @@ func _get_platform(id: int) -> TileMapLayer:
 		2: return platform2_tile
 		_: return platform3_tile
 	
-func change_platform() -> void:
-	for attempt in 100:
-		var spawn_length: int = randi_range(BREAKABLE_LENGTH_LOWEST, BREAKABLE_LENGTH_HIGHEST)
-		var spawn_tile: Vector2i = Vector2i(
-								randi_range(
-									BREAKABLE_BOUND_LEFT,
-									BREAKABLE_BOUND_RIGHT - spawn_length - 1
-								),
-								randi_range(
-									BREAKABLE_BOUND_TOP,
-									BREAKABLE_BOUND_BOTTOM
-								)
-								)
-		if check_spawn(spawn_tile, spawn_length):
-			print()
-
-func check_spawn(spawn_tile: Vector2i, spawn_length: int) -> bool:
-	var left_tile_x: int = spawn_tile.x
-	var tile_y: int = spawn_tile.y
-	var right_tile_x: int = spawn_tile.x + spawn_length - 1
-	for platform in platform_storage:
-		var existing_left_tile_x: Vector2i = platform[0].x
-		var existing_tile_y: Vector2i = platform[0].y
-		var existing_right_tile_x: Vector2i = platform[1].x
-	return true
-	
+#func change_platform() -> void:
+	#for attempt in 100:
+		#var spawn_length: int = randi_range(BREAKABLE_LENGTH_LOWEST, BREAKABLE_LENGTH_HIGHEST)
+		#var spawn_tile: Vector2i = Vector2i(
+								#randi_range(
+									#BREAKABLE_BOUND_LEFT,
+									#BREAKABLE_BOUND_RIGHT - spawn_length - 1
+								#),
+								#randi_range(
+									#BREAKABLE_BOUND_TOP,
+									#BREAKABLE_BOUND_BOTTOM
+								#)
+								#)
+		#if check_spawn(spawn_tile, spawn_length):
+			#print()
+#
+#func check_spawn(spawn_tile: Vector2i, spawn_length: int) -> bool:
+	#var left_tile_x: int = spawn_tile.x
+	#var tile_y: int = spawn_tile.y
+	#var right_tile_x: int = spawn_tile.x + spawn_length - 1
+	#for platform in platform_storage:
+		#var existing_left_tile_x: Vector2i = platform[0].x
+		#var existing_tile_y: Vector2i = platform[0].y
+		#var existing_right_tile_x: Vector2i = platform[1].x
+	#return true
+	#
 
 func set_platform(left_cell: Vector2i, right_cell: Vector2i, source_id: int) -> void:
 	var length: int = right_cell.x - left_cell.x + 1

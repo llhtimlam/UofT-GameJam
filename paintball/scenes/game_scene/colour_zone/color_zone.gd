@@ -7,11 +7,6 @@ var capturable : bool = false
 func _ready() -> void:
 	turret.can_capture.connect(can_be_captured)
 
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta: float) -> void:
-	pass
-
-
 func _on_colour_range_area_entered(area: Area2D) -> void:
 	pass # Replace with function body.
 

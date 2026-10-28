@@ -23,9 +23,9 @@ func _process(_delta: float) -> void:
 		if player.input_up:
 			pickup(player)
 	
-static func spawn(map: Node2D, spawn_position: Vector2, score: Vector3 = Vector3.ZERO) -> Area2D:
+static func spawn(map: Node2D, spawn_position: Vector2, s_score: Vector3 = Vector3.ZERO) -> Area2D:
 	var bucket = BUCKET_SCENE.instantiate()
-	bucket.score = score
+	bucket.score = s_score
 	map.add_child.call_deferred(bucket)
 	bucket.global_position = spawn_position
 	return bucket

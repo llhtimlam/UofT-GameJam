@@ -84,6 +84,7 @@ texture = ExtResource("2_7k1jl")
 position = Vector2(0, -48)
 
 [node name="Camera2D" type="Camera2D" parent="." unique_id=1764947080]
+process_callback = 0
 
 [node name="StunBar" type="TextureProgressBar" parent="." unique_id=643186231]
 texture_filter = 2

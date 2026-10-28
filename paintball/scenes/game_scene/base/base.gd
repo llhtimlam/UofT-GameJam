@@ -46,7 +46,7 @@ func update_score(add_score: Vector3) -> void:
 	score += add_score
 	get_parent().update_color_wheel()
 	
-func take_damage(damage, attacker_id, attacker_team) -> void:
+func take_damage(damage, attacker_id, _attacker_team) -> void:
 	if attacker_id == team_id:
 		return
 	hp -= damage

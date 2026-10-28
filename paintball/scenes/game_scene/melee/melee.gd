@@ -44,8 +44,10 @@ func _hit_target(target: Node) -> void:
 			return
 	damaged_targets.append(target)
 	# Damage
+	var giving_damage = false #silly way to do it probably, but damage needs to be applied before knockback
 	if target.has_method("take_damage"):
-		
-		target.take_damage(damage, ATTACKER_ID, ATTACKER_TEAM)
+		giving_damage = true
 		if target.has_method("apply_knockback"):
 			target.apply_knockback(facing_dir, knockback)
+	if giving_damage:
+		target.take_damage(damage, ATTACKER_ID, ATTACKER_TEAM)

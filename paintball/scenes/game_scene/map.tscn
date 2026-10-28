@@ -11604,15 +11604,11 @@ tile_set = SubResource("TileSet_13qdw")
 [node name="Player1" parent="." unique_id=25147227 instance=ExtResource("2_2m4d5")]
 position = Vector2(-980, -250)
 
-[node name="Camera2D2" type="Camera2D" parent="Player1" unique_id=1545230877]
-
 [node name="Player2" parent="." unique_id=817086128 instance=ExtResource("2_2m4d5")]
 position = Vector2(980, -250)
 control_type = "P2"
 TEAM_ID = 2
 PLAYER_ID = 2
-
-[node name="Camera2D2" type="Camera2D" parent="Player2" unique_id=737629106]
 
 [node name="Player1ColorWheel" type="Sprite2D" parent="." unique_id=1051621695]
 z_index = -1

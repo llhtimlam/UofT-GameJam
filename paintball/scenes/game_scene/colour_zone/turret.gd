@@ -14,9 +14,9 @@ var ATTACK_CD: float = 10.0
 @export var SHOTGUN_PROJECTILE_DMG: float = 0.0
 @export var SHOTGUN_PROJECTILE_SPEED: float = 300.0
 @export var SHOTGUN_PROJECTILE_KNOCKBACK: float = 100.0
-@export var RIFFLE_PROJECTILE_DMG: float = 0.0
-@export var RIFFLE_PROJECTILE_SPEED: float = 300.0
-@export var RIFFLE_PROJECTILE_KNOCKBACK: float = 400.0
+@export var RIFLE_PROJECTILE_DMG: float = 0.0
+@export var RIFLE_PROJECTILE_SPEED: float = 300.0
+@export var RIFLE_PROJECTILE_KNOCKBACK: float = 400.0
 @export var MAP_ATTACK_DMG: float = 0.0
 @export var MAP_ATTACK_SPEED: float = 300.0
 @export var MAP_ATTACK_KNOCKBACK: float = 600.0
@@ -42,7 +42,7 @@ var shoot_angle: float
 var facing_dir: float = 1.0
 
 const SHOTGUN_SCENE = preload("res://scenes/game_scene/projectile/shotgun.tscn")
-const RIFFLE_SCENE = preload("res://scenes/game_scene/projectile/riffle.tscn")
+const RIFLE_SCENE = preload("res://scenes/game_scene/projectile/rifle.tscn")
 @onready var center: Marker2D = $Center
 @onready var projectile: Marker2D = $Center/LaunchPoint
 @onready var attack_detection: Area2D = $AttackZone
@@ -88,7 +88,7 @@ func _physics_process(delta: float) -> void:
 			if attack_preset == 1:
 				shoot_shotgun_projectile(SHOTGUN_PROJECTILE_DMG, SHOTGUN_PROJECTILE_SPEED, SHOTGUN_PROJECTILE_KNOCKBACK, facing_dir, target_angle, -1 ,-1)
 			elif attack_preset == 2:
-				shoot_riffle_projectile(RIFFLE_PROJECTILE_DMG, RIFFLE_PROJECTILE_SPEED, RIFFLE_PROJECTILE_KNOCKBACK, facing_dir, aim_target, -1 ,-1)
+				shoot_rifle_projectile(RIFLE_PROJECTILE_DMG, RIFLE_PROJECTILE_SPEED, RIFLE_PROJECTILE_KNOCKBACK, facing_dir, aim_target, -1 ,-1)
 			attack_cd = ATTACK_CD
 			_pick_random_target()
 			attack_preset = [1, 2].pick_random()
@@ -121,33 +121,33 @@ func _pick_random_target() -> void:
 	else:
 		aim_target = null
 
-func shoot_shotgun_projectile(base_damage: float, speed: float, knockback: float, facing_dir: float, angle: float, attacker_id: int, attacker_team: int) -> void:
+func shoot_shotgun_projectile(base_damage: float, speed: float, knockback: float, p_facing_dir: float, angle: float, attacker_id: int, attacker_team: int) -> void:
 	var shotgun_instance = SHOTGUN_SCENE.instantiate()
 	# Projectile Collision 2
 	shotgun_instance.ATTACKER_ID = attacker_id
 	shotgun_instance.ATTACKER_TEAM = attacker_team
 	shotgun_instance.global_position = projectile.global_position
 	shotgun_instance.facing_angle = angle
-	shotgun_instance.facing_dir = facing_dir
+	shotgun_instance.facing_dir = p_facing_dir
 	shotgun_instance.damage = base_damage
 	shotgun_instance.speed = speed
 	shotgun_instance.knockback = knockback
 	shotgun_instance.lifetime = 4.0
 	get_parent().get_parent().add_child.call_deferred(shotgun_instance)
 
-func shoot_riffle_projectile(base_damage: float, speed: float, knockback: float, facing_dir: float, target: CharacterBody2D, attacker_id: int, attacker_team: int) -> void:
-	var riffle_instance = RIFFLE_SCENE.instantiate()
+func shoot_rifle_projectile(base_damage: float, speed: float, knockback: float, p_facing_dir: float, target: CharacterBody2D, attacker_id: int, attacker_team: int) -> void:
+	var rifle_instance = RIFLE_SCENE.instantiate()
 	# Projectile Collision 2
-	riffle_instance.ATTACKER_ID = attacker_id
-	riffle_instance.ATTACKER_TEAM = attacker_team
-	riffle_instance.global_position = projectile.global_position
-	riffle_instance.target = target
-	riffle_instance.facing_dir = facing_dir
-	riffle_instance.damage = base_damage
-	riffle_instance.speed = speed
-	riffle_instance.knockback = knockback
-	riffle_instance.lifetime = 2.5
-	get_parent().get_parent().add_child.call_deferred(riffle_instance)
+	rifle_instance.ATTACKER_ID = attacker_id
+	rifle_instance.ATTACKER_TEAM = attacker_team
+	rifle_instance.global_position = projectile.global_position
+	rifle_instance.target = target
+	rifle_instance.facing_dir = p_facing_dir
+	rifle_instance.damage = base_damage
+	rifle_instance.speed = speed
+	rifle_instance.knockback = knockback
+	rifle_instance.lifetime = 2.5
+	get_parent().get_parent().add_child.call_deferred(rifle_instance)
 
 func _map_attack_vertical_preset() -> int:
 	var vertical_map_attack_preset = [1,2,3].pick_random()
