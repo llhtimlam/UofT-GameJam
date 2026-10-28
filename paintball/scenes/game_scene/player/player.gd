@@ -27,9 +27,9 @@ var CLIMB_DECELERATION: float = 50.0
 
 # Stat
 @export var HEALTH: float = 100.0
-@export var MELEE_DMG: float = 30.0
+@export var MELEE_DMG: float = 40.0
 @export var MELEE_KNOCKBACK: float = 600.0
-@export var PROJECTILE_DMG: float = 20.0
+@export var PROJECTILE_DMG: float = 90.0
 @export var PROJECTILE_SPEED: float = 800.0
 @export var PROJECTILE_KNOCKBACK: float = 800.0
 const JUMP_VELOCITY = -1200.0

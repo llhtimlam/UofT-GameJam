@@ -4,20 +4,20 @@ signal can_capture
 
 @onready var capture_bar: ProgressBar = $CaptureBar
 
-const MAX_HP : float = 90
+const MAX_HP : float = 120
 var hp : float = MAX_HP
 var fallen : bool = false
 
 var MAP_ATTACK_VERTICAL_CD: float = 4.0
 var MAP_ATTACK_HORIZONTAL_CD: float = 15.0
 var ATTACK_CD: float = 10.0
-@export var SHOTGUN_PROJECTILE_DMG: float = 0.0
+@export var SHOTGUN_PROJECTILE_DMG: float = 5.0
 @export var SHOTGUN_PROJECTILE_SPEED: float = 300.0
 @export var SHOTGUN_PROJECTILE_KNOCKBACK: float = 100.0
-@export var RIFLE_PROJECTILE_DMG: float = 0.0
+@export var RIFLE_PROJECTILE_DMG: float = 2.0
 @export var RIFLE_PROJECTILE_SPEED: float = 300.0
 @export var RIFLE_PROJECTILE_KNOCKBACK: float = 400.0
-@export var MAP_ATTACK_DMG: float = 0.0
+@export var MAP_ATTACK_DMG: float = 10.0
 @export var MAP_ATTACK_SPEED: float = 300.0
 @export var MAP_ATTACK_KNOCKBACK: float = 600.0
 
