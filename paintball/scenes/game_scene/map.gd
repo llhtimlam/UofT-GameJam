@@ -4,6 +4,7 @@ extends Node2D
 const PLAYER_SCENE = preload("res://scenes/game_scene/player/player.tscn")
 var users: Array[String] = ["P1", "P2"]
 var player_instances: Array[CharacterBody2D] = []
+signal player_eliminated(player: CharacterBody2D)
 @export var PLAYER1: Node2D
 @export var PLAYER2: Node2D
 
@@ -11,8 +12,6 @@ var player_instances: Array[CharacterBody2D] = []
 @onready var P2Spawn: Marker2D = $Player2SpawnPoint
 
 # Base
-@onready var base_p1: Marker2D = $P1BaseSpawnPoint
-@onready var base_p2: Marker2D = $P2BaseSpawnPoint
 const BASE_SCENE = preload("res://scenes/game_scene/base/base.tscn")
 var p1_base_instance: Node2D = null
 var p2_base_instance: Node2D = null
@@ -28,6 +27,12 @@ var p2_base_instance: Node2D = null
 @onready var p1_color_wheel: Sprite2D = $Player1ColorWheel
 @onready var p2_color_wheel: Sprite2D = $Player2ColorWheel
 @onready var turret_color_wheel: Sprite2D = $TurretColorWheel
+@onready var p1_score_progress_self: TextureProgressBar = $Player1ColorWheel/P1SelfScore
+@onready var p1_score_progress_enemy: TextureProgressBar = $Player1ColorWheel/P1EnemyScore
+@onready var p1_score_progress_turret: TextureProgressBar = $Player1ColorWheel/P1TurretScore
+@onready var p2_score_progress_self: TextureProgressBar = $Player2ColorWheel/P2SelfScore
+@onready var p2_score_progress_enemy: TextureProgressBar = $Player2ColorWheel/P2EnemyScore
+@onready var p2_score_progress_turret: TextureProgressBar = $Player2ColorWheel/P2TurretScore
 
 # Platform
 @onready var platform_tile: TileMapLayer = $TileMapLayer
@@ -74,6 +79,12 @@ func _ready() -> void:
 		p2_color_wheel.material = p2_color_wheel.material.duplicate()
 	if turret_color_wheel and turret_color_wheel.material:
 		turret_color_wheel.material = turret_color_wheel.material.duplicate()
+	p1_score_progress_self.self_modulate = p1_color
+	p1_score_progress_enemy.self_modulate = p2_color
+	p1_score_progress_turret.self_modulate = turret_color
+	p2_score_progress_self.self_modulate = p2_color
+	p2_score_progress_enemy.self_modulate = p1_color
+	p2_score_progress_turret.self_modulate = turret_color
 	# Player
 	PLAYER1.player_eliminated.connect(player_killed)
 	PLAYER2.player_eliminated.connect(player_killed)
@@ -106,7 +117,7 @@ func _ready() -> void:
 	p1_base_instance.turret_color = turret_color
 	p1_base_instance.score = Vector3(255,0,0)
 	add_child.call_deferred(p1_base_instance)
-	p1_base_instance.global_position = base_p1.global_position
+	p1_base_instance.global_position = p1_color_wheel.global_position
 	
 	p2_base_instance = BASE_SCENE.instantiate()
 	p2_base_instance.defender = PLAYER2
@@ -116,7 +127,7 @@ func _ready() -> void:
 	p2_base_instance.turret_color = turret_color
 	p2_base_instance.score = Vector3(0,0,255)
 	add_child.call_deferred(p2_base_instance)
-	p2_base_instance.global_position = base_p2.global_position
+	p2_base_instance.global_position = p2_color_wheel.global_position
 	update_color_wheel()
 	
 	# Setup rope
@@ -199,7 +210,12 @@ func update_color_wheel() -> void:
 		turret_color_wheel.material.set_shader_parameter("custom_color_middle", turret_normalized_color)
 		turret_color_wheel.material.set_shader_parameter("custom_color_left", Vector3(0, 0 ,0))
 		turret_color_wheel.material.set_shader_parameter("custom_color_right", Vector3(0, 0, 0))
-	
+	p1_score_progress_self.value = p1_base_instance.progress_self_score
+	p1_score_progress_enemy.value = p1_base_instance.progress_enemy_score
+	p1_score_progress_turret.value = p1_base_instance.progress_turret_score
+	p2_score_progress_self.value = p2_base_instance.progress_self_score
+	p2_score_progress_enemy.value = p2_base_instance.progress_enemy_score
+	p2_score_progress_turret.value = p2_base_instance.progress_turret_score
 func _get_platform(id: int) -> TileMapLayer:
 	match id:
 		1: return platform1_tile
@@ -232,8 +248,12 @@ func _get_platform(id: int) -> TileMapLayer:
 		#var existing_right_tile_x: Vector2i = platform[1].x
 	#return true
 	#
-
+	
 func set_platform(left_cell: Vector2i, right_cell: Vector2i, source_id: int) -> void:
 	var length: int = right_cell.x - left_cell.x + 1
 	for i in range(length):
 		platform_tile.set_cell(left_cell + Vector2i(i, 0), source_id, PLATFORM_ATLAS)
+
+
+func _on_player_2_player_eliminated(player: CharacterBody2D) -> void:
+	pass # Replace with function body.

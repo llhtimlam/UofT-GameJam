@@ -12,14 +12,14 @@ uniform float fill_percentage : hint_range(0.0, 1.0) = 0.0;
 
 void fragment() {
     // 1. Equilateral coordinates (60 degrees, equal sides)
-    vec2 eq_green = vec2(0.5, 0.15);
-    vec2 eq_blue  = vec2(0.15, 0.75);
-    vec2 eq_red   = vec2(0.85, 0.75);
+    vec2 eq_middle = vec2(0.5, 0.10);
+    vec2 eq_left  = vec2(0.15, 0.70);
+    vec2 eq_right   = vec2(0.85, 0.70);
     
     // 2. Geometric Equilateral Boundary Check
-    float det = (eq_blue.y - eq_red.y) * (eq_green.x - eq_red.x) + (eq_red.x - eq_blue.x) * (eq_green.y - eq_red.y);
-    float w_g = ((eq_blue.y - eq_red.y) * (UV.x - eq_red.x) + (eq_red.x - eq_blue.x) * (UV.y - eq_red.y)) / det;
-    float w_b = ((eq_red.y - eq_green.y) * (UV.x - eq_red.x) + (eq_green.x - eq_red.x) * (UV.y - eq_red.y)) / det;
+    float det = (eq_left.y - eq_right.y) * (eq_middle.x - eq_right.x) + (eq_right.x - eq_left.x) * (eq_middle.y - eq_right.y);
+    float w_g = ((eq_left.y - eq_right.y) * (UV.x - eq_right.x) + (eq_right.x - eq_left.x) * (UV.y - eq_right.y)) / det;
+    float w_b = ((eq_right.y - eq_middle.y) * (UV.x - eq_right.x) + (eq_middle.x - eq_right.x) * (UV.y - eq_right.y)) / det;
     float w_r = 1.0 - w_g - w_b;
     
     if (w_r < 0.0 || w_g < 0.0 || w_b < 0.0) {
@@ -87,7 +87,7 @@ void fragment() {
     }
     
     // Map the calculated color center back into the physical 2D screen UV space
-    vec2 dynamic_center = target_w_r * eq_red + target_w_g * eq_green + target_w_b * eq_blue;
+    vec2 dynamic_center = target_w_r * eq_right + target_w_g * eq_middle + target_w_b * eq_left;
     
     // Render the dynamic center indicator dot
     float dist_to_center = distance(UV, dynamic_center);

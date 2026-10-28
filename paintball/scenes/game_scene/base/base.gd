@@ -10,6 +10,9 @@ var owner_normalized_color: Vector3
 var display_self_score: Vector3 = Vector3.ZERO
 var display_enemy_score: Vector3 = Vector3.ZERO
 var display_turret_score: Vector3 = Vector3.ZERO
+var progress_self_score: float
+var progress_enemy_score: float
+var progress_turret_score: float
 
 var base_color: Color:
 	set(value):
@@ -28,15 +31,21 @@ var score: Vector3 = Vector3.ZERO: # Format: (P1, Turret, P2)
 		score = value
 		var normalized_score = score / 255.0
 		if team_id == 1:
+			progress_self_score = normalized_score.x * 100
+			progress_enemy_score = normalized_score.z * 100
+			progress_turret_score = normalized_score.y * 100
 			display_self_score = normalized_base_color * normalized_score.x
 			display_enemy_score = normalized_enemy_color * normalized_score.z
 			display_turret_score = normalized_turret_color * normalized_score.y
 		else:
+			progress_self_score = normalized_score.z * 100
+			progress_enemy_score = normalized_score.x * 100
+			progress_turret_score = normalized_score.y * 100
 			display_self_score = normalized_base_color * normalized_score.z
 			display_enemy_score = normalized_enemy_color * normalized_score.x
 			display_turret_score = normalized_turret_color * normalized_score.y
 
-const MAX_HP : float = 30
+const MAX_HP : float = 40
 var hp : float = MAX_HP
 
 func _ready() -> void:
