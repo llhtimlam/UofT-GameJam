@@ -25,6 +25,10 @@ var combined: bool = false
 # UI
 @onready var healthbar1: ColorRect = $PlayerUI1/ProgressBar
 @onready var healthbar2: ColorRect = $PlayerUI2/ProgressBar
+#@onready var stunbar1: TextureProgressBar = $PlayerUI1/StunBar
+#@onready var stunbar2: TextureProgressBar = $PlayerUI2/StunBar
+#@onready var dashbar1: TextureProgressBar = $PlayerUI1/DashBar
+#@onready var dashbar2: TextureProgressBar = $PlayerUI2/DashBar
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
@@ -53,6 +57,16 @@ func _physics_process(_delta: float) -> void:
 	P1Cols.material.set_shader_parameter("cur_col", player_1_color/255.)
 	P2Cols.material.set_shader_parameter("cur_col", player_2_color/255.)
 	
+	# Health
+	healthbar1.anchor_right = player1.HEALTH/100.
+	healthbar2.anchor_right = player2.HEALTH/100.
+	
+	# Dash
+	#dashbar1.value = player1.dash_cd / player1.DASH_CD
+	#dashbar2.value = player2.dash_cd / player2.DASH_CD
+	#dashbar1.Location = player1.get_screen_transform().get_origin()
+	#dashbar2.Location = player2.get_screen_transform().get_origin() - Vector2(get_window().size.x*.501,0.)
+	
 	# Split screen
 	var p1_prop = player1.get_screen_transform().get_origin()/Vector2(get_window().size)
 	var p2_prop = player2.get_screen_transform().get_origin()/Vector2(get_window().size)
@@ -67,10 +81,6 @@ func _physics_process(_delta: float) -> void:
 	else:
 		center.y = player1.CAMERA_Y
 		diff.y = 0
-	
-	# Health
-	healthbar1.anchor_right = player1.HEALTH/100.
-	healthbar2.anchor_right = player2.HEALTH/100.
 	
 	if not combined and max(diff.x, diff.y) < MERGE_PROPORTION:
 		var screen_correction = Vector2(get_window().size.x*.25,0) / player1.camera.zoom

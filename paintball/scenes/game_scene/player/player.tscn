@@ -2,6 +2,7 @@
 
 [ext_resource type="Script" uid="uid://b0iohuh6rl7g5" path="res://scenes/game_scene/player/player.gd" id="1_tcwrj"]
 [ext_resource type="Texture2D" uid="uid://miqo1wbx3pow" path="res://icon.svg" id="2_7k1jl"]
+[ext_resource type="Script" uid="uid://dndiybdxky6cb" path="res://scenes/game_scene/player/progressBar.gd" id="3_7k1jl"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_xrivr"]
 size = Vector2(32, 64)
@@ -11,6 +12,30 @@ size = Vector2(32, 65)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_13qdw"]
 size = Vector2(32, 64)
+
+[sub_resource type="Gradient" id="Gradient_l4yx7"]
+offsets = PackedFloat32Array(0, 0.67551625, 0.70501477, 0.96755165, 0.99705017)
+colors = PackedColorArray(1, 1, 1, 0, 1, 0, 0, 0, 1, 0, 0, 0.4, 1, 0, 0, 0.4, 1, 0, 0, 0)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_kyjql"]
+gradient = SubResource("Gradient_l4yx7")
+width = 128
+height = 128
+fill = 1
+fill_from = Vector2(0.5, 0.5)
+fill_to = Vector2(0.5, 0)
+
+[sub_resource type="Gradient" id="Gradient_0v83j"]
+offsets = PackedFloat32Array(0, 0.35693216, 0.38053098, 0.63126844, 0.6637168)
+colors = PackedColorArray(1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1, 0.4, 1, 1, 1, 0.4, 1, 1, 1, 0)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_7p8hl"]
+gradient = SubResource("Gradient_0v83j")
+width = 128
+height = 128
+fill = 1
+fill_from = Vector2(0.5, 0.5)
+fill_to = Vector2(0.5, 0)
 
 [node name="Player" type="CharacterBody2D" unique_id=25147227]
 collision_layer = 6
@@ -59,3 +84,29 @@ texture = ExtResource("2_7k1jl")
 position = Vector2(0, -48)
 
 [node name="Camera2D" type="Camera2D" parent="." unique_id=1764947080]
+
+[node name="StunBar" type="TextureProgressBar" parent="." unique_id=643186231]
+texture_filter = 2
+offset_left = -64.0
+offset_top = -64.0
+offset_right = 64.0
+offset_bottom = 64.0
+max_value = 1.0
+step = 0.0
+value = 0.17
+fill_mode = 4
+texture_progress = SubResource("GradientTexture2D_kyjql")
+script = ExtResource("3_7k1jl")
+
+[node name="DashBar" type="TextureProgressBar" parent="." unique_id=2080858808]
+texture_filter = 2
+offset_left = -64.0
+offset_top = -64.0
+offset_right = 64.0
+offset_bottom = 64.0
+max_value = 1.0
+step = 0.0
+value = 0.125
+fill_mode = 4
+texture_progress = SubResource("GradientTexture2D_7p8hl")
+script = ExtResource("3_7k1jl")

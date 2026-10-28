@@ -121,6 +121,12 @@ var camera_i: Vector2 = Vector2.ZERO
 var screens_merging = false
 var camera_target = Vector2.ZERO
 
+# UI
+const INDICATOR_Y = -60
+const INDICATOR_BUCKET_Y = -90
+@onready var StunBar: TextureProgressBar = $StunBar
+@onready var DashBar: TextureProgressBar = $DashBar
+
 # User Input Mapping
 func _input(event: InputEvent) -> void:
 	if !is_spawned:
@@ -217,6 +223,19 @@ func _ready() -> void:
 func _physics_process(delta: float) -> void:
 	if is_dead:
 		return
+	
+	# UI
+	StunBar.value = stun_cd/STUN_CD
+	StunBar.Scale = camera.zoom.x
+	DashBar.value = dash_cd/DASH_CD
+	DashBar.Scale = camera.zoom.x
+	if is_instance_valid(held_bucket):
+		StunBar.Location = Vector2(0,INDICATOR_BUCKET_Y)
+		DashBar.Location = Vector2(0,INDICATOR_BUCKET_Y)
+	else:
+		StunBar.Location = Vector2(0,INDICATOR_Y)
+		DashBar.Location = Vector2(0,INDICATOR_Y)
+	
 	
 	match control_type:
 		"P1":
