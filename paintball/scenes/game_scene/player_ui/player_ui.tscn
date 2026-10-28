@@ -1,19 +1,30 @@
 [gd_scene format=3 uid="uid://dlf86r28uod0r"]
 
+[ext_resource type="Script" uid="uid://cqgmk6nonm5q7" path="res://scenes/game_scene/player_ui/label.gd" id="1_l4yx7"]
+
 [node name="PlayerUI" type="Control" unique_id=2014902624]
 layout_mode = 3
 anchor_right = 0.499
 anchor_bottom = 0.897
 
-[node name="Label" type="Label" parent="." unique_id=1171311217]
+[node name="ProgressBar" type="ColorRect" parent="." unique_id=187189309]
+clip_contents = true
 layout_mode = 1
 anchors_preset = -1
-anchor_top = 1.0
-anchor_bottom = 1.0
-offset_left = 14.0
-offset_top = -40.511963
-offset_right = 149.0
-offset_bottom = -2.511963
+anchor_right = 1.0
+anchor_bottom = 0.010000001
+offset_bottom = 11.625118
 grow_horizontal = 2
 grow_vertical = 2
-text = "ui stuff goes here"
+color = Color(1, 0.06279585, 0.26286736, 1)
+
+[node name="Label" type="Label" parent="ProgressBar" unique_id=2013049332]
+layout_mode = 1
+anchors_preset = 9
+anchor_bottom = 1.0
+offset_left = 5.0
+offset_right = 57.0
+offset_bottom = -0.25023842
+grow_vertical = 2
+text = "HEALTH"
+script = ExtResource("1_l4yx7")

@@ -22,6 +22,10 @@ const SCREEN_MERGE_DIST_2D = 15
 @onready var player2: CharacterBody2D = viewport1.get_node("Map/Player2")
 var combined: bool = false
 
+# UI
+@onready var healthbar1: ColorRect = $PlayerUI1/ProgressBar
+@onready var healthbar2: ColorRect = $PlayerUI2/ProgressBar
+
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	# Color labels
@@ -29,8 +33,8 @@ func _ready() -> void:
 	var g = green.srgb_to_linear()
 	var b = blue.srgb_to_linear()
 	var col_matrix = Basis(Vector3(r.r, r.g, r.b),Vector3(g.r, g.g, g.b),Vector3(b.r, b.g, b.b))
-	#P1Cols.material.set_shader_parameter("colors", col_matrix)
-	#P2Cols.material.set_shader_parameter("colors", col_matrix)
+	P1Cols.material.set_shader_parameter("colors", col_matrix)
+	P2Cols.material.set_shader_parameter("colors", col_matrix)
 	
 	# Split screen
 	var camera1 = player1.get_node("Camera2D")
@@ -44,7 +48,7 @@ func _ready() -> void:
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
-func _physics_process(delta: float) -> void:
+func _physics_process(_delta: float) -> void:
 	# Color labels
 	P1Cols.material.set_shader_parameter("cur_col", player_1_color/255.)
 	P2Cols.material.set_shader_parameter("cur_col", player_2_color/255.)
@@ -63,6 +67,10 @@ func _physics_process(delta: float) -> void:
 	else:
 		center.y = player1.CAMERA_Y
 		diff.y = 0
+	
+	# Health
+	healthbar1.anchor_right = player1.HEALTH/100.
+	healthbar2.anchor_right = player2.HEALTH/100.
 	
 	if not combined and max(diff.x, diff.y) < MERGE_PROPORTION:
 		var screen_correction = Vector2(get_window().size.x*.25,0) / player1.camera.zoom

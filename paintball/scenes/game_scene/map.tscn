@@ -11552,8 +11552,8 @@ sources/0 = SubResource("TileSetAtlasSource_iqgdr")
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_13qdw"]
 shader = ExtResource("5_d327o")
-shader_parameter/custom_color_middle = Vector3(1, 0, 0)
-shader_parameter/custom_color_left = Vector3(0, 1, 0)
+shader_parameter/custom_color_middle = Vector3(0, 0, 0)
+shader_parameter/custom_color_left = Vector3(0, 0, 0)
 shader_parameter/custom_color_right = Vector3(0, 0, 1)
 shader_parameter/fill_percentage = 0.0
 
