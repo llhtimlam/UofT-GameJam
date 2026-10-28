@@ -7,7 +7,7 @@ var ATTACKER_TEAM: int
 # Stat
 var damage: float
 var knockback: float
-var stun_time: float = 3.0
+var stun_time: float = 2.0
 
 # Physic
 var facing_dir: float = 0.0

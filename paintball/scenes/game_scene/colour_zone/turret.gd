@@ -4,7 +4,7 @@ signal can_capture
 
 @onready var capture_bar: ProgressBar = $CaptureBar
 
-const MAX_HP : float = 120
+const MAX_HP : float = 40
 var hp : float = MAX_HP
 var fallen : bool = false
 
@@ -204,7 +204,7 @@ func take_damage(damage, _attacker_id, attacker_team) -> void:
 		Bucket.spawn(
 				get_parent().get_parent(),
 				get_parent().get_parent().bucket_spawn_turret.global_position,
-				Vector3(0, 64, 0)
+				Vector3(0, 16, 0)
 				)
 		fallen = true
 		#can_capture.emit(attacker_team)

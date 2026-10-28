@@ -29,7 +29,7 @@ var CLIMB_DECELERATION: float = 50.0
 @export var HEALTH: float = 100.0
 @export var MELEE_DMG: float = 40.0
 @export var MELEE_KNOCKBACK: float = 600.0
-@export var PROJECTILE_DMG: float = 90.0
+@export var PROJECTILE_DMG: float = 50.0
 @export var PROJECTILE_SPEED: float = 800.0
 @export var PROJECTILE_KNOCKBACK: float = 800.0
 const JUMP_VELOCITY = -1200.0
@@ -73,6 +73,7 @@ var held_bucket: Node2D = null
 @onready var bucket_slot: Marker2D = $BucketPosition
 
 var is_dead: bool = false
+var iframe: float = 1.0
 
 # Crouching
 var is_crouching: bool = false
@@ -108,7 +109,7 @@ var is_aiming: bool = false
 const PROJECTILE_SCENE = preload("res://scenes/game_scene/projectile/projectile.tscn")
 
 # World Boundary
-const Y_BOUNDARY = 1500
+const Y_BOUNDARY = 200
 
 # Camera
 const MIN_SCREEN_HEIGHT = 550
@@ -208,6 +209,9 @@ func reset_state():
 	shoot_cd = 0
 	climb_cd = 0
 	stun_cd = 0
+	self.visible = true
+	set_physics_process(true)
+	hurtbox.set_deferred("disabled", false)
 	
 func _ready() -> void:
 	add_to_group("player")
@@ -341,7 +345,7 @@ func _physics_process(delta: float) -> void:
 	
 	velocity.x = base_velocity + knockback_velocity
 	move_and_slide()
-	if not is_aiming and not is_climbing:
+	if not is_aiming and not is_stun and not is_climbing:
 		# Dash
 		if input_dash and dash_cd <= 0:
 				dash_dir = facing_dir
@@ -403,6 +407,7 @@ func _physics_process(delta: float) -> void:
 	melee_cd = max(melee_cd - delta, 0.0)
 	aim_cd = max(aim_cd - delta, 0.0)
 	shoot_cd = max(shoot_cd - delta, 0.0)
+	iframe = max(iframe - delta, 0.0)
 	
 	# World Boundary
 	if position.y > Y_BOUNDARY:
@@ -414,7 +419,9 @@ func _physics_process(delta: float) -> void:
 func take_damage(amount: float, attacker_id: int, attacker_team: int) -> void:
 	if is_dead:
 		return
-	
+	if iframe > 0 and attacker_team != 0:
+		return
+		
 	HEALTH -= amount * damage_reduction
 	if HEALTH <= 0.0:
 		if is_instance_valid(held_bucket):
@@ -423,10 +430,14 @@ func take_damage(amount: float, attacker_id: int, attacker_team: int) -> void:
 		velocity = Vector2.ZERO
 		base_velocity = 0.0
 		knockback_velocity = 0.0
-		
-		player_eliminated.emit(self)
+		self.visible = false
+		set_physics_process(false)
+		hurtbox.set_deferred("disabled", true)
+		player_eliminated.emit(self, attacker_id, attacker_team)
 
 func apply_knockback(k_dir: float, knockback: float, stun_time: float = STUN_CD) -> void:
+	if iframe > 0:
+		return
 	if is_climbing == true:
 		is_climbing = false
 	is_crouching = false
