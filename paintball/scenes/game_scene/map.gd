@@ -4,7 +4,6 @@ extends Node2D
 const PLAYER_SCENE = preload("res://scenes/game_scene/player/player.tscn")
 var users: Array[String] = ["P1", "P2"]
 var player_instances: Array[CharacterBody2D] = []
-signal player_eliminated(player: CharacterBody2D)
 @export var PLAYER1: Node2D
 @export var PLAYER2: Node2D
 

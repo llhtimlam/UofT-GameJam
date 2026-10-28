@@ -14,7 +14,7 @@ var ATTACK_CD: float = 10.0
 @export var SHOTGUN_PROJECTILE_DMG: float = 5.0
 @export var SHOTGUN_PROJECTILE_SPEED: float = 300.0
 @export var SHOTGUN_PROJECTILE_KNOCKBACK: float = 100.0
-@export var RIFLE_PROJECTILE_DMG: float = 2.0
+@export var RIFLE_PROJECTILE_DMG: float = 8.0
 @export var RIFLE_PROJECTILE_SPEED: float = 300.0
 @export var RIFLE_PROJECTILE_KNOCKBACK: float = 400.0
 @export var MAP_ATTACK_DMG: float = 10.0
@@ -30,9 +30,9 @@ var attack_preset: int = 1
 var vertical_x_preset1: Array[float] = [-432, -216, 0, 216, 432]
 var vertical_x_preset2: Array[float] = [-360, -144, 72, 288]
 var vertical_x_preset3: Array[float] = [-288, -72, 144, 360]
-var horizontal_y_preset1: Array[float] = [-1056, -800, -200]
-var horizontal_y_preset2: Array[float] = [-1090, -416]
-var horizontal_y_preset3: Array[float] = [-1130, -300, -544]
+var horizontal_y_preset1: Array[float] = [-1056]
+var horizontal_y_preset2: Array[float] = [-1090]
+var horizontal_y_preset3: Array[float] = [-1130]
 
 var aimable_targets: Array[CharacterBody2D]
 var aim_target: CharacterBody2D
@@ -178,7 +178,7 @@ func _generate_vertical_map_attack(x: float) -> void:
 	# Map Attack Collision 2
 	map_attack_vertical_instance.ATTACKER_ID = -1
 	map_attack_vertical_instance.ATTACKER_TEAM = -1
-	map_attack_vertical_instance.global_position = Vector2(x, 0)
+	map_attack_vertical_instance.global_position = Vector2(x, -15)
 	map_attack_vertical_instance.facing_dir = signf(x)
 	map_attack_vertical_instance.damage = MAP_ATTACK_DMG
 	map_attack_vertical_instance.knockback = MAP_ATTACK_KNOCKBACK
