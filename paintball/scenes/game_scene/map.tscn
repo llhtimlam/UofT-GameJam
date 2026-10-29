@@ -527,12 +527,12 @@ tile_map_data = PackedByteArray("AADt//f/AAABAAAAAADt/+v/AAABAAAAAADu//f/AAACAAA
 tile_set = ExtResource("100_um714")
 
 [node name="Player1" parent="." unique_id=25147227 instance=ExtResource("2_2m4d5")]
-position = Vector2(-980, -250)
+position = Vector2(-1088, -2000)
 
 [node name="Camera2D2" type="Camera2D" parent="Player1" unique_id=1545230877]
 
 [node name="Player2" parent="." unique_id=817086128 instance=ExtResource("2_2m4d5")]
-position = Vector2(980, -250)
+position = Vector2(1120, -2000)
 control_type = "P2"
 TEAM_ID = 2
 PLAYER_ID = 2
@@ -599,7 +599,7 @@ radial_fill_degrees = 115.0
 texture_progress = ExtResource("9_x0on3")
 
 [node name="Player1SpawnPoint" type="Marker2D" parent="." unique_id=324260113]
-position = Vector2(-980, -250)
+position = Vector2(-1088, -2000)
 
 [node name="P1PaintBucketSpawnPoint" type="Marker2D" parent="." unique_id=627514841]
 position = Vector2(-1088, -176)
@@ -664,7 +664,7 @@ radial_fill_degrees = 115.0
 texture_progress = ExtResource("9_x0on3")
 
 [node name="Player2SpawnPoint" type="Marker2D" parent="." unique_id=1644131078]
-position = Vector2(980, -250)
+position = Vector2(1120, -2000)
 
 [node name="P2PaintBucketSpawnPoint" type="Marker2D" parent="." unique_id=436978477]
 position = Vector2(1120, -176)
