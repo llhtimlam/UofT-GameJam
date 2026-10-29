@@ -16,6 +16,8 @@ var p1_base_instance: Node2D = null
 var p2_base_instance: Node2D = null
 var p1_spin_tween: Tween
 var p2_spin_tween: Tween
+var p1_zoom_tween: Tween
+var p2_zoom_tween: Tween
 
 # Display color
 @export var p1_color : Color = Color(255,0,0)
@@ -36,31 +38,33 @@ var p2_spin_tween: Tween
 @onready var p2_score_progress_turret: TextureProgressBar = $Player2ColorWheel/P2TurretScore
 
 # Platform
-@onready var platform_tile: TileMapLayer = $TileMapLayer
-@onready var platform1_tile: TileMapLayer = $BreakablePlatform1
-@onready var platform2_tile: TileMapLayer = $BreakablePlatform2
-@onready var platform3_tile: TileMapLayer = $BreakablePlatform3
-const PLATFORM_ATLAS: Vector2i = Vector2i(1,0)
-var platform_spawn_interval: float = 0.0
-var platform_lifetime: float = 0.0
-
+@onready var platform1: TileMapLayer = $Platform1
+@onready var platform2: TileMapLayer = $Platform2
+@onready var platform3: TileMapLayer = $Platform3
+@onready var platform12: TileMapLayer = $Platform12
+@onready var platform23: TileMapLayer = $Platform23
+@onready var platform31: TileMapLayer = $Platform31
+@onready var platform12a: TileMapLayer = $Platform12a
+@onready var platform12b: TileMapLayer = $Platform12b
+@onready var platform21a: TileMapLayer = $Platform21a
+@onready var platform21b: TileMapLayer = $Platform21b
+@onready var platform13a: TileMapLayer = $Platform13a
+@onready var platform13b: TileMapLayer = $Platform13b
+@onready var platform31a: TileMapLayer = $Platform31a
+@onready var platform31b: TileMapLayer = $Platform31b
+@onready var platform23a: TileMapLayer = $Platform23a
+@onready var platform23b: TileMapLayer = $Platform23b
+@onready var platform32a: TileMapLayer = $Platform32a
+@onready var platform32b: TileMapLayer = $Platform32b
 var PLATFORM_LIFETIME: float = 8.0
-var PLATFORM_VARIANCE: float = 1.0
+var PLATFORM_VARIANCE: float = 2.0
+var PLATFORM_TRANSITION_TIME: float = 3.0
 var PLATFORM_OVERLAP_TIME: float = 5.0
 
-var BREAKABLE_BOUND_TOP: int = -25
-var BREAKABLE_BOUND_BOTTOM: int = -10
-var BREAKABLE_BOUND_LEFT: int = -11
-var BREAKABLE_BOUND_RIGHT: int = 11
-var BREAKABLE_LENGTH_LOWEST: int = 4
-var BREAKABLE_LENGTH_HIGHEST: int = 20
-var BREAKABLE_MARGIN: int = 2
-
-var platform_storage: Array[Array] = []
-var break_preset1: bool = false
-var break_preset2: bool = false
-var break_preset3: bool = false
-var preset: int = 3
+var current_platform: int = 1
+var next_platform: int
+var transition_step: int = 3
+var platform_timer: float = 0.0
 
 # Rope
 @onready var rope_tile: TileMapLayer = $RopeLayer
@@ -148,10 +152,26 @@ func _ready() -> void:
 	add_child(rope_instance_p2_base)
 	rope_instance_p2_base.tilemap = rope_tile
 	rope_instance_p2_base.setup_rope(Vector2i(23,-28), Vector2i(23,-9))
-	# Setup Platform for spawning
-	platform1_tile.enabled = false
-	platform2_tile.enabled = false
-	platform3_tile.enabled = false
+	
+	#Setup Platform
+	platform1.enabled = false
+	platform2.enabled = false
+	platform3.enabled = false
+	platform12.enabled = false
+	platform23.enabled = false
+	platform31.enabled = false
+	platform12a.enabled = false
+	platform12b.enabled = false
+	platform21a.enabled = false
+	platform21b.enabled = false
+	platform13a.enabled = false
+	platform13b.enabled = false
+	platform31a.enabled = false
+	platform31b.enabled = false
+	platform23a.enabled = false
+	platform23b.enabled = false
+	platform32a.enabled = false
+	platform32b.enabled = false
 	
 func player_killed(player, attacker_id: int, attacker_team: int):
 	#TODO: mobile spawn point once capture points exist
@@ -177,30 +197,30 @@ func player_killed(player, attacker_id: int, attacker_team: int):
 
 func _physics_process(delta: float) -> void:
 	# Timer
-	platform_spawn_interval = max(platform_spawn_interval - delta, 0.0)
-	platform_lifetime = max(platform_lifetime - delta, 0.0)
-	
-	if platform_spawn_interval <= 0.0:
-		platform_spawn_interval = randf_range(
-							PLATFORM_LIFETIME - PLATFORM_VARIANCE,
-							PLATFORM_LIFETIME + PLATFORM_VARIANCE
-						)
-						
-		platform_lifetime = PLATFORM_OVERLAP_TIME # Must be smaller than platform_spawn_interval
-		var current_preset = _get_platform(preset)
-		current_preset.enabled = true
-		break_preset1 = (preset != 1)
-		break_preset2 = (preset != 2)
-		break_preset3 = (preset != 3)
-		preset = (preset % 3) + 1
-	
-	if platform_lifetime <= 0.0:
-		if break_preset1:
-			platform1_tile.enabled = false
-		if break_preset2:
-			platform2_tile.enabled = false
-		if break_preset3:
-			platform3_tile.enabled = false
+	platform_timer = max(platform_timer - delta, 0.0)
+	# Platform Switching
+	if platform_timer <= 0:
+		match transition_step:
+			0:
+				_advance_transition()
+				platform_timer = PLATFORM_TRANSITION_TIME
+				transition_step = 1
+			1:
+				_advance_transition()
+				platform_timer = PLATFORM_OVERLAP_TIME
+				transition_step = 2
+			2:
+				_advance_transition()
+				platform_timer = PLATFORM_TRANSITION_TIME
+				transition_step = 3
+			3:
+				_advance_transition()
+				_pick_next_platform()
+				platform_timer = randf_range(
+					PLATFORM_LIFETIME - PLATFORM_VARIANCE,
+					PLATFORM_LIFETIME + PLATFORM_VARIANCE
+				)
+				transition_step = 0
 	
 func update_color_wheel() -> void:
 	if p1_color_wheel and p1_color_wheel.material is ShaderMaterial:
@@ -213,8 +233,8 @@ func update_color_wheel() -> void:
 		p2_color_wheel.material.set_shader_parameter("custom_color_right", p2_base_instance.display_enemy_score)
 	if turret_color_wheel and turret_color_wheel.material is ShaderMaterial:
 		turret_color_wheel.material.set_shader_parameter("custom_color_middle", turret_normalized_color)
-		turret_color_wheel.material.set_shader_parameter("custom_color_left", Vector3(0, 0 ,0))
-		turret_color_wheel.material.set_shader_parameter("custom_color_right", Vector3(0, 0, 0))
+		turret_color_wheel.material.set_shader_parameter("custom_color_left", Vector3(1, 1 ,1)) # Scale with Capture Point
+		turret_color_wheel.material.set_shader_parameter("custom_color_right", Vector3(1, 1, 1)) # Scale with Capture Point
 	p1_score_progress_self.value = p1_base_instance.progress_self_score
 	p1_score_progress_enemy.value = p1_base_instance.progress_enemy_score
 	p1_score_progress_turret.value = p1_base_instance.progress_turret_score
@@ -240,44 +260,159 @@ func p2_base_hurt_animation() -> void:
 	var target_rotation: float = p2_color_wheel.rotation + (6 * PI)
 	p2_spin_tween.tween_property(p2_color_wheel, "rotation", target_rotation, 1.0)
 	
-func _get_platform(id: int) -> TileMapLayer:
-	match id:
-		1: return platform1_tile
-		2: return platform2_tile
-		_: return platform3_tile
+func p1_base_zoom_animation() -> void:
+	if p1_zoom_tween and p1_zoom_tween.is_valid():
+		p1_zoom_tween.kill()
+	p1_color_wheel.scale = Vector2.ONE
+	p1_zoom_tween = create_tween()
+	p1_zoom_tween.tween_property(p1_color_wheel, "scale", Vector2(1.3, 1.3), 0.15)
+	p1_zoom_tween.tween_property(p1_color_wheel, "scale", Vector2.ONE, 0.15)
 	
-#func change_platform() -> void:
-	#for attempt in 100:
-		#var spawn_length: int = randi_range(BREAKABLE_LENGTH_LOWEST, BREAKABLE_LENGTH_HIGHEST)
-		#var spawn_tile: Vector2i = Vector2i(
-								#randi_range(
-									#BREAKABLE_BOUND_LEFT,
-									#BREAKABLE_BOUND_RIGHT - spawn_length - 1
-								#),
-								#randi_range(
-									#BREAKABLE_BOUND_TOP,
-									#BREAKABLE_BOUND_BOTTOM
-								#)
-								#)
-		#if check_spawn(spawn_tile, spawn_length):
-			#print()
-#
-#func check_spawn(spawn_tile: Vector2i, spawn_length: int) -> bool:
-	#var left_tile_x: int = spawn_tile.x
-	#var tile_y: int = spawn_tile.y
-	#var right_tile_x: int = spawn_tile.x + spawn_length - 1
-	#for platform in platform_storage:
-		#var existing_left_tile_x: Vector2i = platform[0].x
-		#var existing_tile_y: Vector2i = platform[0].y
-		#var existing_right_tile_x: Vector2i = platform[1].x
-	#return true
-	#
+func p2_base_zoom_animation() -> void:
+	if p2_zoom_tween and p2_zoom_tween.is_valid():
+		p2_zoom_tween.kill()
+	p2_color_wheel.scale = Vector2.ONE
+	p2_zoom_tween = create_tween()
+	p2_zoom_tween.tween_property(p2_color_wheel, "scale", Vector2(1.3, 1.3), 0.15)
+	p2_zoom_tween.tween_property(p2_color_wheel, "scale", Vector2.ONE, 0.15)
 	
-func set_platform(left_cell: Vector2i, right_cell: Vector2i, source_id: int) -> void:
-	var length: int = right_cell.x - left_cell.x + 1
-	for i in range(length):
-		platform_tile.set_cell(left_cell + Vector2i(i, 0), source_id, PLATFORM_ATLAS)
+func p1_base_flip_animation() -> void:
+	if p1_zoom_tween and p1_zoom_tween.is_valid():
+		p1_zoom_tween.kill()
+	p1_color_wheel.scale = Vector2.ONE
+	p1_zoom_tween = create_tween()
+	p1_zoom_tween.tween_property(p1_color_wheel, "scale", Vector2(-1.0, -1.0), 0.15)
+	p1_zoom_tween.tween_property(p1_color_wheel, "scale", Vector2.ONE, 0.15)
+	
+func p2_base_flip_animation() -> void:
+	if p2_zoom_tween and p2_zoom_tween.is_valid():
+		p2_zoom_tween.kill()
+	p2_color_wheel.scale = Vector2.ONE
+	p2_zoom_tween = create_tween()
+	p2_zoom_tween.tween_property(p2_color_wheel, "scale", Vector2(-1.0, -1.0), 0.15)
+	p2_zoom_tween.tween_property(p2_color_wheel, "scale", Vector2.ONE, 0.15)
+	
+func _pick_next_platform() -> void:
+	var choices: Array[int] = [1, 2, 3]
+	choices.erase(current_platform)
+	next_platform = choices.pick_random()
 
+func _advance_transition() -> void:
+	match current_platform:
+		1:
+			match next_platform:
+				2:
+					_transition_1_to_2()
+				3:
+					_transition_1_to_3()
+		2:
+			match next_platform:
+				1:
+					_transition_2_to_1()
+				3:
+					_transition_2_to_3()
+		3:
+			match next_platform:
+				1:
+					_transition_3_to_1()
+				2:
+					_transition_3_to_2()
+	
+func _transition_1_to_2() -> void:
+	match transition_step:
+		0:
+			platform1.enabled = false
+			platform12a.enabled = true
+		1:
+			platform12a.enabled = false
+			platform12.enabled = true
+		2:
+			platform12.enabled = false
+			platform12b.enabled = true
+		3:
+			platform12b.enabled = false
+			platform2.enabled = true
+			current_platform = next_platform
+
+func _transition_1_to_3() -> void:
+	match transition_step:
+		0:
+			platform1.enabled = false
+			platform13a.enabled = true
+		1:
+			platform13a.enabled = false
+			platform31.enabled = true
+		2:
+			platform31.enabled = false
+			platform13b.enabled = true
+		3:
+			platform13b.enabled = false
+			platform3.enabled = true
+			current_platform = next_platform
+
+func _transition_2_to_1() -> void:
+	match transition_step:
+		0:
+			platform2.enabled = false
+			platform21a.enabled = true
+		1:
+			platform21a.enabled = false
+			platform12.enabled = true
+		2:
+			platform12.enabled = false
+			platform21b.enabled = true
+		3:
+			platform21b.enabled = false
+			platform1.enabled = true
+			current_platform = next_platform
+
+func _transition_2_to_3() -> void:
+	match transition_step:
+		0:
+			platform2.enabled = false
+			platform23a.enabled = true
+		1:
+			platform23a.enabled = false
+			platform23.enabled = true
+		2:
+			platform23.enabled = false
+			platform23b.enabled = true
+		3:
+			platform23b.enabled = false
+			platform3.enabled = true
+			current_platform = next_platform
+
+func _transition_3_to_1() -> void:
+	match transition_step:
+		0:
+			platform3.enabled = false
+			platform31a.enabled = true
+		1:
+			platform31a.enabled = false
+			platform31.enabled = true
+		2:
+			platform31.enabled = false
+			platform31b.enabled = true
+		3:
+			platform31b.enabled = false
+			platform1.enabled = true
+			current_platform = next_platform
+
+func _transition_3_to_2() -> void:
+	match transition_step:
+		0:
+			platform3.enabled = false
+			platform32a.enabled = true
+		1:
+			platform32a.enabled = false
+			platform23.enabled = true
+		2:
+			platform23.enabled = false
+			platform32b.enabled = true
+		3:
+			platform32b.enabled = false
+			platform2.enabled = true
+			current_platform = next_platform
 
 func _on_player_2_player_eliminated(player: CharacterBody2D) -> void:
 	pass # Replace with function body.

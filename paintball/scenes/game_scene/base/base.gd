@@ -94,6 +94,16 @@ func _get_hurt_animation() -> void:
 		1: return get_parent().p1_base_hurt_animation()
 		_: return get_parent().p2_base_hurt_animation()
 
+func _get_zoom_animation() -> void:
+	match team_id:
+		1: return get_parent().p1_base_zoom_animation()
+		_: return get_parent().p2_base_zoom_animation()
+
+func _get_flip_animation() -> void:
+	match team_id:
+		1: return get_parent().p1_base_flip_animation()
+		_: return get_parent().p2_base_flip_animation()
+
 func _get_regen() -> void:
 	match team_id:
 		1: score.x += REGEN_AMOUNT
@@ -101,11 +111,11 @@ func _get_regen() -> void:
 	score = score.clamp(Vector3.ZERO, Vector3(255.0, 255.0, 255.0))
 	update_score()
 	
-func lost_score(attacker_base: Node = null) -> void:
+func lost_score_to(attacker_base: Node = null) -> void:
 	var amount_lost: Vector3 = self.score * LOSS_PERCENTAGE
 	self.score -= amount_lost
 	self.score = self.score.max(Vector3.ZERO)
-	_get_hurt_animation()
+	_get_flip_animation()
 	update_score()
 	if attacker_base != null:
 		attacker_base.update_score(amount_lost)

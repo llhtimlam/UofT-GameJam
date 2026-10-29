@@ -3,6 +3,7 @@
 [ext_resource type="Script" uid="uid://b0iohuh6rl7g5" path="res://scenes/game_scene/player/player.gd" id="1_tcwrj"]
 [ext_resource type="Texture2D" uid="uid://miqo1wbx3pow" path="res://icon.svg" id="2_7k1jl"]
 [ext_resource type="Script" uid="uid://dndiybdxky6cb" path="res://scenes/game_scene/player/progressBar.gd" id="3_7k1jl"]
+[ext_resource type="Texture2D" uid="uid://cduwedquj1wde" path="res://assets/item/paint.png" id="3_kyjql"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_xrivr"]
 size = Vector2(32, 64)
@@ -38,14 +39,19 @@ fill_from = Vector2(0.5, 0.5)
 fill_to = Vector2(0.5, 0)
 
 [node name="Player" type="CharacterBody2D" unique_id=25147227]
+z_index = 25
+z_as_relative = false
 collision_layer = 6
 script = ExtResource("1_tcwrj")
 
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=91982507]
+z_index = 25
+z_as_relative = false
 scale = Vector2(0.25, 0.5)
 texture = ExtResource("2_7k1jl")
 
 [node name="Hurtbox" type="CollisionShape2D" parent="." unique_id=962338468]
+z_as_relative = false
 shape = SubResource("RectangleShape2D_xrivr")
 debug_color = Color(0.7882353, 0, 0.30980393, 0.41960785)
 
@@ -72,15 +78,13 @@ shape = SubResource("RectangleShape2D_13qdw")
 position = Vector2(32, 0)
 
 [node name="AimDot" type="Sprite2D" parent="Center/LaunchPoint" unique_id=906158970]
-scale = Vector2(0.125, 0.125)
-texture = ExtResource("2_7k1jl")
-
-[node name="Sprite2D" type="Sprite2D" parent="Center/LaunchPoint" unique_id=1009896978]
-position = Vector2(392, 0)
-scale = Vector2(7, 0.05)
-texture = ExtResource("2_7k1jl")
+z_index = 27
+z_as_relative = false
+scale = Vector2(2, 2)
+texture = ExtResource("3_kyjql")
 
 [node name="BucketPosition" type="Marker2D" parent="." unique_id=1041089716]
+z_index = 26
 position = Vector2(0, -48)
 
 [node name="Camera2D" type="Camera2D" parent="." unique_id=1764947080]

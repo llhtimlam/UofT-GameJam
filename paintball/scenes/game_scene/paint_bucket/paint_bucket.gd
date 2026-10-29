@@ -1,18 +1,22 @@
 extends Area2D
 class_name Bucket
 
-var score: Vector3 = Vector3.ZERO # Format: (P1, Turret, P2)
+var score: Vector3 = Vector3.ZERO: # Format: (P1, Turret, P2)
+	set(value):
+		var normalized_score = value / 255.0
 
 var pickable_players: Array[CharacterBody2D] = []
 var carrier: CharacterBody2D = null
 var delivered: bool = false
 
 const BUCKET_SCENE = preload("res://scenes/game_scene/paint_bucket/paint_bucket.tscn")
+@onready var paint: Sprite2D = $Paint
 
 func _ready() -> void:
 	add_to_group("bucket")
 	body_entered.connect(_on_body_entered)
 	area_entered.connect(_on_area_entered)
+	paint.modulate = Color8(0, 16, 0)
 	
 func _process(_delta: float) -> void:
 	if carrier != null or delivered:
@@ -51,6 +55,7 @@ func deliver(base: Node2D) -> void:
 	carrier.held_bucket = null
 	carrier = null
 	base.update_score(score)
+	base._get_zoom_animation()
 	call_deferred("queue_free")
 	
 func transfer(attacker_id: int, attacker_team: int) -> void:

@@ -6,7 +6,11 @@ signal can_capture
 
 const MAX_HP : float = 40
 var hp : float = MAX_HP
+var TEAM_ID: int = -1
 var fallen : bool = false
+
+var p1_capture_score: float = 0
+var p2_capture_score: float = 0
 
 var MAP_ATTACK_VERTICAL_CD: float = 4.0
 var MAP_ATTACK_HORIZONTAL_CD: float = 15.0
@@ -20,8 +24,14 @@ var ATTACK_CD: float = 10.0
 @export var MAP_ATTACK_DMG: float = 10.0
 @export var MAP_ATTACK_SPEED: float = 300.0
 @export var MAP_ATTACK_KNOCKBACK: float = 600.0
+@export var IFRAME_CD: float = 0.3
+@export var ASCEND_SPEED: float = 700.0
+@export var DESCEND_SPEED: float = 100.0
+var AGGRO_CD: float = PI
 
-var map_attack_vertical_cd: float = 2.0
+var iframe: float = 0.0
+
+var map_attack_vertical_cd: float = 5.0
 var map_attack_horizontal_cd: float = 12.0
 var map_attack_preset: int = 1
 var attack_cd: float = 2.0
@@ -36,6 +46,7 @@ var horizontal_y_preset3: Array[float] = [-1130]
 
 var aimable_targets: Array[CharacterBody2D]
 var aim_target: CharacterBody2D
+var aggro_timer: float = 0.0
 var target_direction: Vector2
 var target_angle: float
 var shoot_angle: float
@@ -50,6 +61,9 @@ const RIFLE_SCENE = preload("res://scenes/game_scene/projectile/rifle.tscn")
 const MAP_ATTACK_VERTICAL_SCENE = preload("res://scenes/game_scene/colour_zone/map_attack/map_attack_vertical.tscn")
 const MAP_ATTACK_HORIZONTAL_SCENE = preload("res://scenes/game_scene/colour_zone/map_attack/map_attack_horizontal.tscn")
 
+@onready var anim_player: AnimationPlayer = $AnimationPlayer
+@onready var attack_anim_player: AnimationPlayer = $AttackAnimationPlayer
+
 func _ready() -> void:
 	add_to_group("turret")
 	capture_bar.max_value = MAX_HP
@@ -59,11 +73,20 @@ func _ready() -> void:
 	attack_detection.area_entered.connect(_on_area_entered)
 	attack_detection.body_exited.connect(_on_body_exited)
 	attack_detection.area_exited.connect(_on_area_exited)
+	anim_player.play("Idle")
 
 func _physics_process(delta: float) -> void:
 	map_attack_vertical_cd = max(map_attack_vertical_cd - delta, 0.0)
 	map_attack_horizontal_cd = max(map_attack_horizontal_cd - delta, 0.0)
+	aggro_timer = max(aggro_timer - delta, 0.0)
 	attack_cd = max(attack_cd - delta, 0.0)
+	iframe = max(iframe - delta, 0.0)
+	
+	# iframe mechanic (fly up when attacked)
+	if iframe > 0.0:
+		position.y -= ASCEND_SPEED * delta
+	else:
+		position.y = move_toward(position.y, 0, DESCEND_SPEED * delta)
 	
 	if map_attack_vertical_cd <= 0:
 		_map_attack_vertical_preset()
@@ -73,24 +96,33 @@ func _physics_process(delta: float) -> void:
 		map_attack_horizontal_cd = MAP_ATTACK_HORIZONTAL_CD
 	
 	# Random Aim target
+	aimable_targets = aimable_targets.filter(
+		func(target):
+			return is_instance_valid(target) and not target.is_dead and target.TEAM_ID != TEAM_ID
+	)
 	if aim_target != null and not aimable_targets.has(aim_target):
 		_pick_random_target()
-	if aim_target == null and aimable_targets.size() > 0:
-		_pick_random_target()
+	if aimable_targets.size() > 0:
+		if aim_target == null or aggro_timer <= 0.0:
+			_pick_random_target()
+			aggro_timer = AGGRO_CD
+	else:
+		aim_target = null
 	if aim_target != null:
 		target_direction = center.global_position.direction_to(aim_target.global_position)
 		facing_dir = signf(target_direction.x) 
 		target_angle = target_direction.angle()
 		center.rotation = target_angle
-	
+	else:
+		center.rotation = PI/2
 	if attack_cd <= 0:
 		if aim_target != null and is_equal_approx(center.rotation, target_angle):
 			if attack_preset == 1:
-				shoot_shotgun_projectile(SHOTGUN_PROJECTILE_DMG, SHOTGUN_PROJECTILE_SPEED, SHOTGUN_PROJECTILE_KNOCKBACK, facing_dir, target_angle, -1 ,-1)
+				shoot_shotgun_projectile(SHOTGUN_PROJECTILE_DMG, SHOTGUN_PROJECTILE_SPEED, SHOTGUN_PROJECTILE_KNOCKBACK, facing_dir, target_angle, aim_target, -1 , TEAM_ID)
 			elif attack_preset == 2:
-				shoot_rifle_projectile(RIFLE_PROJECTILE_DMG, RIFLE_PROJECTILE_SPEED, RIFLE_PROJECTILE_KNOCKBACK, facing_dir, aim_target, -1 ,-1)
+				shoot_rifle_projectile(RIFLE_PROJECTILE_DMG, RIFLE_PROJECTILE_SPEED, RIFLE_PROJECTILE_KNOCKBACK, facing_dir, aim_target, -1 ,TEAM_ID)
 			attack_cd = ATTACK_CD
-			_pick_random_target()
+			attack_anim_player.play("Attack")
 			attack_preset = [1, 2].pick_random()
 
 # Utility Function
@@ -121,33 +153,38 @@ func _pick_random_target() -> void:
 	else:
 		aim_target = null
 
-func shoot_shotgun_projectile(base_damage: float, speed: float, knockback: float, p_facing_dir: float, angle: float, attacker_id: int, attacker_team: int) -> void:
+func shoot_shotgun_projectile(base_damage: float, speed: float, knockback: float, p_facing_dir: float, angle: float, target: CharacterBody2D, attacker_id: int, attacker_team: int) -> void:
 	var shotgun_instance = SHOTGUN_SCENE.instantiate()
 	# Projectile Collision 2
 	shotgun_instance.ATTACKER_ID = attacker_id
 	shotgun_instance.ATTACKER_TEAM = attacker_team
-	shotgun_instance.global_position = projectile.global_position
 	shotgun_instance.facing_angle = angle
 	shotgun_instance.facing_dir = p_facing_dir
+	shotgun_instance.target = target
+	shotgun_instance.ray_origin = center
+	shotgun_instance.launch_point = projectile
 	shotgun_instance.damage = base_damage
 	shotgun_instance.speed = speed
 	shotgun_instance.knockback = knockback
 	shotgun_instance.lifetime = 4.0
 	get_parent().get_parent().add_child.call_deferred(shotgun_instance)
+	shotgun_instance.global_position = projectile.global_position
 
 func shoot_rifle_projectile(base_damage: float, speed: float, knockback: float, p_facing_dir: float, target: CharacterBody2D, attacker_id: int, attacker_team: int) -> void:
 	var rifle_instance = RIFLE_SCENE.instantiate()
 	# Projectile Collision 2
 	rifle_instance.ATTACKER_ID = attacker_id
 	rifle_instance.ATTACKER_TEAM = attacker_team
-	rifle_instance.global_position = projectile.global_position
-	rifle_instance.target = target
 	rifle_instance.facing_dir = p_facing_dir
+	rifle_instance.target = target
+	rifle_instance.ray_origin = center
+	rifle_instance.launch_point = projectile
 	rifle_instance.damage = base_damage
 	rifle_instance.speed = speed
 	rifle_instance.knockback = knockback
 	rifle_instance.lifetime = 2.5
 	get_parent().get_parent().add_child.call_deferred(rifle_instance)
+	rifle_instance.global_position = projectile.global_position
 
 func _map_attack_vertical_preset() -> int:
 	var vertical_map_attack_preset = [1,2,3].pick_random()
@@ -158,7 +195,7 @@ func _map_attack_vertical_preset() -> int:
 func _map_attack_horizontal_preset() -> int:
 	var horizontal_map_attack_preset = [1,2,3].pick_random()
 	for i in _get_horizontal_preset(horizontal_map_attack_preset):
-		_generate_horizontal_map_attack(i - self.global_position.y)
+		_generate_horizontal_map_attack(i)
 	return horizontal_map_attack_preset
 	
 func _get_vertical_preset(id: int) -> Array[float]:
@@ -178,26 +215,25 @@ func _generate_vertical_map_attack(x: float) -> void:
 	# Map Attack Collision 2
 	map_attack_vertical_instance.ATTACKER_ID = -1
 	map_attack_vertical_instance.ATTACKER_TEAM = -1
-	map_attack_vertical_instance.global_position = Vector2(x, -15)
 	map_attack_vertical_instance.facing_dir = signf(x)
 	map_attack_vertical_instance.damage = MAP_ATTACK_DMG
 	map_attack_vertical_instance.knockback = MAP_ATTACK_KNOCKBACK
-	map_attack_vertical_instance.lifetime = 0.8
-	add_child.call_deferred(map_attack_vertical_instance)
+	get_parent().get_parent().add_child.call_deferred(map_attack_vertical_instance)
+	map_attack_vertical_instance.global_position = Vector2(x, -1150)
 	
 func _generate_horizontal_map_attack(y: float) -> void:
 	var map_attack_horizontal_instance = MAP_ATTACK_HORIZONTAL_SCENE.instantiate()
 	# Map Attack Collision 2
 	map_attack_horizontal_instance.ATTACKER_ID = -1
 	map_attack_horizontal_instance.ATTACKER_TEAM = -1
-	map_attack_horizontal_instance.global_position = Vector2(0, y)
 	map_attack_horizontal_instance.damage = MAP_ATTACK_DMG
 	map_attack_horizontal_instance.knockback = MAP_ATTACK_KNOCKBACK
-	map_attack_horizontal_instance.lifetime = 0.8
-	add_child.call_deferred(map_attack_horizontal_instance)
+	get_parent().get_parent().add_child.call_deferred(map_attack_horizontal_instance)
+	map_attack_horizontal_instance.global_position = Vector2(0, y)
 	
 func take_damage(damage, _attacker_id, attacker_team) -> void:
 	hp -= damage
+	iframe = IFRAME_CD
 	capture_bar.value = hp
 	if hp <= 0:
 		hp = MAX_HP
@@ -206,5 +242,9 @@ func take_damage(damage, _attacker_id, attacker_team) -> void:
 				get_parent().get_parent().bucket_spawn_turret.global_position,
 				Vector3(0, 16, 0)
 				)
-		fallen = true
+		if attacker_team == 1:
+			p1_capture_score += 16
+		elif attacker_team == 2:
+			p2_capture_score += 16
+		#fallen = true
 		#can_capture.emit(attacker_team)

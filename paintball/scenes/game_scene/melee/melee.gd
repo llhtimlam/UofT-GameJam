@@ -7,6 +7,7 @@ var ATTACKER_TEAM: int
 # Stat
 var damage: float
 var knockback: float
+var stun_time: float = 0.2
 
 # Setup
 var lifetime: float = 0.1
@@ -39,8 +40,9 @@ func _on_area_entered(area: Area2D) -> void:
 func _hit_target(target: Node) -> void:
 	if damaged_targets.has(target):
 		return
-	if target.is_in_group("player"):
-		if target.PLAYER_ID == ATTACKER_ID:
+	# No friendly fire
+	if target.is_in_group("player") or target.is_in_group("turret"):
+		if target.TEAM_ID == ATTACKER_TEAM:
 			return
 	damaged_targets.append(target)
 	# Damage
@@ -48,6 +50,6 @@ func _hit_target(target: Node) -> void:
 	if target.has_method("take_damage"):
 		giving_damage = true
 		if target.has_method("apply_knockback"):
-			target.apply_knockback(facing_dir, knockback)
+			target.apply_knockback(facing_dir, knockback, stun_time)
 	if giving_damage:
 		target.take_damage(damage, ATTACKER_ID, ATTACKER_TEAM)

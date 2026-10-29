@@ -403,6 +403,8 @@ collision_mask = 2
 script = ExtResource("1_afhhg")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1601651630]
+z_index = 30
+z_as_relative = false
 shape = SubResource("RectangleShape2D_xrivr")
 
 [node name="BlackHole" type="AnimatedSprite2D" parent="." unique_id=958145766]

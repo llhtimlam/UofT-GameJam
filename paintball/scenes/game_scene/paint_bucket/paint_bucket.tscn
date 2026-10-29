@@ -1,19 +1,136 @@
 [gd_scene format=3 uid="uid://dl40cnp41ty7u"]
 
 [ext_resource type="Script" uid="uid://ciyxenx2s0jpf" path="res://scenes/game_scene/paint_bucket/paint_bucket.gd" id="1_q5avn"]
-[ext_resource type="Texture2D" uid="uid://miqo1wbx3pow" path="res://icon.svg" id="2_h4cll"]
+[ext_resource type="Texture2D" uid="uid://cduwedquj1wde" path="res://assets/item/paint.png" id="2_q5avn"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_xrivr"]
 size = Vector2(32, 32)
+
+[sub_resource type="Animation" id="Animation_q5avn"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Bucket:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(0, 0)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("CollisionShape2D:disabled")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Bucket:rotation")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [0.0]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Bucket:scale")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(3.2, 3.2)]
+}
+
+[sub_resource type="Animation" id="Animation_h4cll"]
+resource_name = "fall"
+length = 0.5
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Bucket:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.5),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector2(0, -606), Vector2(0, 0)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("CollisionShape2D:disabled")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.5),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [true, false]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Bucket:rotation")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.25, 0.5),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [0.0, 6.283185307179586, 0.0]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Bucket:scale")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.5),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Vector2(0, 0), Vector2(3.2, 3.2), Vector2(3.2, 3.2)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_8bcio"]
+_data = {
+&"RESET": SubResource("Animation_q5avn"),
+&"fall": SubResource("Animation_h4cll")
+}
 
 [node name="PaintBucket" type="Area2D" unique_id=1837286444]
 collision_layer = 0
 collision_mask = 4
 script = ExtResource("1_q5avn")
 
-[node name="Sprite2D" type="Sprite2D" parent="." unique_id=746848099]
-scale = Vector2(0.25, 0.25)
-texture = ExtResource("2_h4cll")
+[node name="Bucket" type="Sprite2D" parent="." unique_id=746848099]
+z_index = 1
+z_as_relative = false
+scale = Vector2(3.2, 3.2)
+texture = ExtResource("2_q5avn")
+
+[node name="Paint" type="Sprite2D" parent="." unique_id=1182532116]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=950568101]
 shape = SubResource("RectangleShape2D_xrivr")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=1493106539]
+libraries/ = SubResource("AnimationLibrary_8bcio")
+autoplay = &"fall"
