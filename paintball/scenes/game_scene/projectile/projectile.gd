@@ -17,7 +17,7 @@ var speed: float = 500.0
 
 # Setup
 var lifetime: float = 1.0
-var iframe: float = 0.15
+var iframe: float = 0.0
 var is_shot: bool = false
 	
 func _ready() -> void:
@@ -46,14 +46,15 @@ func _on_area_entered(area: Area2D) -> void:
 
 # Hitbox Manager
 func _hit_target(target: Node) -> void:
-	if is_shot:
+	# iframe
+	if is_shot or iframe > 0:
 		return
 	# Turret and projectile immunity to projectile
 	if target.is_in_group("projectile"):
 		return
-	# Player iframe
-	if target.is_in_group("player"):
-		if iframe > 0.0 and target.PLAYER_ID == ATTACKER_ID:
+	# No friendly fire
+	if target.is_in_group("player") or target.is_in_group("turret"):
+		if target.TEAM_ID == ATTACKER_TEAM:
 			return
 	# Damage
 	if target.has_method("take_damage"):

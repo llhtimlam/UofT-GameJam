@@ -38,10 +38,11 @@ var SLOWNESS_MODIFIER: float = 0.6
 var DASH_DURATION: float = 0.5
 var DASH_DISTANCE: float = 5.0
 @export var MELEE_CD: float = 0.8
-var AIM_CD: float = 2.0
-@export var SHOOT_CD: float = 0.2
+var AIM_CD: float = 0.0
+@export var SHOOT_CD: float = 4.0
 var DIAL_SPEED: float = 2.0
 var FINE_DIAL_SPEED: float = 0.5
+var IFRAME: float = 3.0
 
 # Initialize
 var damage_reduction: float = 1.0
@@ -105,7 +106,7 @@ const MELEE_SCENE = preload("res://scenes/game_scene/melee/melee.tscn")
 var is_aiming: bool = false
 @onready var center: Marker2D = $Center
 @onready var projectile: Marker2D = $Center/LaunchPoint
-@onready var aim_dot: Sprite2D = $Center/LaunchPoint/Sprite2D
+@onready var aim_dot: Sprite2D = $Center/LaunchPoint/AimDot
 const PROJECTILE_SCENE = preload("res://scenes/game_scene/projectile/projectile.tscn")
 
 # World Boundary
@@ -209,6 +210,7 @@ func reset_state():
 	shoot_cd = 0
 	climb_cd = 0
 	stun_cd = 0
+	iframe = IFRAME
 	self.visible = true
 	set_physics_process(true)
 	hurtbox.set_deferred("disabled", false)
@@ -366,7 +368,6 @@ func _physics_process(delta: float) -> void:
 	if not is_climbing:
 		# Range
 		if input_shoot and shoot_cd <= 0 and not is_aiming:
-			shoot_cd = SHOOT_CD
 			if aim_cd <= 0:
 				aim_angle = 0
 			aim_cd = AIM_CD
@@ -391,7 +392,7 @@ func _physics_process(delta: float) -> void:
 				shoot_angle = aim_angle
 			center.rotation = shoot_angle
 			
-			if input_shoot and shoot_cd <= 0:
+			if input_shoot and aim_cd <= 0:
 				shoot_projectile(PROJECTILE_DMG, PROJECTILE_SPEED, PROJECTILE_KNOCKBACK, facing_dir, shoot_angle, PLAYER_ID ,TEAM_ID)
 				exit_aiming()
 				shoot_cd = SHOOT_CD

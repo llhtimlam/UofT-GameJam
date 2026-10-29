@@ -14,7 +14,7 @@ var facing_dir: float = 0.0
 var speed: float = 0.0
 
 # Setup
-var lifetime: float = 1.0
+#var lifetime: float = 1.0
 var immune_targets: Array[Node2D]
 	
 var target_progress_bar: TextureProgressBar
@@ -26,9 +26,9 @@ func _ready() -> void:
 	
 func _physics_process(delta: float) -> void:
 	# Despawn timer
-	lifetime -= delta
-	if lifetime <= 0.0:
-		call_deferred("queue_free")
+	#lifetime -= delta
+	#if lifetime <= 0.0:
+	#	call_deferred("queue_free")
 		
 	# Final Movement
 	global_position.x += speed * delta
@@ -45,7 +45,10 @@ func _hit_target(target: Node) -> void:
 	if immune_targets.has(target):
 		return
 	# Damage
-	if target.is_in_group("player"):
+	if target.is_in_group("player") or target.is_in_group("turret"):
+		# No friendly fire
+		if target.TEAM_ID == ATTACKER_TEAM:
+			return
 		if target.has_method("take_damage"):
 			target.take_damage(damage, ATTACKER_ID, ATTACKER_TEAM)
 			if target.has_method("apply_knockback"):
