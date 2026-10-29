@@ -1,9 +1,7 @@
 extends Area2D
 class_name Bucket
 
-var score: Vector3 = Vector3.ZERO: # Format: (P1, Turret, P2)
-	set(value):
-		var normalized_score = value / 255.0
+var score: Vector3 = Vector3.ZERO # Format: (P1, Turret, P2)
 
 var pickable_players: Array[CharacterBody2D] = []
 var carrier: CharacterBody2D = null
