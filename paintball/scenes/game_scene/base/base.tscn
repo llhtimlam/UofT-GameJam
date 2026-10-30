@@ -1,6 +1,7 @@
 [gd_scene format=3 uid="uid://s5kcwdhdsby6"]
 
 [ext_resource type="Script" uid="uid://ciphk151bojs0" path="res://scenes/game_scene/base/base.gd" id="1_gas1l"]
+[ext_resource type="PackedScene" uid="uid://d2572qdh18lxc" path="res://scenes/game_scene/base/color_wheel.tscn" id="2_5wsol"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_lx050"]
 radius = 150.0
@@ -12,3 +13,10 @@ script = ExtResource("1_gas1l")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=290758528]
 shape = SubResource("CircleShape2D_lx050")
+
+[node name="CollisionShape2DClone" type="CollisionShape2D" parent="." unique_id=1896262198]
+shape = SubResource("CircleShape2D_lx050")
+
+[node name="ColorWheel" parent="." unique_id=920039219 instance=ExtResource("2_5wsol")]
+
+[node name="ColorWheelClone" parent="." unique_id=2055182026 instance=ExtResource("2_5wsol")]

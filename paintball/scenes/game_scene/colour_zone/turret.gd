@@ -1,16 +1,12 @@
 extends StaticBody2D
 
-signal can_capture
+signal last_hit_attacker
 
 @onready var capture_bar: ProgressBar = $CaptureBar
 
 const MAX_HP : float = 40
 var hp : float = MAX_HP
 var TEAM_ID: int = -1
-var fallen : bool = false
-
-var p1_capture_score: float = 0
-var p2_capture_score: float = 0
 
 var MAP_ATTACK_VERTICAL_CD: float = 4.0
 var MAP_ATTACK_HORIZONTAL_CD: float = 15.0
@@ -57,17 +53,30 @@ const RIFLE_SCENE = preload("res://scenes/game_scene/projectile/rifle.tscn")
 @onready var center: Marker2D = $Center
 @onready var projectile: Marker2D = $Center/LaunchPoint
 @onready var attack_detection: Area2D = $AttackZone
+@onready var hurtbox: CollisionShape2D = $CollisionShape2D
 
 const MAP_ATTACK_VERTICAL_SCENE = preload("res://scenes/game_scene/colour_zone/map_attack/map_attack_vertical.tscn")
 const MAP_ATTACK_HORIZONTAL_SCENE = preload("res://scenes/game_scene/colour_zone/map_attack/map_attack_horizontal.tscn")
+
+# Bucket spawn rate
+var BUCKET_SPAWN_CHANCE_ON_ATTACK: float = 0.05
+var BUCKET_SPAWN_CHANCE_ON_HIT: float = 0.05
+var BUCKET_REWARD: float = 48.0
+var BUCKET_REWARD_VARIANCE: float = 32.0
+
+# Shadow
+@onready var shadow_1: AnimatedSprite2D = $Skeleton2D/Head/Head/HeadShadow
+@onready var shadow_2: AnimatedSprite2D = $Skeleton2D/Head/Body/Body/BodyShadow
+@onready var shadow_3: AnimatedSprite2D = $Skeleton2D/Head/Body/Leg/Leg/LegShadow
+@onready var shadow_4: AnimatedSprite2D = $Hand/HandShadow
+var shadows: Array = []
 
 @onready var anim_player: AnimationPlayer = $AnimationPlayer
 @onready var attack_anim_player: AnimationPlayer = $AttackAnimationPlayer
 
 func _ready() -> void:
 	add_to_group("turret")
-	capture_bar.max_value = MAX_HP
-	capture_bar.value = hp
+	shadows = [shadow_1, shadow_2, shadow_3, shadow_4]
 	attack_cd = ATTACK_CD
 	attack_detection.body_entered.connect(_on_body_entered)
 	attack_detection.area_entered.connect(_on_area_entered)
@@ -85,8 +94,12 @@ func _physics_process(delta: float) -> void:
 	# iframe mechanic (fly up when attacked)
 	if iframe > 0.0:
 		position.y -= ASCEND_SPEED * delta
+		if not hurtbox.disabled:
+			hurtbox.set_deferred("disabled", true)
 	else:
 		position.y = move_toward(position.y, 0, DESCEND_SPEED * delta)
+		if hurtbox.disabled:
+			hurtbox.set_deferred("disabled", false)
 	
 	if map_attack_vertical_cd <= 0:
 		_map_attack_vertical_preset()
@@ -124,6 +137,8 @@ func _physics_process(delta: float) -> void:
 			attack_cd = ATTACK_CD
 			attack_anim_player.play("Attack")
 			attack_preset = [1, 2].pick_random()
+			# Spawn Bucket
+			spawn_bucket(BUCKET_SPAWN_CHANCE_ON_ATTACK)
 
 # Utility Function
 func _on_body_entered(body: Node2D) -> void:
@@ -167,7 +182,7 @@ func shoot_shotgun_projectile(base_damage: float, speed: float, knockback: float
 	shotgun_instance.speed = speed
 	shotgun_instance.knockback = knockback
 	shotgun_instance.lifetime = 4.0
-	get_parent().get_parent().add_child.call_deferred(shotgun_instance)
+	get_parent().get_parent().add_child(shotgun_instance)
 	shotgun_instance.global_position = projectile.global_position
 
 func shoot_rifle_projectile(base_damage: float, speed: float, knockback: float, p_facing_dir: float, target: CharacterBody2D, attacker_id: int, attacker_team: int) -> void:
@@ -183,7 +198,7 @@ func shoot_rifle_projectile(base_damage: float, speed: float, knockback: float, 
 	rifle_instance.speed = speed
 	rifle_instance.knockback = knockback
 	rifle_instance.lifetime = 2.5
-	get_parent().get_parent().add_child.call_deferred(rifle_instance)
+	get_parent().get_parent().add_child(rifle_instance)
 	rifle_instance.global_position = projectile.global_position
 
 func _map_attack_vertical_preset() -> int:
@@ -214,37 +229,49 @@ func _generate_vertical_map_attack(x: float) -> void:
 	var map_attack_vertical_instance = MAP_ATTACK_VERTICAL_SCENE.instantiate()
 	# Map Attack Collision 2
 	map_attack_vertical_instance.ATTACKER_ID = -1
-	map_attack_vertical_instance.ATTACKER_TEAM = -1
+	map_attack_vertical_instance.ATTACKER_TEAM = TEAM_ID
 	map_attack_vertical_instance.facing_dir = signf(x)
 	map_attack_vertical_instance.damage = MAP_ATTACK_DMG
 	map_attack_vertical_instance.knockback = MAP_ATTACK_KNOCKBACK
-	get_parent().get_parent().add_child.call_deferred(map_attack_vertical_instance)
+	get_parent().get_parent().add_child(map_attack_vertical_instance)
 	map_attack_vertical_instance.global_position = Vector2(x, -1150)
 	
 func _generate_horizontal_map_attack(y: float) -> void:
 	var map_attack_horizontal_instance = MAP_ATTACK_HORIZONTAL_SCENE.instantiate()
 	# Map Attack Collision 2
 	map_attack_horizontal_instance.ATTACKER_ID = -1
-	map_attack_horizontal_instance.ATTACKER_TEAM = -1
+	map_attack_horizontal_instance.ATTACKER_TEAM = TEAM_ID
 	map_attack_horizontal_instance.damage = MAP_ATTACK_DMG
 	map_attack_horizontal_instance.knockback = MAP_ATTACK_KNOCKBACK
-	get_parent().get_parent().add_child.call_deferred(map_attack_horizontal_instance)
+	get_parent().get_parent().add_child(map_attack_horizontal_instance)
 	map_attack_horizontal_instance.global_position = Vector2(0, y)
 	
 func take_damage(damage, _attacker_id, attacker_team) -> void:
+	if attacker_team == TEAM_ID:
+		return
 	hp -= damage
 	iframe = IFRAME_CD
 	capture_bar.value = hp
 	if hp <= 0:
 		hp = MAX_HP
+		last_hit_attacker.emit(attacker_team)
+		spawn_bucket(BUCKET_SPAWN_CHANCE_ON_HIT)
+	
+func spawn_bucket(spawn_chance: float) -> void:
+	if randf() < spawn_chance:
+		var bucket_score_value = randf_range(
+			BUCKET_REWARD - BUCKET_REWARD_VARIANCE,
+			BUCKET_REWARD + BUCKET_REWARD_VARIANCE
+		)
 		Bucket.spawn(
-				get_parent().get_parent(),
-				get_parent().get_parent().bucket_spawn_turret.global_position,
-				Vector3(0, 16, 0)
-				)
-		if attacker_team == 1:
-			p1_capture_score += 16
-		elif attacker_team == 2:
-			p2_capture_score += 16
-		#fallen = true
-		#can_capture.emit(attacker_team)
+			get_parent().get_parent(),
+			TEAM_ID,
+			get_parent().get_parent().bucket_spawn_turret.global_position,
+			Vector3(0, bucket_score_value, 0)
+		)
+	
+func update_shadow_color(color: Color) -> void:
+	for shadow in shadows:
+		if shadow:
+			shadow.self_modulate = Color.WHITE
+			shadow.self_modulate = color

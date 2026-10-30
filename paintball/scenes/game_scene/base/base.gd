@@ -1,61 +1,42 @@
 extends Area2D
 
-var team_id: int
+var TEAM_ID: int = 1
 var defender: CharacterBody2D
 
-var normalized_base_color: Vector3
-var normalized_enemy_color: Vector3
-var normalized_turret_color: Vector3
-var owner_normalized_color: Vector3
-var display_self_score: Vector3 = Vector3.ZERO
-var display_enemy_score: Vector3 = Vector3.ZERO
-var display_turret_score: Vector3 = Vector3.ZERO
-var progress_self_score: float
-var progress_enemy_score: float
-var progress_turret_score: float
+@onready var colorwheel: Node2D = $ColorWheel
+@onready var colorwheel_clone: Node2D = $ColorWheelClone
+@onready var hurtbox_clone: CollisionShape2D = $CollisionShape2DClone
 
-var base_color: Color:
-	set(value):
-		base_color = value
-		normalized_base_color = Vector3(base_color.r, base_color.g, base_color.b) / 255.0
-var enemy_color: Color:
-	set(value):
-		enemy_color = value
-		normalized_enemy_color = Vector3(enemy_color.r, enemy_color.g, enemy_color.b) / 255.0
-var turret_color: Color:
-	set(value):
-		turret_color = value
-		normalized_turret_color = Vector3(turret_color.r, turret_color.g, turret_color.b) / 255.0
 var score: Vector3 = Vector3.ZERO: # Format: (P1, Turret, P2)
 	set(value):
-		score = value
-		var normalized_score = score / 255.0
-		if team_id == 1:
-			progress_self_score = normalized_score.x * 100
-			progress_enemy_score = normalized_score.z * 100
-			progress_turret_score = normalized_score.y * 100
-			display_self_score = normalized_base_color * normalized_score.x
-			display_enemy_score = normalized_enemy_color * normalized_score.z
-			display_turret_score = normalized_turret_color * normalized_score.y
-		else:
-			progress_self_score = normalized_score.z * 100
-			progress_enemy_score = normalized_score.x * 100
-			progress_turret_score = normalized_score.y * 100
-			display_self_score = normalized_base_color * normalized_score.z
-			display_enemy_score = normalized_enemy_color * normalized_score.x
-			display_turret_score = normalized_turret_color * normalized_score.y
+		score = value.clamp(Vector3.ZERO, Vector3(255.0, 255.0, 255.0))
+		if colorwheel:
+			colorwheel.score = score
+		if colorwheel_clone:
+			colorwheel_clone.score = score
 
 const MAX_HP: float = 40
 var hp: float = MAX_HP
 
-var REGEN_AMOUNT: = 0.1
+var is_harvesting: bool = false
+var SIPHON_AMOUNT: float = 0.4
+
+var REGEN_AMOUNT: float = 0.2
 var REGEN_CD: float = 0.2
 var regen_timer : float = 0.0
 
+var INVADE_PERCENTAGE: = 0.3
 var LOSS_PERCENTAGE: = 0.05
+var OVERFLOWN_PERCENTAGE: = 0.7
 
 func _ready() -> void:
 	add_to_group("base")
+	if colorwheel:
+		colorwheel.TEAM_ID = TEAM_ID
+	if colorwheel_clone:
+		colorwheel_clone.TEAM_ID = TEAM_ID
+	colorwheel_clone.visible = false
+	hurtbox_clone.disabled = true
 	
 func _physics_process(delta: float) -> void:
 	# Timer
@@ -65,57 +46,75 @@ func _physics_process(delta: float) -> void:
 		regen_timer = REGEN_CD
 	
 func update_score(add_score: Vector3 = Vector3.ZERO) -> void:
-	score += add_score
-	score = score.clamp(Vector3.ZERO, Vector3(255.0, 255.0, 255.0))
-	get_parent().update_color_wheel()
+	var combined_score = score + add_score
+	score = combined_score
 	
 func take_damage(damage, attacker_id, _attacker_team) -> void:
-	if attacker_id == team_id:
+	if attacker_id == TEAM_ID:
 		return
 	hp -= damage
 	if hp <= 0:
 		hp = MAX_HP
 		Bucket.spawn(
 				get_parent(),
+				TEAM_ID,
 				_get_spawnpoint(),
-				score * 0.1
+				score * INVADE_PERCENTAGE
 				)
-		_get_hurt_animation()
-		score -= score * 0.1
-		score = score.max(Vector3.ZERO)
+		if colorwheel:
+			colorwheel.hurt_animation()
+		if colorwheel_clone:
+			colorwheel_clone.hurt_animation()
+		var temp_score = score - (score * INVADE_PERCENTAGE)
+		score = temp_score
 	
 func _get_spawnpoint() -> Vector2:
-	match team_id:
+	match TEAM_ID:
 		1: return get_parent().bucket_spawn_p1.global_position
 		_: return get_parent().bucket_spawn_p2.global_position
 
-func _get_hurt_animation() -> void:
-	match team_id:
-		1: return get_parent().p1_base_hurt_animation()
-		_: return get_parent().p2_base_hurt_animation()
-
-func _get_zoom_animation() -> void:
-	match team_id:
-		1: return get_parent().p1_base_zoom_animation()
-		_: return get_parent().p2_base_zoom_animation()
-
-func _get_flip_animation() -> void:
-	match team_id:
-		1: return get_parent().p1_base_flip_animation()
-		_: return get_parent().p2_base_flip_animation()
-
 func _get_regen() -> void:
-	match team_id:
-		1: score.x += REGEN_AMOUNT
-		_: score.z += REGEN_AMOUNT
-	score = score.clamp(Vector3.ZERO, Vector3(255.0, 255.0, 255.0))
-	update_score()
+	var temp_score = score
+	match TEAM_ID:
+		1: temp_score.x += REGEN_AMOUNT
+		2: temp_score.z += REGEN_AMOUNT
+	if is_harvesting:
+		temp_score.y += SIPHON_AMOUNT
+	score = temp_score 
+	
+func deposit_score(add_score: Vector3 = Vector3.ZERO) -> void:
+	update_score(add_score)
+	if colorwheel:
+		colorwheel.zoom_animation()
+	if colorwheel_clone:
+		colorwheel_clone.zoom_animation()
 	
 func lost_score_to(attacker_base: Node = null) -> void:
 	var amount_lost: Vector3 = self.score * LOSS_PERCENTAGE
+	var temp_score = score - amount_lost
 	self.score -= amount_lost
-	self.score = self.score.max(Vector3.ZERO)
-	_get_flip_animation()
-	update_score()
+	score = temp_score
+	if colorwheel:
+		colorwheel.flip_animation()
+	if colorwheel_clone:
+		colorwheel_clone.flip_animation()
+	if attacker_base != null:
+		attacker_base.update_score(amount_lost)
+	
+func set_outpost(is_deployed: bool) -> void:
+	if is_deployed:
+		colorwheel_clone.visible = true
+		hurtbox_clone.set_deferred("disabled", false)
+		is_harvesting = true
+	else:
+		colorwheel_clone.visible = false
+		hurtbox_clone.set_deferred("disabled", true)
+		is_harvesting = false
+
+func overthrown(attacker_base: Node = null) -> void:
+	set_outpost(false)
+	var amount_lost: Vector3 = self.score * OVERFLOWN_PERCENTAGE
+	var temp_score = score - amount_lost
+	self.score -= amount_lost
 	if attacker_base != null:
 		attacker_base.update_score(amount_lost)
