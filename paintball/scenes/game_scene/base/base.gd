@@ -25,6 +25,9 @@ var REGEN_AMOUNT: float = 0.2
 var REGEN_CD: float = 0.2
 var regen_timer : float = 0.0
 
+var iframe: float = 0.0
+var IFRAME_CD: float = 0.8
+
 var INVADE_PERCENTAGE: = 0.3
 var LOSS_PERCENTAGE: = 0.05
 var OVERFLOWN_PERCENTAGE: = 0.7
@@ -41,6 +44,7 @@ func _ready() -> void:
 func _physics_process(delta: float) -> void:
 	# Timer
 	regen_timer = max(regen_timer - delta, 0.0)
+	iframe = max(iframe - delta, 0.0)
 	if regen_timer <= 0.0:
 		_get_regen()
 		regen_timer = REGEN_CD
@@ -52,7 +56,10 @@ func update_score(add_score: Vector3 = Vector3.ZERO) -> void:
 func take_damage(damage, attacker_id, _attacker_team) -> void:
 	if attacker_id == TEAM_ID:
 		return
+	if iframe > 0:
+		return
 	hp -= damage
+	iframe = IFRAME_CD
 	if hp <= 0:
 		hp = MAX_HP
 		Bucket.spawn(
