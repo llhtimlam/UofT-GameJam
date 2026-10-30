@@ -111,7 +111,7 @@ func hurt_animation() -> void:
 	spin_tween.set_trans(Tween.TRANS_QUAD)
 	spin_tween.set_ease(Tween.EASE_IN_OUT)
 	var target_rotation: float = self.rotation + (6 * PI)
-	spin_tween.tween_property(self, "rotation", target_rotation, 1.0)
+	spin_tween.tween_property(self, "rotation", target_rotation, 0.8)
 	
 func zoom_animation() -> void:
 	if zoom_tween and zoom_tween.is_valid():
