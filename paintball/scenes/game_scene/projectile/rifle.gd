@@ -27,6 +27,8 @@ var local_lifeime: float
 var wave_timer: float = 0.0
 var wave: int = 0
 const PROJECTILE_SCENE = preload("res://scenes/game_scene/projectile/projectile.tscn")
+
+var target_lost: bool = false
 	
 func _ready() -> void:
 	add_to_group("projectile")
@@ -42,7 +44,9 @@ func _physics_process(delta: float) -> void:
 	if local_lifeime <= 0:
 		call_deferred("queue_free")
 	# Aiming
-	if is_instance_valid(launch_point) and is_instance_valid(target) and not target.is_dead:
+	if is_instance_valid(target) and target.is_dead:
+		target_lost = true
+	if is_instance_valid(launch_point) and is_instance_valid(target) and not target_lost:
 		var target_direction: Vector2 = (launch_point.global_position.direction_to(target.global_position))
 		facing_angle = target_direction.angle()
 		facing_dir = signf(target_direction.x)

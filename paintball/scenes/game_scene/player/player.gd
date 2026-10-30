@@ -6,7 +6,7 @@ extends CharacterBody2D
 @export var PLAYER_ID: int = 1
 @export var character_id: int = 0
 var player_name: String = ""
-signal player_eliminated(player: CharacterBody2D)
+signal player_eliminated(player: CharacterBody2D, attacker_id: int, attacker_team: int)
 
 # Animation
 var is_spawned: bool = false
@@ -226,6 +226,7 @@ func _ready() -> void:
 	climbup_hitbox.area_exited.connect(_on_climb_up_area_exited)
 	climbdown_hitbox.area_entered.connect(_on_climb_down_area_entered)
 	climbdown_hitbox.area_exited.connect(_on_climb_down_area_exited)
+	update_color()
 	
 func _physics_process(delta: float) -> void:
 	if is_dead:
@@ -234,7 +235,7 @@ func _physics_process(delta: float) -> void:
 	# UI
 	StunBar.value = stun_cd/stun_max
 	StunBar.Scale = camera.zoom.x
-	DashBar.value = dash_cd/DASH_CD
+	DashBar.value = shoot_cd/SHOOT_CD
 	DashBar.Scale = camera.zoom.x
 	if is_instance_valid(held_bucket):
 		StunBar.Location = Vector2(0,INDICATOR_BUCKET_Y)
@@ -424,7 +425,7 @@ func take_damage(amount: float, attacker_id: int, attacker_team: int) -> void:
 		return
 		
 	HEALTH -= amount * damage_reduction
-	if HEALTH <= 0.0:
+	if HEALTH <= 0.0 and not is_dead:
 		if is_instance_valid(held_bucket):
 			held_bucket.transfer(attacker_id, attacker_team)
 		is_dead = true
@@ -531,6 +532,15 @@ func shoot_projectile(base_damage: float, speed: float, knockback: float, p_faci
 
 func enemy_ai() -> void:
 	pass
+
+func update_color() -> void:
+	$Sprite2D.self_modulate = Color.WHITE
+	var base_color: Color
+	match TEAM_ID:
+		1: base_color = Globals.p1_color
+		2: base_color = Globals.p2_color
+		_: base_color = Color.WHITE
+	$Sprite2D.self_modulate = base_color.lerp(Color.WHITE, Globals.white_blend_intensity)
 
 func move_and_scale_camera():
 	if not screens_merging: #let ui.gd override the target if merging

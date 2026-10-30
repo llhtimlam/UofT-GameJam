@@ -1,0 +1,84 @@
+[gd_scene format=3 uid="uid://d2572qdh18lxc"]
+
+[ext_resource type="Shader" uid="uid://b0rhp3fug4naq" path="res://assets/color_wheel.gdshader" id="1_olyei"]
+[ext_resource type="Script" uid="uid://b0rfillnnqnl4" path="res://scenes/game_scene/base/color_wheel.gd" id="1_s5dsr"]
+[ext_resource type="Texture2D" uid="uid://pwk8kqxx8pmm" path="res://assets/background/triangle_base.png" id="2_s5dsr"]
+[ext_resource type="Texture2D" uid="uid://dy07iiiqkpdt6" path="res://assets/background/Ring_base.png" id="3_lo1wq"]
+[ext_resource type="Texture2D" uid="uid://3vsgqbe71cg5" path="res://assets/background/ring_glow.png" id="4_pdqay"]
+[ext_resource type="Texture2D" uid="uid://dloy2cv6w4tu1" path="res://assets/background/progress_bar.png" id="5_omnfb"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_yivnm"]
+shader = ExtResource("1_olyei")
+shader_parameter/custom_color_middle = Vector3(1, 0, 0)
+shader_parameter/custom_color_left = Vector3(0, 1, 0)
+shader_parameter/custom_color_right = Vector3(0, 0, 1)
+shader_parameter/fill_percentage = 0.0
+
+[sub_resource type="Gradient" id="Gradient_geu3a"]
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_682nn"]
+gradient = SubResource("Gradient_geu3a")
+width = 256
+height = 256
+
+[node name="ColorWheel" type="Node2D" unique_id=920039219]
+script = ExtResource("1_s5dsr")
+
+[node name="ColorWheel" type="Sprite2D" parent="." unique_id=1651613932]
+z_index = 8
+z_as_relative = false
+material = SubResource("ShaderMaterial_yivnm")
+texture = SubResource("GradientTexture2D_682nn")
+
+[node name="TriangleBase" type="Sprite2D" parent="." unique_id=145619206]
+z_index = 7
+z_as_relative = false
+texture = ExtResource("2_s5dsr")
+
+[node name="RingBase" type="Sprite2D" parent="." unique_id=571165209]
+z_index = 5
+z_as_relative = false
+texture = ExtResource("3_lo1wq")
+
+[node name="RingGlow" type="Sprite2D" parent="." unique_id=491764387]
+z_index = 3
+z_as_relative = false
+texture = ExtResource("4_pdqay")
+
+[node name="MiddleScore" type="TextureProgressBar" parent="." unique_id=156393809]
+z_index = 6
+z_as_relative = false
+offset_left = -200.0
+offset_top = -200.0
+offset_right = 200.0
+offset_bottom = 200.0
+value = 100.0
+fill_mode = 8
+radial_fill_degrees = 115.0
+texture_progress = ExtResource("5_omnfb")
+
+[node name="LeftScore" type="TextureProgressBar" parent="." unique_id=862336961]
+z_index = 6
+z_as_relative = false
+offset_left = -200.0
+offset_top = -200.0
+offset_right = 200.0
+offset_bottom = 200.0
+value = 100.0
+fill_mode = 8
+radial_initial_angle = 240.0
+radial_fill_degrees = 115.0
+texture_progress = ExtResource("5_omnfb")
+
+[node name="RightScore" type="TextureProgressBar" parent="." unique_id=1666428338]
+z_index = 6
+z_as_relative = false
+offset_left = -200.0
+offset_top = -200.0
+offset_right = 200.0
+offset_bottom = 200.0
+value = 100.0
+fill_mode = 8
+radial_initial_angle = 120.0
+radial_fill_degrees = 115.0
+texture_progress = ExtResource("5_omnfb")

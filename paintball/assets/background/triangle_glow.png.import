@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://cfjnm3b46jeat"
-path="res://.godot/imported/triangle.png-5e2a774d49458cfe1867aa8939986627.ctex"
+uid="uid://bexx3tdwvmjcp"
+path="res://.godot/imported/triangle_glow.png-f640702ee07e2f17f478a4ac33d87db1.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/background/triangle.png"
-dest_files=["res://.godot/imported/triangle.png-5e2a774d49458cfe1867aa8939986627.ctex"]
+source_file="res://assets/background/triangle_glow.png"
+dest_files=["res://.godot/imported/triangle_glow.png-f640702ee07e2f17f478a4ac33d87db1.ctex"]
 
 [params]
 

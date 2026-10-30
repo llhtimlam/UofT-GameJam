@@ -22,6 +22,7 @@ func _ready() -> void:
 	area_entered.connect(_on_area_entered)
 	HIT_VISUAL.flip_h = (facing_dir == -1.0)
 	HITBOX.position.x *= facing_dir
+	update_color()
 	
 func _physics_process(delta: float) -> void:
 	# Despawn timer
@@ -53,3 +54,13 @@ func _hit_target(target: Node) -> void:
 			target.apply_knockback(facing_dir, knockback, stun_time)
 	if giving_damage:
 		target.take_damage(damage, ATTACKER_ID, ATTACKER_TEAM)
+
+func update_color() -> void:
+	HIT_VISUAL.self_modulate = Color.WHITE
+	var base_color: Color
+	match ATTACKER_TEAM:
+		1: base_color = Globals.p1_color
+		2: base_color = Globals.p2_color
+		-1: base_color = Globals.turret_color
+		_: base_color = Color.WHITE
+	HIT_VISUAL.self_modulate = base_color.lerp(Color.WHITE, Globals.white_blend_intensity)

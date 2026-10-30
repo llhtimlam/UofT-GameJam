@@ -6,14 +6,11 @@
 [ext_resource type="Texture2D" uid="uid://qanrvw5rwuf5" path="res://assets/background/animated_blackhole/d1512ad5-c56d-433f-8d48-4f5e4a54399e-1.png" id="3_42y4p"]
 [ext_resource type="Texture2D" uid="uid://htn3dabtgy7u" path="res://assets/background/animated_blackhole/d1512ad5-c56d-433f-8d48-4f5e4a54399e-2.png" id="4_pu1w6"]
 [ext_resource type="Texture2D" uid="uid://da0ccrkdrxsqc" path="res://assets/background/animated_blackhole/d1512ad5-c56d-433f-8d48-4f5e4a54399e-3.png" id="5_4ji5y"]
-[ext_resource type="Shader" uid="uid://b0rhp3fug4naq" path="res://assets/color_wheel.gdshader" id="5_d327o"]
 [ext_resource type="Texture2D" uid="uid://cf8h5voai78ue" path="res://assets/background/animated_blackhole/d1512ad5-c56d-433f-8d48-4f5e4a54399e-4.png" id="6_o45np"]
 [ext_resource type="PackedScene" uid="uid://chbxu3qvg1pqe" path="res://scenes/game_scene/colour_zone/color_zone.tscn" id="7_d327o"]
 [ext_resource type="Texture2D" uid="uid://bupcvve2fiowo" path="res://assets/background/animated_blackhole/d1512ad5-c56d-433f-8d48-4f5e4a54399e-5.png" id="7_u72jr"]
 [ext_resource type="Texture2D" uid="uid://ny84bglepa1c" path="res://assets/background/background_haze.png" id="8_geu3a"]
 [ext_resource type="Texture2D" uid="uid://cqebuxv4troth" path="res://assets/background/animated_blackhole/d1512ad5-c56d-433f-8d48-4f5e4a54399e-6.png" id="8_v1iu0"]
-[ext_resource type="Texture2D" uid="uid://dy07iiiqkpdt6" path="res://assets/background/Ring_base.png" id="8_yl5ko"]
-[ext_resource type="Texture2D" uid="uid://bvt5bxerwnpdw" path="res://assets/background/Ring_inner.png" id="9_x0on3"]
 [ext_resource type="Texture2D" uid="uid://cfe7ip0o4srxl" path="res://assets/background/animated_blackhole/d1512ad5-c56d-433f-8d48-4f5e4a54399e-7.png" id="9_yffb7"]
 [ext_resource type="Texture2D" uid="uid://c6jjrhff58u04" path="res://assets/background/animated_blackhole/d1512ad5-c56d-433f-8d48-4f5e4a54399e-8.png" id="10_f3mhb"]
 [ext_resource type="Texture2D" uid="uid://dvy7xpq42kxap" path="res://assets/background/animated_blackhole/d1512ad5-c56d-433f-8d48-4f5e4a54399e-9.png" id="11_0p2g1"]
@@ -401,27 +398,10 @@ animations = [{
 "speed": 60.0
 }]
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_13qdw"]
-shader = ExtResource("5_d327o")
-shader_parameter/custom_color_middle = Vector3(1, 0, 0)
-shader_parameter/custom_color_left = Vector3(0, 1, 0)
-shader_parameter/custom_color_right = Vector3(0, 0, 1)
-shader_parameter/fill_percentage = 0.0
-
-[sub_resource type="Gradient" id="Gradient_geu3a"]
-
-[sub_resource type="GradientTexture2D" id="GradientTexture2D_xrivr"]
-gradient = SubResource("Gradient_geu3a")
-width = 256
-height = 256
-
 [node name="Map" type="Node2D" unique_id=1264092394 node_paths=PackedStringArray("PLAYER1", "PLAYER2")]
 script = ExtResource("1_2m4d5")
 PLAYER1 = NodePath("Player1")
 PLAYER2 = NodePath("Player2")
-p1_color = Color(248.11058, 0, 0, 1)
-p2_color = Color(0, 0, 255.0139, 1)
-turret_color = Color(0, 219.66463, 0, 1)
 
 [node name="BlackHole" type="AnimatedSprite2D" parent="." unique_id=1582543593]
 z_index = -10
@@ -447,7 +427,7 @@ position = Vector2(-3508, -648.5)
 texture = ExtResource("8_geu3a")
 
 [node name="MapLayer" type="TileMapLayer" parent="." unique_id=2055237803]
-tile_map_data = PackedByteArray("AADV//v/AAABAAAAAADV//b/AAABAAAAAADY//L/AAABAAAAAADf//L/AAABAAAAAADk//b/AAABAAAAAADm/+T/AAABAAAAAAD9/+r/AAABAAAAAAAUAOT/AAABAAAAAAAaAPv/AAABAAAAAAAaAPf/AAABAAAAAAAdAPP/AAABAAAAAAAkAPP/AAABAAAAAAApAPf/AAABAAAAAAArAPv/AAADAAAAAAArAPf/AAADAAAAAAAoAPP/AAADAAAAAAAhAPP/AAADAAAAAAAcAPf/AAADAAAAAAAaAOT/AAADAAAAAAAPAOD/AAADAAAAAADs/+T/AAADAAAAAADm//b/AAADAAAAAADj//L/AAADAAAAAADc//L/AAADAAAAAADX//b/AAADAAAAAADm//v/AAADAAAAAAADAOr/AAADAAAAAAD+/+r/AAACAAAAAAD//+r/AAACAAAAAAAAAOr/AAACAAAAAAABAOr/AAACAAAAAAACAOr/AAACAAAAAADn/+T/AAACAAAAAADo/+T/AAACAAAAAADp/+T/AAACAAAAAADq/+T/AAACAAAAAADr/+T/AAACAAAAAADy/+D/AAACAAAAAADz/+D/AAACAAAAAAD0/+D/AAACAAAAAAD1/+D/AAACAAAAAAD2/+D/AAACAAAAAAD3/+D/AAACAAAAAAD4/+D/AAACAAAAAAD5/+D/AAACAAAAAAD6/+D/AAACAAAAAAD7/+D/AAACAAAAAAD8/+D/AAACAAAAAAD9/+D/AAACAAAAAAD+/+D/AAACAAAAAAD//+D/AAACAAAAAAAAAOD/AAACAAAAAAABAOD/AAACAAAAAAACAOD/AAACAAAAAAADAOD/AAACAAAAAAAEAOD/AAACAAAAAAAFAOD/AAACAAAAAAAGAOD/AAACAAAAAAAHAOD/AAACAAAAAAAIAOD/AAACAAAAAAAJAOD/AAACAAAAAAAKAOD/AAACAAAAAAALAOD/AAACAAAAAAAMAOD/AAACAAAAAAANAOD/AAACAAAAAAAOAOD/AAACAAAAAAAVAOT/AAACAAAAAAAWAOT/AAACAAAAAAAXAOT/AAACAAAAAAAYAOT/AAACAAAAAAAZAOT/AAACAAAAAAAbAPv/AAACAAAAAAAcAPv/AAACAAAAAAAdAPv/AAACAAAAAAAeAPv/AAACAAAAAAAfAPv/AAACAAAAAAAgAPv/AAACAAAAAAAhAPv/AAACAAAAAAAiAPv/AAACAAAAAAAjAPv/AAACAAAAAAAkAPv/AAACAAAAAAAlAPv/AAACAAAAAAAmAPv/AAACAAAAAAAnAPv/AAACAAAAAAAoAPv/AAACAAAAAAApAPv/AAACAAAAAAAqAPv/AAACAAAAAAAqAPf/AAACAAAAAAAnAPP/AAACAAAAAAAmAPP/AAACAAAAAAAlAPP/AAACAAAAAAAeAPP/AAACAAAAAAAfAPP/AAACAAAAAAAgAPP/AAACAAAAAAAbAPf/AAACAAAAAADW//v/AAACAAAAAADX//v/AAACAAAAAADY//v/AAACAAAAAADZ//v/AAACAAAAAADa//v/AAACAAAAAADb//v/AAACAAAAAADc//v/AAACAAAAAADd//v/AAACAAAAAADe//v/AAACAAAAAADf//v/AAACAAAAAADg//v/AAACAAAAAADh//v/AAACAAAAAADi//v/AAACAAAAAADj//v/AAACAAAAAADk//v/AAACAAAAAADl//v/AAACAAAAAADl//b/AAACAAAAAADg//L/AAACAAAAAADh//L/AAACAAAAAADi//L/AAACAAAAAADb//L/AAACAAAAAADa//L/AAACAAAAAADZ//L/AAACAAAAAADW//b/AAACAAAAAADx/+D/AAABAAAAAADu/+L/AAABAAAAAADv/+L/AAADAAAAAAASAOL/AAADAAAAAAARAOL/AAABAAAAAAA=")
+tile_map_data = PackedByteArray("AADV//v/AAABAAAAAADV//b/AAABAAAAAADY//L/AAABAAAAAADf//L/AAABAAAAAADk//b/AAABAAAAAADm/+T/AAABAAAAAAD9/+r/AAABAAAAAAAUAOT/AAABAAAAAAAaAPf/AAABAAAAAAAdAPP/AAABAAAAAAAkAPP/AAABAAAAAAApAPf/AAABAAAAAAArAPv/AAADAAAAAAArAPf/AAADAAAAAAAoAPP/AAADAAAAAAAhAPP/AAADAAAAAAAcAPf/AAADAAAAAAAaAOT/AAADAAAAAAAPAOD/AAADAAAAAADs/+T/AAADAAAAAADm//b/AAADAAAAAADj//L/AAADAAAAAADc//L/AAADAAAAAADX//b/AAADAAAAAAADAOr/AAADAAAAAAD+/+r/AAACAAAAAAD//+r/AAACAAAAAAAAAOr/AAACAAAAAAABAOr/AAACAAAAAAACAOr/AAACAAAAAADn/+T/AAACAAAAAADo/+T/AAACAAAAAADp/+T/AAACAAAAAADq/+T/AAACAAAAAADr/+T/AAACAAAAAADy/+D/AAACAAAAAADz/+D/AAACAAAAAAD0/+D/AAACAAAAAAD1/+D/AAACAAAAAAD2/+D/AAACAAAAAAD3/+D/AAACAAAAAAD4/+D/AAACAAAAAAD5/+D/AAACAAAAAAD6/+D/AAACAAAAAAD7/+D/AAACAAAAAAD8/+D/AAACAAAAAAD9/+D/AAACAAAAAAD+/+D/AAACAAAAAAD//+D/AAACAAAAAAAAAOD/AAACAAAAAAABAOD/AAACAAAAAAACAOD/AAACAAAAAAADAOD/AAACAAAAAAAEAOD/AAACAAAAAAAFAOD/AAACAAAAAAAGAOD/AAACAAAAAAAHAOD/AAACAAAAAAAIAOD/AAACAAAAAAAJAOD/AAACAAAAAAAKAOD/AAACAAAAAAALAOD/AAACAAAAAAAMAOD/AAACAAAAAAANAOD/AAACAAAAAAAOAOD/AAACAAAAAAAVAOT/AAACAAAAAAAWAOT/AAACAAAAAAAXAOT/AAACAAAAAAAYAOT/AAACAAAAAAAZAOT/AAACAAAAAAAbAPv/AAACAAAAAAAcAPv/AAACAAAAAAAdAPv/AAACAAAAAAAeAPv/AAACAAAAAAAfAPv/AAACAAAAAAAgAPv/AAACAAAAAAAhAPv/AAACAAAAAAAiAPv/AAACAAAAAAAjAPv/AAACAAAAAAAkAPv/AAACAAAAAAAlAPv/AAACAAAAAAAmAPv/AAACAAAAAAAnAPv/AAACAAAAAAAoAPv/AAACAAAAAAApAPv/AAACAAAAAAAqAPv/AAACAAAAAAAqAPf/AAACAAAAAAAnAPP/AAACAAAAAAAmAPP/AAACAAAAAAAlAPP/AAACAAAAAAAeAPP/AAACAAAAAAAfAPP/AAACAAAAAAAgAPP/AAACAAAAAAAbAPf/AAACAAAAAADW//v/AAACAAAAAADX//v/AAACAAAAAADY//v/AAACAAAAAADZ//v/AAACAAAAAADa//v/AAACAAAAAADb//v/AAACAAAAAADc//v/AAACAAAAAADd//v/AAACAAAAAADe//v/AAACAAAAAADf//v/AAACAAAAAADg//v/AAACAAAAAADh//v/AAACAAAAAADi//v/AAACAAAAAADj//v/AAACAAAAAADk//v/AAACAAAAAADl//v/AAACAAAAAADl//b/AAACAAAAAADg//L/AAACAAAAAADh//L/AAACAAAAAADi//L/AAACAAAAAADb//L/AAACAAAAAADa//L/AAACAAAAAADZ//L/AAACAAAAAADW//b/AAACAAAAAADx/+D/AAABAAAAAADu/+L/AAABAAAAAADv/+L/AAADAAAAAAASAOL/AAADAAAAAAARAOL/AAABAAAAAADm//v/AAACAAAAAADn//v/AAACAAAAAADo//v/AAACAAAAAADp//v/AAADAAAAAAAYAPv/AAACAAAAAAAZAPv/AAACAAAAAAAaAPv/AAACAAAAAAAXAPv/AAABAAAAAAA=")
 tile_set = ExtResource("100_um714")
 
 [node name="RopeLayer" type="TileMapLayer" parent="." unique_id=1316687841]
@@ -487,7 +467,7 @@ tile_map_data = PackedByteArray("AAD3/+f/AAACAAAAAAD4/+f/AAACAAAAAAD5/+f/AAACAAA
 tile_set = ExtResource("100_um714")
 
 [node name="Platform32b" type="TileMapLayer" parent="." unique_id=1783007330]
-tile_map_data = PackedByteArray("AAD3/+f/AAACAAAAAAD4/+f/AAACAAAAAAD5/+f/AAACAAAAAAAHAOf/AAACAAAAAAAIAOf/AAACAAAAAAAJAOf/AAACAAAAAAD8//L/AAACAAAAAAD9//L/AAACAAAAAAD+//L/AAACAAAAAAABAPb/AAACAAAAAAACAPb/AAACAAAAAAADAPb/AAACAAAAAAAIAPj/AAACAAAAAAAJAPj/AAACAAAAAAAKAPj/AAACAAAAAAD///r/AAACAAAAAAAAAPr/AAACAAAAAAABAPr/AAACAAAAAAD2//r/AAACAAEAAAD3//r/AAACAAEAAAD4//r/AAACAAEAAAD1//r/AAACAAEAAAD+//r/AAACAAAAAAACAPr/AAACAAAAAAD9//r/AAACAAAAAAD7//r/AAACAAAAAAD8//r/AAACAAAAAAD6//r/AAACAAAAAAD5//r/AAACAAEAAAAAAPb/AAACAAAAAAAEAPb/AAACAAAAAAAHAPj/AAACAAAAAAALAPj/AAACAAAAAAD///L/AAACAAAAAAAAAPL/AAACAAAAAAABAPL/AAACAAAAAAD//+7/AAACAAAAAAAAAO7/AAACAAAAAAABAO7/AAACAAAAAAACAO7/AAADAAAAAAACAPL/AAADAAAAAAAFAPb/AAADAAAAAAAMAPj/AAADAAAAAAADAPr/AAADAAAAAAD6/+f/AAADAAAAAAD+/+7/AAABAAAAAAAGAOf/AAABAAAAAAD7//L/AAABAAAAAAD///b/AAABAAAAAAD0//r/AAABAAEAAAAGAPj/AAABAAAAAAD2/+f/AAABAAAAAAAKAOf/AAADAAAAAADt//f/AAABAAEAAADz//P/AAABAAEAAAAMAPT/AAABAAEAAAANAPv/AAABAAEAAAATAPv/AAADAAEAAAASAPT/AAADAAEAAADz//f/AAADAAEAAAD4//P/AAADAAEAAAD0//P/AAACAAEAAAD1//P/AAACAAEAAAD2//P/AAACAAEAAAD3//P/AAACAAEAAADu//f/AAACAAEAAADv//f/AAACAAEAAADw//f/AAACAAEAAADx//f/AAACAAEAAADy//f/AAACAAEAAAANAPT/AAACAAEAAAAOAPT/AAACAAEAAAAPAPT/AAACAAEAAAAQAPT/AAACAAEAAAARAPT/AAACAAEAAAAOAPv/AAACAAEAAAAPAPv/AAACAAEAAAAQAPv/AAACAAEAAAARAPv/AAACAAEAAAASAPv/AAACAAEAAAA=")
+tile_map_data = PackedByteArray("AAD3/+f/AAACAAAAAAD4/+f/AAACAAAAAAD5/+f/AAACAAAAAAAHAOf/AAACAAAAAAAIAOf/AAACAAAAAAAJAOf/AAACAAAAAAD8//L/AAACAAAAAAD9//L/AAACAAAAAAD+//L/AAACAAAAAAABAPb/AAACAAAAAAACAPb/AAACAAAAAAADAPb/AAACAAAAAAAIAPj/AAACAAAAAAAJAPj/AAACAAAAAAAKAPj/AAACAAAAAAD///r/AAACAAAAAAAAAPr/AAACAAAAAAABAPr/AAACAAAAAAD+//r/AAACAAAAAAACAPr/AAACAAAAAAD9//r/AAACAAAAAAD7//r/AAACAAAAAAD8//r/AAACAAAAAAD6//r/AAACAAAAAAAAAPb/AAACAAAAAAAEAPb/AAACAAAAAAAHAPj/AAACAAAAAAALAPj/AAACAAAAAAD///L/AAACAAAAAAAAAPL/AAACAAAAAAABAPL/AAACAAAAAAD//+7/AAACAAAAAAAAAO7/AAACAAAAAAABAO7/AAACAAAAAAACAO7/AAADAAAAAAACAPL/AAADAAAAAAAFAPb/AAADAAAAAAAMAPj/AAADAAAAAAADAPr/AAADAAAAAAD6/+f/AAADAAAAAAD+/+7/AAABAAAAAAAGAOf/AAABAAAAAAD7//L/AAABAAAAAAD///b/AAABAAAAAAAGAPj/AAABAAAAAAD2/+f/AAABAAAAAAAKAOf/AAADAAAAAADt//f/AAABAAEAAADz//P/AAABAAEAAAAMAPT/AAABAAEAAAANAPv/AAABAAEAAAATAPv/AAADAAEAAAASAPT/AAADAAEAAADz//f/AAADAAEAAAD4//P/AAADAAEAAAD0//P/AAACAAEAAAD1//P/AAACAAEAAAD2//P/AAACAAEAAAD3//P/AAACAAEAAADu//f/AAACAAEAAADv//f/AAACAAEAAADw//f/AAACAAEAAADx//f/AAACAAEAAADy//f/AAACAAEAAAANAPT/AAACAAEAAAAOAPT/AAACAAEAAAAPAPT/AAACAAEAAAAQAPT/AAACAAEAAAARAPT/AAACAAEAAAAOAPv/AAACAAEAAAAPAPv/AAACAAEAAAAQAPv/AAACAAEAAAARAPv/AAACAAEAAAASAPv/AAACAAEAAAD0//r/AAABAAAAAAD1//r/AAACAAAAAAD2//r/AAACAAAAAAD3//r/AAACAAAAAAD4//r/AAACAAAAAAD5//r/AAACAAAAAAA=")
 tile_set = ExtResource("100_um714")
 
 [node name="Platform23" type="TileMapLayer" parent="." unique_id=302757071]
@@ -539,64 +519,8 @@ PLAYER_ID = 2
 
 [node name="Camera2D2" type="Camera2D" parent="Player2" unique_id=737629106]
 
-[node name="Player1ColorWheel" type="Sprite2D" parent="." unique_id=1051621695]
-z_index = 7
-z_as_relative = false
-material = SubResource("ShaderMaterial_13qdw")
+[node name="P1Base" type="Marker2D" parent="." unique_id=591551844]
 position = Vector2(-1088, -680)
-texture = SubResource("GradientTexture2D_xrivr")
-
-[node name="TriangleBase" type="Polygon2D" parent="Player1ColorWheel" unique_id=1645182398]
-z_index = 6
-z_as_relative = false
-color = Color(0, 0, 0, 1)
-polygon = PackedVector2Array(0, -112.4, 98, 56, -98, 56)
-
-[node name="RingBase" type="Sprite2D" parent="Player1ColorWheel" unique_id=2039970250]
-z_index = 5
-z_as_relative = false
-texture = ExtResource("8_yl5ko")
-
-[node name="P1SelfScore" type="TextureProgressBar" parent="Player1ColorWheel" unique_id=2019487399]
-modulate = Color(1, 0, 0, 1)
-z_index = 6
-z_as_relative = false
-offset_left = -150.0
-offset_top = -150.0
-offset_right = 150.0
-offset_bottom = 150.0
-value = 100.0
-fill_mode = 8
-radial_fill_degrees = 115.0
-texture_progress = ExtResource("9_x0on3")
-
-[node name="P1EnemyScore" type="TextureProgressBar" parent="Player1ColorWheel" unique_id=1208169225]
-modulate = Color(0, 0, 1, 1)
-z_index = 6
-z_as_relative = false
-offset_left = -150.0
-offset_top = -150.0
-offset_right = 150.0
-offset_bottom = 150.0
-value = 100.0
-fill_mode = 8
-radial_initial_angle = 240.0
-radial_fill_degrees = 115.0
-texture_progress = ExtResource("9_x0on3")
-
-[node name="P1TurretScore" type="TextureProgressBar" parent="Player1ColorWheel" unique_id=214140866]
-modulate = Color(0, 1, 0, 1)
-z_index = 6
-z_as_relative = false
-offset_left = -150.0
-offset_top = -150.0
-offset_right = 150.0
-offset_bottom = 150.0
-value = 100.0
-fill_mode = 8
-radial_initial_angle = 120.0
-radial_fill_degrees = 115.0
-texture_progress = ExtResource("9_x0on3")
 
 [node name="Player1SpawnPoint" type="Marker2D" parent="." unique_id=324260113]
 position = Vector2(-1088, -2000)
@@ -604,64 +528,8 @@ position = Vector2(-1088, -2000)
 [node name="P1PaintBucketSpawnPoint" type="Marker2D" parent="." unique_id=627514841]
 position = Vector2(-1088, -176)
 
-[node name="Player2ColorWheel" type="Sprite2D" parent="." unique_id=1372223997]
-z_index = 7
-z_as_relative = false
-material = SubResource("ShaderMaterial_13qdw")
+[node name="P2Base" type="Marker2D" parent="." unique_id=151775186]
 position = Vector2(1120, -680)
-texture = SubResource("GradientTexture2D_xrivr")
-
-[node name="TriangleBase" type="Polygon2D" parent="Player2ColorWheel" unique_id=1982820605]
-z_index = 6
-z_as_relative = false
-color = Color(0, 0, 0, 1)
-polygon = PackedVector2Array(0, -112.4, 98, 56, -98, 56)
-
-[node name="RingBase" type="Sprite2D" parent="Player2ColorWheel" unique_id=1126716781]
-z_index = 5
-z_as_relative = false
-texture = ExtResource("8_yl5ko")
-
-[node name="P2SelfScore" type="TextureProgressBar" parent="Player2ColorWheel" unique_id=1925714553]
-modulate = Color(0, 0, 1, 1)
-z_index = 6
-z_as_relative = false
-offset_left = -150.0
-offset_top = -150.0
-offset_right = 150.0
-offset_bottom = 150.0
-value = 100.0
-fill_mode = 8
-radial_fill_degrees = 115.0
-texture_progress = ExtResource("9_x0on3")
-
-[node name="P2EnemyScore" type="TextureProgressBar" parent="Player2ColorWheel" unique_id=1501203536]
-modulate = Color(1, 0, 0, 1)
-z_index = 6
-z_as_relative = false
-offset_left = -150.0
-offset_top = -150.0
-offset_right = 150.0
-offset_bottom = 150.0
-value = 100.0
-fill_mode = 8
-radial_initial_angle = 120.0
-radial_fill_degrees = 115.0
-texture_progress = ExtResource("9_x0on3")
-
-[node name="P2TurretScore" type="TextureProgressBar" parent="Player2ColorWheel" unique_id=1025227400]
-modulate = Color(0, 1, 0, 1)
-z_index = 6
-z_as_relative = false
-offset_left = -150.0
-offset_top = -150.0
-offset_right = 150.0
-offset_bottom = 150.0
-value = 100.0
-fill_mode = 8
-radial_initial_angle = 240.0
-radial_fill_degrees = 115.0
-texture_progress = ExtResource("9_x0on3")
 
 [node name="Player2SpawnPoint" type="Marker2D" parent="." unique_id=1644131078]
 position = Vector2(1120, -2000)
@@ -669,22 +537,12 @@ position = Vector2(1120, -2000)
 [node name="P2PaintBucketSpawnPoint" type="Marker2D" parent="." unique_id=436978477]
 position = Vector2(1120, -176)
 
-[node name="TurretColorWheel" type="Sprite2D" parent="." unique_id=1651168249]
-z_index = 7
-z_as_relative = false
-material = SubResource("ShaderMaterial_13qdw")
-position = Vector2(18, -1240)
-scale = Vector2(1, -1)
-texture = SubResource("GradientTexture2D_xrivr")
-
-[node name="TriangleBase" type="Polygon2D" parent="TurretColorWheel" unique_id=849186175]
-z_index = 6
-z_as_relative = false
-color = Color(0, 0, 0, 1)
-polygon = PackedVector2Array(0, -112.4, 98, 56, -98, 56)
-
 [node name="TurretPaintBucketSpawnPoint" type="Marker2D" parent="." unique_id=56123915]
 position = Vector2(16, -720)
+
+[node name="CloneSpawnPoint" type="Marker2D" parent="." unique_id=1230033910]
+position = Vector2(18, -1240)
+gizmo_extents = 0.0
 
 [node name="ColorZone" parent="." unique_id=248434155 instance=ExtResource("7_d327o")]
 position = Vector2(16, -1240)

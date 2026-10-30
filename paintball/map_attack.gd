@@ -17,12 +17,18 @@ var speed: float = 0.0
 #var lifetime: float = 1.0
 var immune_targets: Array[Node2D]
 	
-var target_progress_bar: TextureProgressBar
-var target_animated_sprite: AnimatedSprite2D
+var sprites: Array[Node] = []
+
 func _ready() -> void:
 	add_to_group("map_attack")
 	body_entered.connect(_on_body_entered)
 	area_entered.connect(_on_area_entered)
+	sprites = find_children("*", "AnimatedSprite2D", true, false)
+	sprites = sprites.filter(
+		func(node: Node):
+			return not "shadow" in node.name.to_lower()
+	)
+	update_color()
 	
 func _physics_process(delta: float) -> void:
 	# Despawn timer
@@ -56,3 +62,15 @@ func _hit_target(target: Node) -> void:
 					facing_dir = signf(target.global_position.x - global_position.x)
 				target.apply_knockback(facing_dir, knockback, stun_time)
 				immune_targets.append(target)
+	
+func update_color() -> void:
+	for sprite in sprites:
+		if sprite:
+			sprite.self_modulate = Color.WHITE
+			var base_color: Color
+			match ATTACKER_TEAM:
+				1: base_color = Globals.p1_color
+				2: base_color = Globals.p2_color
+				-1: base_color = Globals.turret_color
+				_: base_color = Color.WHITE
+			sprite.self_modulate = base_color.lerp(Color.WHITE, Globals.white_blend_intensity)
