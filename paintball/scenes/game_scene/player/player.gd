@@ -127,7 +127,8 @@ var camera_target = Vector2.ZERO
 const INDICATOR_Y = -60
 const INDICATOR_BUCKET_Y = -90
 @onready var StunBar: TextureProgressBar = $StunBar
-@onready var DashBar: TextureProgressBar = $DashBar
+@onready var ShootBar: TextureProgressBar = $ShootBar
+@onready var HealthBar: ProgressBar = $HealthBar
 var stun_max: float = 1.
 
 # Audio
@@ -239,14 +240,17 @@ func _physics_process(delta: float) -> void:
 	# UI
 	StunBar.value = stun_cd/stun_max
 	StunBar.Scale = camera.zoom.x
-	DashBar.value = shoot_cd/SHOOT_CD
-	DashBar.Scale = camera.zoom.x
+	ShootBar.value = shoot_cd/SHOOT_CD
+	ShootBar.Scale = camera.zoom.x
+	HealthBar.value = HEALTH
 	if is_instance_valid(held_bucket):
 		StunBar.Location = Vector2(0,INDICATOR_BUCKET_Y)
-		DashBar.Location = Vector2(0,INDICATOR_BUCKET_Y)
+		ShootBar.Location = Vector2(0,INDICATOR_BUCKET_Y)
+		HealthBar.position.y = INDICATOR_BUCKET_Y + 20
 	else:
 		StunBar.Location = Vector2(0,INDICATOR_Y)
-		DashBar.Location = Vector2(0,INDICATOR_Y)
+		ShootBar.Location = Vector2(0,INDICATOR_Y)
+		HealthBar.position.y = INDICATOR_Y + 20
 	
 	
 	match control_type:

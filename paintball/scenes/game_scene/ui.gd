@@ -1,14 +1,5 @@
 extends CanvasLayer
 
-# Color labels
-@onready var P1Cols: ColorRect = $PlayerUI1/Cols
-@onready var P2Cols: ColorRect = $PlayerUI2/Cols
-@export var red: Color = Color.RED
-@export var green: Color = Color.GREEN
-@export var blue: Color = Color.BLUE
-@export var player_1_color: Vector3 = Vector3.ZERO
-@export var player_2_color: Vector3 = Vector3.ZERO
-
 # Split screen
 const MERGE_PROPORTION = .75
 const SPLIT_PROPORTION = .8
@@ -22,21 +13,8 @@ const SCREEN_MERGE_DIST_2D = 15
 @onready var player2: CharacterBody2D = viewport1.get_node("Map/Player2")
 var combined: bool = false
 
-# UI
-@onready var healthbar1: ColorRect = $PlayerUI1/ProgressBar
-@onready var healthbar2: ColorRect = $PlayerUI2/ProgressBar
-
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
-	# Color labels
-	var r = red.srgb_to_linear()
-	var g = green.srgb_to_linear()
-	var b = blue.srgb_to_linear()
-	var col_matrix = Basis(Vector3(r.r, r.g, r.b),Vector3(g.r, g.g, g.b),Vector3(b.r, b.g, b.b))
-	P1Cols.material.set_shader_parameter("colors", col_matrix)
-	P2Cols.material = P2Cols.material.duplicate()
-	P2Cols.material.set_shader_parameter("colors", col_matrix)
-	
 	# Split screen
 	var camera1 = player1.get_node("Camera2D")
 	var camera2 = player2.get_node("Camera2D")
@@ -50,14 +28,6 @@ func _ready() -> void:
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _physics_process(_delta: float) -> void:
-	# Color labels
-	P1Cols.material.set_shader_parameter("cur_col", player_1_color/255.)
-	P2Cols.material.set_shader_parameter("cur_col", player_2_color/255.)
-	
-	# Health
-	healthbar1.anchor_right = .5 + .5 * max(player1.HEALTH,0)/100.
-	healthbar2.anchor_right = .5 + .5 * max(player2.HEALTH,0)/100.
-	
 	# Split screen
 	var p1_prop = player1.get_screen_transform().get_origin()/Vector2(get_window().size)
 	var p2_prop = player2.get_screen_transform().get_origin()/Vector2(get_window().size)
