@@ -16,6 +16,10 @@ var TEAM_ID: int = 1:
 var spin_tween: Tween
 var zoom_tween: Tween
 
+# Audio
+@onready var colour_wheel_damage: AudioStreamPlayer = $AudioController/ColourWheelDamage
+@onready var colour_wheel_flip: AudioStreamPlayer = $AudioController/ColourWheelFlip
+
 # Shader input: 0.0 to 1.0 Normalized Color Vectors (Vector3)
 var display_middle_rgb: Vector3 = Vector3.ZERO:
 	set(value):
@@ -105,6 +109,7 @@ func set_color(middle_color: Color = Color(255,0,0), left_color: Color = Color(0
 		display_right.self_modulate = right_color
 	
 func hurt_animation() -> void:
+	colour_wheel_damage.play()
 	if spin_tween and spin_tween.is_valid():
 		spin_tween.kill()
 	spin_tween = create_tween()
@@ -122,6 +127,7 @@ func zoom_animation() -> void:
 	zoom_tween.tween_property(self, "scale", Vector2.ONE, 0.15)
 	
 func flip_animation() -> void:
+	colour_wheel_flip.play()
 	if zoom_tween and zoom_tween.is_valid():
 		zoom_tween.kill()
 	self.scale = Vector2.ONE

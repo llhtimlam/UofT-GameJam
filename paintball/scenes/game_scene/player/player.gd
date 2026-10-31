@@ -130,6 +130,10 @@ const INDICATOR_BUCKET_Y = -90
 @onready var DashBar: TextureProgressBar = $DashBar
 var stun_max: float = 1.
 
+# Audio
+@onready var melee_audio: AudioStreamPlayer = $MeleeAudio
+
+
 # User Input Mapping
 #func _input(event: InputEvent) -> void:
 #	if !is_spawned:
@@ -505,6 +509,7 @@ func melee(base_damage: float, knockback: float, m_facing_dir: float, attacker_i
 	melee_instance.facing_dir = m_facing_dir
 	melee_instance.damage = base_damage
 	melee_instance.knockback = knockback
+	melee_instance.connect("contact_made", play_hit_audio)
 	melee_hitbox.position.x = abs(melee_hitbox.position.x) * facing_dir
 	melee_hitbox.reset_physics_interpolation()
 	melee_hitbox.add_child(melee_instance)
@@ -557,3 +562,5 @@ func move_and_scale_camera():
 	camera_pos += P * .08 + camera_i * .0007
 	camera.global_position = camera_pos
 	
+func play_hit_audio() -> void:
+	melee_audio.play(0.15)

@@ -21,9 +21,13 @@ var iframe: float = 0.0
 var is_shot: bool = false
 
 var sprites: Array[Node] = []
-	
+
+# Audio
+@onready var ranged_audio: AudioStreamPlayer = $RangedAudio
+
 func _ready() -> void:
 	add_to_group("projectile")
+	ranged_audio.play()
 	body_entered.connect(_on_body_entered)
 	area_entered.connect(_on_area_entered)
 	sprites = find_children("*", "AnimatedSprite2D", true, false)

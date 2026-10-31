@@ -2,6 +2,7 @@
 
 [ext_resource type="Script" uid="uid://d0jmcs1fcls3u" path="res://scenes/game_scene/melee/melee.gd" id="1_eik8v"]
 [ext_resource type="Texture2D" uid="uid://miqo1wbx3pow" path="res://icon.svg" id="2_f8ttp"]
+[ext_resource type="AudioStream" uid="uid://b363j5sswbq4i" path="res://assets/sounds/sfx/melee.ogg" id="3_ff8q8"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_xrivr"]
 size = Vector2(128, 64)
@@ -19,3 +20,6 @@ texture = ExtResource("2_f8ttp")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1601651630]
 shape = SubResource("RectangleShape2D_xrivr")
+
+[node name="MeleeAudio" type="AudioStreamPlayer" parent="." unique_id=2009071376]
+stream = ExtResource("3_ff8q8")

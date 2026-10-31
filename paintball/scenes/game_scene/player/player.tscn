@@ -4,6 +4,7 @@
 [ext_resource type="Texture2D" uid="uid://miqo1wbx3pow" path="res://icon.svg" id="2_7k1jl"]
 [ext_resource type="Script" uid="uid://dndiybdxky6cb" path="res://scenes/game_scene/player/progressBar.gd" id="3_7k1jl"]
 [ext_resource type="Texture2D" uid="uid://cduwedquj1wde" path="res://assets/item/paint.png" id="3_kyjql"]
+[ext_resource type="AudioStream" uid="uid://b363j5sswbq4i" path="res://assets/sounds/sfx/melee.ogg" id="5_csdy4"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_xrivr"]
 size = Vector2(32, 64)
@@ -115,3 +116,6 @@ value = 0.125
 fill_mode = 4
 texture_progress = SubResource("GradientTexture2D_7p8hl")
 script = ExtResource("3_7k1jl")
+
+[node name="MeleeAudio" type="AudioStreamPlayer" parent="." unique_id=125071536]
+stream = ExtResource("5_csdy4")

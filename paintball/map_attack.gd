@@ -19,8 +19,12 @@ var immune_targets: Array[Node2D]
 	
 var sprites: Array[Node] = []
 
+#Audio
+var audio : AudioStreamPlayer
+
 func _ready() -> void:
-	add_to_group("map_attack")
+	audio = find_child("AttackAudio")
+	audio.play()
 	body_entered.connect(_on_body_entered)
 	area_entered.connect(_on_area_entered)
 	sprites = find_children("*", "AnimatedSprite2D", true, false)

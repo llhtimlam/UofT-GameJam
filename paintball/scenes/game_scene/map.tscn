@@ -101,6 +101,10 @@
 [ext_resource type="Texture2D" uid="uid://vujtk2hnm1og" path="res://assets/background/animated_blackhole/d1512ad5-c56d-433f-8d48-4f5e4a54399e-94.png" id="96_mfkdx"]
 [ext_resource type="Texture2D" uid="uid://dk5iydpyc87dd" path="res://assets/background/animated_blackhole/d1512ad5-c56d-433f-8d48-4f5e4a54399e-95.png" id="97_wdb0g"]
 [ext_resource type="TileSet" uid="uid://en4sll6evhh8" path="res://scenes/game_scene/tileset/tile_set.tres" id="100_um714"]
+[ext_resource type="AudioStream" uid="uid://16to76ukj1fv" path="res://assets/sounds/sfx/blackhole.ogg" id="102_4w5tc"]
+[ext_resource type="AudioStream" uid="uid://cpd3bhba5q3cn" path="res://assets/sounds/bgm/bgm1.ogg" id="103_um714"]
+[ext_resource type="AudioStream" uid="uid://dis4uk21v4xnq" path="res://assets/sounds/bgm/bgm2.ogg" id="104_x51vt"]
+[ext_resource type="AudioStream" uid="uid://b363j5sswbq4i" path="res://assets/sounds/sfx/melee.ogg" id="105_um714"]
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_xrivr"]
 animations = [{
@@ -549,6 +553,28 @@ position = Vector2(16, -1240)
 
 [node name="Hand" parent="ColorZone/Turret" parent_id_path=PackedInt32Array(248434155, 305425919) index="9" unique_id=2110752015]
 position = Vector2(-1.9073486e-06, 50)
+
+[node name="AudioController" type="Node2D" parent="." unique_id=1500398305]
+
+[node name="Blackhole" type="AudioStreamPlayer" parent="AudioController" unique_id=840713840]
+stream = ExtResource("102_4w5tc")
+volume_db = -22.336
+autoplay = true
+parameters/looping = true
+
+[node name="Bgm1" type="AudioStreamPlayer" parent="AudioController" unique_id=825704576]
+stream = ExtResource("103_um714")
+volume_db = -15.356
+pitch_scale = 0.81
+
+[node name="Bgm2" type="AudioStreamPlayer" parent="AudioController" unique_id=1058829138]
+stream = ExtResource("104_x51vt")
+volume_db = -10.819
+autoplay = true
+parameters/looping = true
+
+[node name="Melee" type="AudioStreamPlayer" parent="AudioController" unique_id=571261770]
+stream = ExtResource("105_um714")
 
 [editable path="ColorZone"]
 [editable path="ColorZone/Turret"]

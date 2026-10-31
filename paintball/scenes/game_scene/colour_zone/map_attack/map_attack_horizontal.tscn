@@ -193,6 +193,7 @@
 [ext_resource type="Texture2D" uid="uid://dyf0pj2nrfwbd" path="res://assets/map_attack/attack/3a73ba02-222a-490f-ab61-a8a4cb431a18-93.png" id="191_chqws"]
 [ext_resource type="Texture2D" uid="uid://cyqmppiglkfcr" path="res://assets/map_attack/attack/3a73ba02-222a-490f-ab61-a8a4cb431a18-94.png" id="192_8d261"]
 [ext_resource type="Texture2D" uid="uid://b0ij4jqrdbhit" path="res://assets/map_attack/attack/3a73ba02-222a-490f-ab61-a8a4cb431a18-95.png" id="193_mpmh0"]
+[ext_resource type="AudioStream" uid="uid://vl15mn7vbi45" path="res://assets/sounds/sfx/turret1.ogg" id="194_xn54q"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_xrivr"]
 size = Vector2(1244, 32)
@@ -1026,3 +1027,6 @@ scale = Vector2(1.0099999, 1.3999999)
 sprite_frames = SubResource("SpriteFrames_13qdw")
 autoplay = "default"
 frame_progress = 0.043639842
+
+[node name="AttackAudio" type="AudioStreamPlayer" parent="." unique_id=1356685847]
+stream = ExtResource("194_xn54q")

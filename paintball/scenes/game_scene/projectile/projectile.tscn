@@ -97,6 +97,7 @@
 [ext_resource type="Texture2D" uid="uid://b83bmkxfxaukh" path="res://assets/background/animated_blackhole/d1512ad5-c56d-433f-8d48-4f5e4a54399e-93.png" id="95_cq8d6"]
 [ext_resource type="Texture2D" uid="uid://vujtk2hnm1og" path="res://assets/background/animated_blackhole/d1512ad5-c56d-433f-8d48-4f5e4a54399e-94.png" id="96_bpfdc"]
 [ext_resource type="Texture2D" uid="uid://dk5iydpyc87dd" path="res://assets/background/animated_blackhole/d1512ad5-c56d-433f-8d48-4f5e4a54399e-95.png" id="97_lo8s0"]
+[ext_resource type="AudioStream" uid="uid://wma7uykbyisf" path="res://assets/sounds/sfx/ranged.ogg" id="98_l3niq"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_xrivr"]
 size = Vector2(40, 40)
@@ -413,3 +414,6 @@ scale = Vector2(0.3, 0.3)
 sprite_frames = SubResource("SpriteFrames_4xvoq")
 autoplay = "default"
 frame_progress = 0.7961366
+
+[node name="RangedAudio" type="AudioStreamPlayer" parent="." unique_id=979135076]
+stream = ExtResource("98_l3niq")

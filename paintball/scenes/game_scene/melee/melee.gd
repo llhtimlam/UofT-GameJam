@@ -1,5 +1,7 @@
 extends Area2D
 
+signal contact_made
+
 # Wielder
 var ATTACKER_ID: int
 var ATTACKER_TEAM: int
@@ -10,13 +12,17 @@ var knockback: float
 var stun_time: float = 0.2
 
 # Setup
-var lifetime: float = 0.1
+var lifetime: float = 0.15
 var facing_dir: float = 1.0
 @onready var HIT_VISUAL: Sprite2D = $Sprite2D
 @onready var HITBOX: CollisionShape2D = $CollisionShape2D
 var damaged_targets: Array[Node2D] = []
 
+# Audio
+@onready var melee_audio: AudioStreamPlayer = $MeleeAudio
+
 func _ready() -> void:
+	melee_audio.play()
 	add_to_group("melee")
 	body_entered.connect(_on_body_entered)
 	area_entered.connect(_on_area_entered)
@@ -50,6 +56,7 @@ func _hit_target(target: Node) -> void:
 	var giving_damage = false #silly way to do it probably, but damage needs to be applied before knockback
 	if target.has_method("take_damage"):
 		giving_damage = true
+		contact_made.emit()
 		if target.has_method("apply_knockback"):
 			target.apply_knockback(facing_dir, knockback, stun_time)
 	if giving_damage:

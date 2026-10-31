@@ -2,6 +2,8 @@
 
 [ext_resource type="Script" uid="uid://ciphk151bojs0" path="res://scenes/game_scene/base/base.gd" id="1_gas1l"]
 [ext_resource type="PackedScene" uid="uid://d2572qdh18lxc" path="res://scenes/game_scene/base/color_wheel.tscn" id="2_5wsol"]
+[ext_resource type="AudioStream" uid="uid://bt3lv8wwrb442" path="res://assets/sounds/sfx/return_colour.ogg" id="3_5wsol"]
+[ext_resource type="AudioStream" uid="uid://cpwaj4pd282gl" path="res://assets/sounds/sfx/zone_captured.ogg" id="4_c8pwn"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_lx050"]
 radius = 150.0
@@ -20,3 +22,9 @@ shape = SubResource("CircleShape2D_lx050")
 [node name="ColorWheel" parent="." unique_id=920039219 instance=ExtResource("2_5wsol")]
 
 [node name="ColorWheelClone" parent="." unique_id=2055182026 instance=ExtResource("2_5wsol")]
+
+[node name="ReturnColour" type="AudioStreamPlayer" parent="." unique_id=520351318]
+stream = ExtResource("3_5wsol")
+
+[node name="ZoneCaptured" type="AudioStreamPlayer" parent="." unique_id=1298030856]
+stream = ExtResource("4_c8pwn")

@@ -6,6 +6,8 @@ var defender: CharacterBody2D
 @onready var colorwheel: Node2D = $ColorWheel
 @onready var colorwheel_clone: Node2D = $ColorWheelClone
 @onready var hurtbox_clone: CollisionShape2D = $CollisionShape2DClone
+@onready var return_colour_audio: AudioStreamPlayer = $ReturnColour
+@onready var zone_captured_audio: AudioStreamPlayer = $ZoneCaptured
 
 var score: Vector3 = Vector3.ZERO: # Format: (P1, Turret, P2)
 	set(value):
@@ -90,6 +92,7 @@ func _get_regen() -> void:
 	score = temp_score 
 	
 func deposit_score(add_score: Vector3 = Vector3.ZERO) -> void:
+	return_colour_audio.play()
 	update_score(add_score)
 	if colorwheel:
 		colorwheel.zoom_animation()
@@ -119,6 +122,7 @@ func set_outpost(is_deployed: bool) -> void:
 		is_harvesting = false
 
 func overthrown(attacker_base: Node = null) -> void:
+	zone_captured_audio.play()
 	set_outpost(false)
 	var amount_lost: Vector3 = self.score * OVERFLOWN_PERCENTAGE
 	var temp_score = score - amount_lost
