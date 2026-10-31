@@ -10,8 +10,8 @@ extends CanvasLayer
 @export var player_2_color: Vector3 = Vector3.ZERO
 
 # Split screen
-const MERGE_PROPORTION = .35
-const SPLIT_PROPORTION = .75
+const MERGE_PROPORTION = .75
+const SPLIT_PROPORTION = .8
 const SCREEN_MERGE_DIST = 5
 const SCREEN_MERGE_DIST_2D = 15
 @onready var container1: SubViewportContainer = $SubViewportContainer1
@@ -55,8 +55,8 @@ func _physics_process(_delta: float) -> void:
 	P2Cols.material.set_shader_parameter("cur_col", player_2_color/255.)
 	
 	# Health
-	healthbar1.anchor_right = .5 + .5 * (player1.HEALTH/100.)
-	healthbar2.anchor_right = .5 + .5 * player2.HEALTH/100.
+	healthbar1.anchor_right = .5 + .5 * max(player1.HEALTH,0)/100.
+	healthbar2.anchor_right = .5 + .5 * max(player2.HEALTH,0)/100.
 	
 	# Split screen
 	var p1_prop = player1.get_screen_transform().get_origin()/Vector2(get_window().size)
