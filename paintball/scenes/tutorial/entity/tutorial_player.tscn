@@ -1,0 +1,119 @@
+[gd_scene format=3 uid="uid://b13ls6u5sdx58"]
+
+[ext_resource type="Script" uid="uid://ne6u15egda57" path="res://scenes/tutorial/entity/tutorial_player.gd" id="1_nrhys"]
+[ext_resource type="Texture2D" uid="uid://miqo1wbx3pow" path="res://icon.svg" id="2_5dyy2"]
+[ext_resource type="Texture2D" uid="uid://cduwedquj1wde" path="res://assets/item/paint.png" id="3_gux2t"]
+[ext_resource type="Script" uid="uid://dndiybdxky6cb" path="res://scenes/game_scene/player/progressBar.gd" id="4_iye3m"]
+[ext_resource type="AudioStream" uid="uid://b363j5sswbq4i" path="res://assets/sounds/sfx/melee.ogg" id="5_00wk7"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_xrivr"]
+size = Vector2(32, 64)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_b1lj4"]
+size = Vector2(32, 65)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_13qdw"]
+size = Vector2(32, 64)
+
+[sub_resource type="Gradient" id="Gradient_l4yx7"]
+offsets = PackedFloat32Array(0, 0.67551625, 0.70501477, 0.96755165, 0.99705017)
+colors = PackedColorArray(1, 1, 1, 0, 1, 0, 0, 0, 1, 0, 0, 0.4, 1, 0, 0, 0.4, 1, 0, 0, 0)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_kyjql"]
+gradient = SubResource("Gradient_l4yx7")
+width = 128
+height = 128
+fill = 1
+fill_from = Vector2(0.5, 0.5)
+fill_to = Vector2(0.5, 0)
+
+[sub_resource type="Gradient" id="Gradient_0v83j"]
+offsets = PackedFloat32Array(0, 0.35693216, 0.38053098, 0.63126844, 0.6637168)
+colors = PackedColorArray(1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1, 0.4, 1, 1, 1, 0.4, 1, 1, 1, 0)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_7p8hl"]
+gradient = SubResource("Gradient_0v83j")
+width = 128
+height = 128
+fill = 1
+fill_from = Vector2(0.5, 0.5)
+fill_to = Vector2(0.5, 0)
+
+[node name="Player" type="CharacterBody2D" unique_id=25147227]
+z_index = 25
+z_as_relative = false
+collision_layer = 6
+script = ExtResource("1_nrhys")
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=91982507]
+z_index = 25
+z_as_relative = false
+scale = Vector2(0.25, 0.5)
+texture = ExtResource("2_5dyy2")
+
+[node name="Hurtbox" type="CollisionShape2D" parent="." unique_id=962338468]
+z_as_relative = false
+shape = SubResource("RectangleShape2D_xrivr")
+debug_color = Color(0.7882353, 0, 0.30980393, 0.41960785)
+
+[node name="Melee" type="Marker2D" parent="." unique_id=996811342]
+position = Vector2(32, 0)
+
+[node name="ClimbDownDetector" type="Area2D" parent="." unique_id=153682031]
+collision_layer = 0
+collision_mask = 8
+
+[node name="ClimbDownHitbox" type="CollisionShape2D" parent="ClimbDownDetector" unique_id=1466038387]
+shape = SubResource("RectangleShape2D_b1lj4")
+
+[node name="ClimbUpDetector" type="Area2D" parent="." unique_id=715796249]
+collision_layer = 0
+collision_mask = 8
+
+[node name="ClimbUpHitbox" type="CollisionShape2D" parent="ClimbUpDetector" unique_id=1186343360]
+shape = SubResource("RectangleShape2D_13qdw")
+
+[node name="Center" type="Marker2D" parent="." unique_id=1906815753]
+
+[node name="LaunchPoint" type="Marker2D" parent="Center" unique_id=1244710761]
+position = Vector2(32, 0)
+
+[node name="AimDot" type="Sprite2D" parent="Center/LaunchPoint" unique_id=906158970]
+z_index = 27
+z_as_relative = false
+scale = Vector2(2, 2)
+texture = ExtResource("3_gux2t")
+
+[node name="BucketPosition" type="Marker2D" parent="." unique_id=1041089716]
+z_index = 26
+position = Vector2(0, -48)
+
+[node name="StunBar" type="TextureProgressBar" parent="." unique_id=643186231]
+texture_filter = 2
+offset_left = -64.0
+offset_top = -64.0
+offset_right = 64.0
+offset_bottom = 64.0
+max_value = 1.0
+step = 0.0
+value = 0.17
+fill_mode = 4
+texture_progress = SubResource("GradientTexture2D_kyjql")
+script = ExtResource("4_iye3m")
+
+[node name="DashBar" type="TextureProgressBar" parent="." unique_id=2080858808]
+texture_filter = 2
+offset_left = -64.0
+offset_top = -64.0
+offset_right = 64.0
+offset_bottom = 64.0
+max_value = 1.0
+step = 0.0
+value = 0.125
+fill_mode = 4
+texture_progress = SubResource("GradientTexture2D_7p8hl")
+script = ExtResource("4_iye3m")
+
+[node name="MeleeAudio" type="AudioStreamPlayer" parent="." unique_id=125071536]
+stream = ExtResource("5_00wk7")
+volume_db = -8.0

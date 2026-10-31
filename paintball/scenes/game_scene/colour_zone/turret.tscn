@@ -3,6 +3,7 @@
 [ext_resource type="Script" uid="uid://dxa1b2iy44agy" path="res://scenes/game_scene/colour_zone/turret.gd" id="1_lmt7v"]
 [ext_resource type="Texture2D" uid="uid://dn847ueisewdg" path="res://sprites/placeholders/turret.png" id="2_l57n1"]
 [ext_resource type="Texture2D" uid="uid://c52ars1snj6kh" path="res://assets/entity/animated_blackhole_corrected/4f73cdf3-d5c8-46fa-9f48-04d46814695d-0.png" id="2_qry7x"]
+[ext_resource type="PackedScene" uid="uid://c3l65iox3a12q" path="res://scenes/game_scene/colour_zone/turret_skeleton.tscn" id="2_vxbuc"]
 [ext_resource type="Texture2D" uid="uid://c6d242iw7wgb6" path="res://assets/entity/animated_blackhole_corrected/4f73cdf3-d5c8-46fa-9f48-04d46814695d-1.png" id="3_vxbuc"]
 [ext_resource type="Texture2D" uid="uid://brjokniyemjdh" path="res://assets/entity/animated_blackhole_corrected/4f73cdf3-d5c8-46fa-9f48-04d46814695d-2.png" id="4_2y0x2"]
 [ext_resource type="Texture2D" uid="uid://banhpt5q6vyuw" path="res://assets/entity/animated_blackhole_corrected/4f73cdf3-d5c8-46fa-9f48-04d46814695d-3.png" id="5_fo3fo"]
@@ -244,6 +245,12 @@ _data = {
 &"Attack": SubResource("Animation_2y0x2"),
 &"RESET": SubResource("Animation_fo3fo")
 }
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_28kot"]
+size = Vector2(80, 200)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_hou0b"]
+size = Vector2(80, 140)
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_xrivr"]
 animations = [{
@@ -541,12 +548,6 @@ animations = [{
 "speed": 120.0
 }]
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_28kot"]
-size = Vector2(80, 200)
-
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_hou0b"]
-size = Vector2(80, 140)
-
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_xrivr"]
 size = Vector2(1244, 1920)
 
@@ -560,72 +561,7 @@ libraries/ = SubResource("AnimationLibrary_2y0x2")
 [node name="AttackAnimationPlayer" type="AnimationPlayer" parent="." unique_id=976261448]
 libraries/ = SubResource("AnimationLibrary_48jd0")
 
-[node name="Skeleton2D" type="Skeleton2D" parent="." unique_id=19445606]
-
-[node name="Head" type="Bone2D" parent="Skeleton2D" unique_id=18361797]
-rest = Transform2D(1, 0, 0, 1, 0, 0)
-
-[node name="Head" type="AnimatedSprite2D" parent="Skeleton2D/Head" unique_id=532645037]
-z_index = 15
-z_as_relative = false
-scale = Vector2(0.5, 0.5)
-sprite_frames = SubResource("SpriteFrames_xrivr")
-autoplay = "default"
-frame_progress = 0.82865727
-
-[node name="HeadShadow" type="AnimatedSprite2D" parent="Skeleton2D/Head/Head" unique_id=935668677]
-self_modulate = Color(0, 0, 0, 1)
-z_index = 11
-z_as_relative = false
-scale = Vector2(1.2, 1.1)
-sprite_frames = SubResource("SpriteFrames_xrivr")
-autoplay = "default"
-frame_progress = 0.82865727
-
-[node name="Body" type="Bone2D" parent="Skeleton2D/Head" unique_id=409449086]
-position = Vector2(0, 60)
-rest = Transform2D(1, 0, 0, 1, 0, 60)
-
-[node name="Body" type="AnimatedSprite2D" parent="Skeleton2D/Head/Body" unique_id=185048271]
-z_index = 14
-z_as_relative = false
-scale = Vector2(0.25, 0.5)
-sprite_frames = SubResource("SpriteFrames_xrivr")
-autoplay = "default"
-frame_progress = 0.82865727
-
-[node name="BodyShadow" type="AnimatedSprite2D" parent="Skeleton2D/Head/Body/Body" unique_id=700029957]
-self_modulate = Color(0, 0, 0, 1)
-z_index = 11
-z_as_relative = false
-scale = Vector2(1.3, 1.1)
-sprite_frames = SubResource("SpriteFrames_xrivr")
-autoplay = "default"
-frame_progress = 0.82865727
-
-[node name="Leg" type="Bone2D" parent="Skeleton2D/Head/Body" unique_id=393653165]
-z_as_relative = false
-position = Vector2(0, 68)
-rest = Transform2D(1, 0, 0, 1, 0, 68)
-auto_calculate_length_and_angle = false
-length = 40.0
-bone_angle = 0.0
-
-[node name="Leg" type="AnimatedSprite2D" parent="Skeleton2D/Head/Body/Leg" unique_id=840766425]
-z_index = 13
-scale = Vector2(0.05, 0.4)
-sprite_frames = SubResource("SpriteFrames_xrivr")
-autoplay = "default"
-frame_progress = 0.82865727
-
-[node name="LegShadow" type="AnimatedSprite2D" parent="Skeleton2D/Head/Body/Leg/Leg" unique_id=1227068472]
-self_modulate = Color(0, 0, 0, 1)
-z_index = 11
-z_as_relative = false
-scale = Vector2(1.4, 1.1)
-sprite_frames = SubResource("SpriteFrames_xrivr")
-autoplay = "default"
-frame_progress = 0.82865727
+[node name="Skeleton2D" parent="." unique_id=278303099 instance=ExtResource("2_vxbuc")]
 
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=320547932]
 visible = false

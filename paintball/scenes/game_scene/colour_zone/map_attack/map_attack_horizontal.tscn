@@ -1030,4 +1030,4 @@ frame_progress = 0.043639842
 
 [node name="AttackAudio" type="AudioStreamPlayer" parent="." unique_id=1356685847]
 stream = ExtResource("194_xn54q")
-volume_db = 3.0
+volume_db = 1.0

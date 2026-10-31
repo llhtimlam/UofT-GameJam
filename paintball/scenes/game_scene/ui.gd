@@ -10,7 +10,7 @@ extends CanvasLayer
 @export var player_2_color: Vector3 = Vector3.ZERO
 
 # Split screen
-const MERGE_PROPORTION = .75
+const MERGE_PROPORTION = .35
 const SPLIT_PROPORTION = .75
 const SCREEN_MERGE_DIST = 5
 const SCREEN_MERGE_DIST_2D = 15

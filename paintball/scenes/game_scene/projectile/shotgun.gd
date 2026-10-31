@@ -78,5 +78,6 @@ func shoot_projectile(base_damage: float, p_speed: float, p_knockback: float, p_
 	projectile_instance.knockback = p_knockback
 	projectile_instance.stun_time = stun_time
 	projectile_instance.lifetime = lifetime
+	projectile_instance.volume = -20
 	get_parent().add_child.call_deferred(projectile_instance)
 	projectile_instance.global_position = launch_point.global_position

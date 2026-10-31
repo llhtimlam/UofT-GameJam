@@ -1,0 +1,36 @@
+[gd_scene format=3 uid="uid://bfl7a1ofya0k7"]
+
+[ext_resource type="Script" uid="uid://1alxau3d2mnl" path="res://scenes/camera/camera_controller.gd" id="1_5h3r2"]
+[ext_resource type="Shader" uid="uid://b3cdj4fsrtpki" path="res://scenes/camera/split_screen.gdshader" id="2_7aaay"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_13qdw"]
+shader = ExtResource("2_7aaay")
+shader_parameter/viewport_size = Vector2(0, 0)
+shader_parameter/split_active = false
+shader_parameter/player1_position = Vector2(0, 0)
+shader_parameter/player2_position = Vector2(0, 0)
+shader_parameter/split_line_thickness = 3.0000000447036
+shader_parameter/split_line_color = Color(1, 1, 1, 1)
+
+[sub_resource type="ViewportTexture" id="ViewportTexture_7aaay"]
+viewport_path = NodePath("Viewport1")
+
+[node name="CameraController" type="Node2D" unique_id=1234799232]
+script = ExtResource("1_5h3r2")
+max_separation = 10.0
+
+[node name="Viewport1" type="SubViewport" parent="." unique_id=783318892]
+size = Vector2i(1152, 648)
+
+[node name="Camera1" type="Camera2D" parent="Viewport1" unique_id=952974612]
+
+[node name="Viewport2" type="SubViewport" parent="." unique_id=1231154027]
+size = Vector2i(1152, 648)
+
+[node name="Camera2" type="Camera2D" parent="Viewport2" unique_id=183669669]
+
+[node name="View" type="TextureRect" parent="." unique_id=89010114]
+material = SubResource("ShaderMaterial_13qdw")
+offset_right = 1152.0
+offset_bottom = 648.0
+texture = SubResource("ViewportTexture_7aaay")

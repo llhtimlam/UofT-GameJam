@@ -24,9 +24,11 @@ var sprites: Array[Node] = []
 
 # Audio
 @onready var ranged_audio: AudioStreamPlayer = $RangedAudio
+var volume: float = -7
 
 func _ready() -> void:
 	add_to_group("projectile")
+	ranged_audio.volume_db = volume
 	ranged_audio.play()
 	body_entered.connect(_on_body_entered)
 	area_entered.connect(_on_area_entered)
