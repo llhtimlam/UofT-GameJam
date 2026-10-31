@@ -22,7 +22,7 @@ var damaged_targets: Array[Node2D] = []
 @onready var melee_audio: AudioStreamPlayer = $MeleeAudio
 
 func _ready() -> void:
-	melee_audio.play()
+	#melee_audio.play()
 	add_to_group("melee")
 	body_entered.connect(_on_body_entered)
 	area_entered.connect(_on_area_entered)
@@ -56,7 +56,8 @@ func _hit_target(target: Node) -> void:
 	var giving_damage = false #silly way to do it probably, but damage needs to be applied before knockback
 	if target.has_method("take_damage"):
 		giving_damage = true
-		contact_made.emit()
+		if not target.is_in_group("base"):
+			contact_made.emit()
 		if target.has_method("apply_knockback"):
 			target.apply_knockback(facing_dir, knockback, stun_time)
 	if giving_damage:

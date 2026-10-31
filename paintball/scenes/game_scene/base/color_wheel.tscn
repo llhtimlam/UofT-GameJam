@@ -7,6 +7,7 @@
 [ext_resource type="Texture2D" uid="uid://3vsgqbe71cg5" path="res://assets/background/ring_glow.png" id="4_pdqay"]
 [ext_resource type="Texture2D" uid="uid://dloy2cv6w4tu1" path="res://assets/background/progress_bar.png" id="5_omnfb"]
 [ext_resource type="AudioStream" uid="uid://db4dbng7ievd5" path="res://assets/sounds/sfx/colour_wheel_flip.ogg" id="7_lo1wq"]
+[ext_resource type="AudioStream" uid="uid://bsd8yjnw3r467" path="res://assets/sounds/sfx/colour_wheel_damage.ogg" id="7_pdqay"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_yivnm"]
 shader = ExtResource("1_olyei")
@@ -87,7 +88,8 @@ texture_progress = ExtResource("5_omnfb")
 [node name="AudioController" type="Node2D" parent="." unique_id=1241708899]
 
 [node name="ColourWheelDamage" type="AudioStreamPlayer" parent="AudioController" unique_id=1224551256]
-stream = ExtResource("7_lo1wq")
+stream = ExtResource("7_pdqay")
+volume_db = -5.0
 
 [node name="ColourWheelFlip" type="AudioStreamPlayer" parent="AudioController" unique_id=1478050428]
 stream = ExtResource("7_lo1wq")
