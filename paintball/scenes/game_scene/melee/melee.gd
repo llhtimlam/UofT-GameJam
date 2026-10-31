@@ -22,7 +22,7 @@ var damaged_targets: Array[Node2D] = []
 @onready var melee_audio: AudioStreamPlayer = $MeleeAudio
 
 func _ready() -> void:
-	melee_audio.play()
+	#melee_audio.play()
 	add_to_group("melee")
 	body_entered.connect(_on_body_entered)
 	area_entered.connect(_on_area_entered)

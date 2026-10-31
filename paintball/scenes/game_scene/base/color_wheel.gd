@@ -109,7 +109,7 @@ func set_color(middle_color: Color = Color(255,0,0), left_color: Color = Color(0
 		display_right.self_modulate = right_color
 	
 func hurt_animation() -> void:
-	colour_wheel_damage.play(0.3)
+	colour_wheel_damage.play()
 	if spin_tween and spin_tween.is_valid():
 		spin_tween.kill()
 	spin_tween = create_tween()

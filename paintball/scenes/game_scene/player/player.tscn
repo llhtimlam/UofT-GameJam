@@ -119,4 +119,4 @@ script = ExtResource("3_7k1jl")
 
 [node name="MeleeAudio" type="AudioStreamPlayer" parent="." unique_id=125071536]
 stream = ExtResource("5_csdy4")
-volume_db = -15.0
+volume_db = -8.0

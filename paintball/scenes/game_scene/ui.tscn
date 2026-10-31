@@ -48,7 +48,7 @@ grow_vertical = 2
 anchors_preset = -1
 anchor_right = 0.499
 anchor_bottom = 0.897
-offset_bottom = 133.48804
+offset_bottom = 66.74402
 size_flags_horizontal = 3
 stretch = true
 
@@ -57,7 +57,7 @@ disable_3d = true
 own_world_3d = true
 handle_input_locally = false
 canvas_item_default_texture_filter = 0
-size = Vector2i(1149, 1296)
+size = Vector2i(574, 648)
 render_target_update_mode = 4
 
 [node name="Map" parent="SubViewportContainer1/Viewport1" unique_id=1264092394 instance=ExtResource("1_vc43c")]
@@ -70,7 +70,7 @@ anchors_preset = -1
 anchor_left = 0.501
 anchor_right = 1.0
 anchor_bottom = 0.897
-offset_bottom = 133.48804
+offset_bottom = 66.74402
 grow_horizontal = 2
 grow_vertical = 2
 size_flags_horizontal = 3
@@ -81,7 +81,7 @@ disable_3d = true
 own_world_3d = true
 handle_input_locally = false
 canvas_item_default_texture_filter = 0
-size = Vector2i(1149, 1296)
+size = Vector2i(574, 648)
 render_target_update_mode = 4
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="SubViewportContainer2/Viewport2" unique_id=1933334175]

@@ -1,4 +1,4 @@
-extends Node3D
+extends Node2D
 
 # Handle the motion of both player cameras as well as communication with the
 # SplitScreen shader to achieve the dynamic split screen effet
@@ -19,13 +19,25 @@ extends Node3D
 #       depending on the distance between players. If false, the thickness will
 #       be constant and equal to split_line_thickness
 
+const MERGE_PROPORTION: float = 0.75
+const SPLIT_PROPORTION: float = 0.75
+const SCREEN_MERGE_DIST: float = 5.0
+const SCREEN_MERGE_DIST_2D: float = 15.0
+
+var combined: bool = false
+var split_active: bool = false
+
+@export var merge_distance: float = 750.0
+@export var split_distance: float = 850.0
+
 @export var max_separation: float = 20.0
+
 @export var split_line_thickness: float = 3.0
 @export var split_line_color: Color = Color.BLACK
 @export var adaptive_split_line_thickness: bool = true
 
-@onready var player1 = $"../Player1"
-@onready var player2 = $"../Player2"
+@export var player1: CharacterBody2D
+@export var player2: CharacterBody2D
 @onready var view = $View
 @onready var viewport1 = $Viewport1
 @onready var viewport2 = $Viewport2
@@ -35,52 +47,92 @@ extends Node3D
 var viewport_base_height = ProjectSettings.get_setting("display/window/size/viewport_height")
 
 func _ready():
+	viewport1.world_2d = get_viewport().world_2d
+	viewport2.world_2d = get_viewport().world_2d
+	print("Viewport1 World: ", viewport1.world_2d)
+	print("Viewport2 World: ", viewport2.world_2d)
+	print("Main World: ", get_viewport().world_2d)
 	_on_size_changed()
 	_update_splitscreen()
 
 	get_viewport().size_changed.connect(_on_size_changed)
-
+	
 	view.material.set_shader_parameter("viewport1", viewport1.get_texture())
 	view.material.set_shader_parameter("viewport2", viewport2.get_texture())
 
-
 func _process(_delta):
-	_move_cameras()
 	_update_splitscreen()
+	_move_cameras(_delta)
 
+func _move_cameras(delta: float):
+	var p1 = player1.global_position
+	var p2 = player2.global_position
+	var center = (p1 + p2) * 0.5
 
-func _move_cameras():
-	var position_difference = _compute_position_difference_in_world()
+	var direction = (p2 - p1).normalized()
 
-	var distance = clamp(_compute_horizontal_length(position_difference), 0, max_separation)
+	var correction_distance = viewport1.size.x * 0.25 / camera1.zoom.x
+	var correction = direction * correction_distance
 
-	position_difference = position_difference.normalized() * distance
+	var target1: Vector2
+	var target2: Vector2
 
-	camera1.position.x = player1.position.x + position_difference.x / 2.0
+	if combined:
+		target1 = center
+		target2 = center
+	else:
+		target1 = p1
+		target2 = p2
+		# Correction doesnt work and sign is weird, one scenario (P2 -x P1 0) need viewport swap
+		#if p1.x < p2.x:
+			# P1 is left, P2 is right.
+			#target1 = p1 - correction
+			#target2 = p2 + correction
+		#else:
+			# P2 is left, P1 is right.
+			#target1 = p1 + correction
+			#target2 = p2 - correction
 
-	camera2.position.x = player2.position.x - position_difference.x / 2.0
+	var weight = 1.0 - exp(-8.0 * delta)
 
+	camera1.global_position = camera1.global_position.lerp(target1, weight)
+	camera2.global_position = camera2.global_position.lerp(target2, weight)
 
 func _update_splitscreen():
 	var screen_size = get_viewport().get_visible_rect().size
-	var player1_position = camera1.unproject_position(player1.position) / screen_size
-	var player2_position = camera2.unproject_position(player2.position) / screen_size
 
+	# Player positions in screen proportions.
+	var p1_prop = player1.get_global_transform_with_canvas().origin / screen_size
+	var p2_prop = player2.get_global_transform_with_canvas().origin / screen_size
+	
+	var distance = player1.global_position.distance_to(player2.global_position)
+	
+	if combined and distance > split_distance:
+		combined = false
+		camera1.reset_physics_interpolation()
+		camera2.reset_physics_interpolation()
+
+	elif not combined and distance < merge_distance:
+		combined = true
+		camera1.reset_physics_interpolation()
+		camera2.reset_physics_interpolation()
+
+	split_active = not combined
+	
 	var thickness
 	if adaptive_split_line_thickness:
 		var position_difference = _compute_position_difference_in_world()
-		var distance = _compute_horizontal_length(position_difference)
+		#var distance = _compute_horizontal_length(position_difference)
 		thickness = lerpf(0, split_line_thickness, (distance - max_separation) / max_separation)
 		thickness = clampf(thickness, 0, split_line_thickness)
 	else:
 		thickness = split_line_thickness
 
-	view.material.set_shader_parameter("split_active", _get_split_state())
-	view.material.set_shader_parameter("player1_position", player1_position)
-	view.material.set_shader_parameter("player2_position", player2_position)
+	view.material.set_shader_parameter("split_active", split_active)
+	view.material.set_shader_parameter("player1_position", p1_prop)
+	view.material.set_shader_parameter("player2_position", p2_prop)
 	view.material.set_shader_parameter("split_line_thickness", thickness)
 	view.material.set_shader_parameter("split_line_color", split_line_color)
-
 
 # Split screen is active if players are too far apart from each other.
 # Only the horizontal components (x, z) are used for distance computation
@@ -95,13 +147,13 @@ func _on_size_changed():
 
 	$Viewport1.size = screen_size
 	$Viewport2.size = screen_size
-
+	print($Viewport1.size)
 	view.material.set_shader_parameter("viewport_size", screen_size)
 
 
 func _compute_position_difference_in_world():
-	return player2.position - player1.position
+	return player2.global_position - player1.global_position
 
 
 func _compute_horizontal_length(vec):
-	return Vector2(vec.x, vec.z).length()
+	return Vector2(vec.x, vec.y).length()

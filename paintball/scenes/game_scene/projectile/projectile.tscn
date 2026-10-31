@@ -417,3 +417,4 @@ frame_progress = 0.7961366
 
 [node name="RangedAudio" type="AudioStreamPlayer" parent="." unique_id=979135076]
 stream = ExtResource("98_l3niq")
+volume_db = -20.0
