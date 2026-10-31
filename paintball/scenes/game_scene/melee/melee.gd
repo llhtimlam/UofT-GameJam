@@ -58,6 +58,8 @@ func _hit_target(target: Node) -> void:
 		giving_damage = true
 		if not target.is_in_group("base"):
 			contact_made.emit()
+		else:
+			melee_audio.stop()
 		if target.has_method("apply_knockback"):
 			target.apply_knockback(facing_dir, knockback, stun_time)
 	if giving_damage:

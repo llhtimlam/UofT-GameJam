@@ -3,6 +3,7 @@
 [ext_resource type="Script" uid="uid://bnabw6qjp6rv" path="res://scenes/game_scene/colour_zone/color_zone.gd" id="1_fw0og"]
 [ext_resource type="PackedScene" uid="uid://cvjnnhqh4ffut" path="res://scenes/game_scene/colour_zone/turret.tscn" id="2_bukbq"]
 [ext_resource type="PackedScene" uid="uid://huvh6esbosuh" path="res://scenes/game_scene/base/turret_color_wheel.tscn" id="3_xv5l3"]
+[ext_resource type="AudioStream" uid="uid://cpwaj4pd282gl" path="res://assets/sounds/sfx/zone_captured.ogg" id="4_421tk"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_28kot"]
 radius = 200.0
@@ -22,3 +23,7 @@ collision_mask = 4
 
 [node name="ColourRangeShape" type="CollisionShape2D" parent="ColourRange" unique_id=1779190220]
 shape = SubResource("CircleShape2D_28kot")
+
+[node name="ZoneCaptured" type="AudioStreamPlayer" parent="." unique_id=1679726111]
+stream = ExtResource("4_421tk")
+volume_db = -10.0

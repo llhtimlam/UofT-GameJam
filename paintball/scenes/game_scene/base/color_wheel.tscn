@@ -88,8 +88,7 @@ texture_progress = ExtResource("5_omnfb")
 [node name="AudioController" type="Node2D" parent="." unique_id=1241708899]
 
 [node name="ColourWheelDamage" type="AudioStreamPlayer" parent="AudioController" unique_id=1224551256]
-stream = ExtResource("7_pdqay")
-volume_db = -5.0
+stream = ExtResource("7_lo1wq")
 
 [node name="ColourWheelFlip" type="AudioStreamPlayer" parent="AudioController" unique_id=1478050428]
 stream = ExtResource("7_lo1wq")
