@@ -122,7 +122,6 @@ func set_outpost(is_deployed: bool) -> void:
 		is_harvesting = false
 
 func overthrown(attacker_base: Node = null) -> void:
-	zone_captured_audio.play()
 	set_outpost(false)
 	var amount_lost: Vector3 = self.score * OVERFLOWN_PERCENTAGE
 	var temp_score = score - amount_lost

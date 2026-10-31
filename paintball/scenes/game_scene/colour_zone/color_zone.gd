@@ -3,6 +3,7 @@ extends Node2D
 @onready var turret: StaticBody2D = $Turret
 @onready var turret_colorwheel: Node2D = $TurretColorWheel
 @onready var capture_zone: Area2D = $ColourRange
+@onready var zone_captured_audio: AudioStreamPlayer = $ZoneCaptured
 
 var SCORE_REWARD: float = 16.0
 var CAPTURE_THRESHOLD: float = 64.0
@@ -62,6 +63,7 @@ func _process(_delta: float) -> void:
 			capture_by(player)
 			
 func capture_by(player: CharacterBody2D) -> void:
+	zone_captured_audio.play()
 	captured_team = player.TEAM_ID
 	turret.TEAM_ID = captured_team
 	get_parent().activate_player_base(captured_team)

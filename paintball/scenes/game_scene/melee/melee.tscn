@@ -23,3 +23,4 @@ shape = SubResource("RectangleShape2D_xrivr")
 
 [node name="MeleeAudio" type="AudioStreamPlayer" parent="." unique_id=2009071376]
 stream = ExtResource("3_ff8q8")
+volume_db = -15.0
