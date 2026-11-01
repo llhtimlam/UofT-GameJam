@@ -106,7 +106,7 @@ const MELEE_SCENE = preload("res://scenes/game_scene/melee/melee.tscn")
 var is_aiming: bool = false
 @onready var center: Marker2D = $Center
 @onready var projectile: Marker2D = $Center/LaunchPoint
-@onready var aim_dot: AnimatedSprite2D = $Center/LaunchPoint/AimDot
+@onready var aim_dot: Sprite2D = $Center/LaunchPoint/AimDot
 const PROJECTILE_SCENE = preload("res://scenes/game_scene/projectile/projectile.tscn")
 
 # World Boundary
@@ -421,27 +421,6 @@ func _physics_process(delta: float) -> void:
 	shoot_cd = max(shoot_cd - delta, 0.0)
 	iframe = max(iframe - delta, 0.0)
 	
-	if velocity.x < 0:
-		melee_hitbox.position = Vector2(-32,0)
-		$AnimatedSprite2D.flip_h = true
-	elif velocity.x > 0:
-		melee_hitbox.position = Vector2(32,0)
-		$AnimatedSprite2D.flip_h = false
-	
-	if melee_hitbox.get_child_count() != 0:
-			$AnimatedSprite2D.play("melee")
-	elif is_climbing:
-		$AnimatedSprite2D.play("climb")
-	elif is_aiming:
-			$AnimatedSprite2D.play("idle")
-	else:
-		if grounded:
-			if velocity.x == 0:
-					$AnimatedSprite2D.play("idle")
-			else:
-				$AnimatedSprite2D.play("run")
-		else:
-			$AnimatedSprite2D.play("jump")
 	# World Boundary
 	if position.y > Y_BOUNDARY:
 		take_damage(100,0,0)
@@ -566,7 +545,7 @@ func enemy_ai() -> void:
 	pass
 
 func update_color() -> void:
-	$AnimatedSprite2D.self_modulate = Color.WHITE
+	$Sprite2D.self_modulate = Color.WHITE
 	var base_color: Color
 	if not fill_style:
 		fill_style = HealthBar.get_theme_stylebox("fill").duplicate()

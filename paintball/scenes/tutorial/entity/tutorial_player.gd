@@ -107,7 +107,7 @@ const MELEE_SCENE = preload("res://scenes/game_scene/melee/melee.tscn")
 var is_aiming: bool = false
 @onready var center: Marker2D = $Center
 @onready var projectile: Marker2D = $Center/LaunchPoint
-@onready var aim_dot: AnimatedSprite2D = $Center/LaunchPoint/AimDot
+@onready var aim_dot: Sprite2D = $Center/LaunchPoint/AimDot
 const PROJECTILE_SCENE = preload("res://scenes/game_scene/projectile/projectile.tscn")
 
 # World Boundary
@@ -125,14 +125,7 @@ var stun_max: float = 1.
 # Audio
 @onready var melee_audio: AudioStreamPlayer = $MeleeAudio
 
-# Camera
-const MIN_SCREEN_HEIGHT = 700
-const CAMERA_MIN_X = -100000
-const CAMERA_MAX_X = 100000
-const CAMERA_Y = -660
 @onready var camera: Camera2D = $Camera2D
-@onready var camera_pos: Vector2 = position.clamp(Vector2(CAMERA_MIN_X,CAMERA_Y),Vector2(CAMERA_MAX_X,CAMERA_Y))
-var camera_i: Vector2 = Vector2.ZERO
 
 # User Input Mapping
 #func _input(event: InputEvent) -> void:
@@ -416,37 +409,11 @@ func _physics_process(delta: float) -> void:
 	aim_cd = max(aim_cd - delta, 0.0)
 	shoot_cd = max(shoot_cd - delta, 0.0)
 	iframe = max(iframe - delta, 0.0)
-	
-	if velocity.x < 0:
-		melee_hitbox.position = Vector2(-32,0)
-		$AnimatedSprite2D.flip_h = true
-	elif velocity.x > 0:
-		melee_hitbox.position = Vector2(32,0)
-		$AnimatedSprite2D.flip_h = false
-	
-	if melee_hitbox.get_child_count() != 0:
-			$AnimatedSprite2D.play("melee")
-	elif is_climbing:
-		$AnimatedSprite2D.play("climb")
-	elif is_aiming:
-			$AnimatedSprite2D.play("idle")
-	else:
-		if grounded:
-			if velocity.x == 0:
-					$AnimatedSprite2D.play("idle")
-			else:
-				$AnimatedSprite2D.play("run")
-		else:
-			$AnimatedSprite2D.play("jump")
-	
 	# World Boundary
 	if position.y > Y_BOUNDARY:
 		player_ready.emit(self, PLAYER_ID, TEAM_ID)
 		self.visible = false
 		set_physics_process(false)
-	
-	# Camera
-	move_and_scale_camera()
 	
 func take_damage(amount: float, attacker_id: int, attacker_team: int) -> void:
 	if is_dead:
@@ -565,29 +532,25 @@ func enemy_ai() -> void:
 	pass
 
 func update_color() -> void:
-	$AnimatedSprite2D.self_modulate = Color.WHITE
+	$Sprite2D.self_modulate = Color.WHITE
 	var base_color: Color
 	if not fill_style:
 		fill_style = HealthBar.get_theme_stylebox("fill").duplicate()
 		HealthBar.add_theme_stylebox_override("fill", fill_style)
 	match TEAM_ID:
-		1: base_color = Globals.p1_color
-		2: base_color = Globals.p2_color
-		_: base_color = Color.WHITE
-	$AnimatedSprite2D.self_modulate = base_color.lerp(Color.WHITE, Globals.white_blend_intensity)
-
-func move_and_scale_camera():
-	var camera_target = Vector2(clamp(position.x,CAMERA_MIN_X,CAMERA_MAX_X),CAMERA_Y)
-	if get_viewport().size.y > MIN_SCREEN_HEIGHT:
-		camera.zoom = Vector2.ONE * 1 * floor(get_viewport().size.y/MIN_SCREEN_HEIGHT)
-	else:
-		var covered_area = MIN_SCREEN_HEIGHT - get_viewport().size.y
-		camera.zoom = Vector2.ONE * 1
-		camera_target.y = clamp(position.y,CAMERA_Y-covered_area,CAMERA_Y+covered_area)
-	var P = camera_target - camera_pos
-	camera_i += P
-	camera_pos += P * .08 + camera_i * .0007
-	camera.global_position = camera_pos
-
+		1: 
+			base_color = Globals.p1_color
+			$Sprite2D.self_modulate = base_color.lerp(Color.WHITE, Globals.p1_white_blend_intensity)
+			fill_style.bg_color = Globals.p1_color
+		2: 
+			base_color = Globals.p2_color
+			$Sprite2D.self_modulate = base_color.lerp(Color.WHITE, Globals.p2_white_blend_intensity)
+			fill_style.bg_color = Globals.p2_color
+		_: 
+			base_color = Color.WHITE
+			$Sprite2D.self_modulate = base_color.lerp(Color.WHITE, Globals.turret_white_blend_intensity)
+			fill_style.bg_color = Color(0.745, 0., 0.065, 1)
+	HealthBar.add_theme_stylebox_override("fill", fill_style)
+	
 func play_hit_audio() -> void:
 	melee_audio.play(0.15)

@@ -1,98 +1,10 @@
 [gd_scene format=3 uid="uid://u1ulorklcu5g"]
 
 [ext_resource type="Script" uid="uid://b0iohuh6rl7g5" path="res://scenes/game_scene/player/player.gd" id="1_tcwrj"]
-[ext_resource type="Texture2D" uid="uid://bliubps7k0jbu" path="res://assets/player/Player1BasicSprite.png" id="2_7p8hl"]
+[ext_resource type="Texture2D" uid="uid://miqo1wbx3pow" path="res://icon.svg" id="2_7k1jl"]
 [ext_resource type="Script" uid="uid://dndiybdxky6cb" path="res://scenes/game_scene/player/progressBar.gd" id="3_7k1jl"]
+[ext_resource type="Texture2D" uid="uid://cduwedquj1wde" path="res://assets/item/paint.png" id="3_kyjql"]
 [ext_resource type="AudioStream" uid="uid://b363j5sswbq4i" path="res://assets/sounds/sfx/melee.ogg" id="5_csdy4"]
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_7p8hl"]
-atlas = ExtResource("2_7p8hl")
-region = Rect2(32, 32, 32, 32)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_sl3pm"]
-atlas = ExtResource("2_7p8hl")
-region = Rect2(64, 32, 32, 32)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_csdy4"]
-atlas = ExtResource("2_7p8hl")
-region = Rect2(96, 0, 32, 32)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_4yb8v"]
-atlas = ExtResource("2_7p8hl")
-region = Rect2(0, 0, 32, 32)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_0b0jg"]
-atlas = ExtResource("2_7p8hl")
-region = Rect2(0, 32, 32, 32)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_osf24"]
-atlas = ExtResource("2_7p8hl")
-region = Rect2(96, 32, 32, 32)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_qrkhp"]
-atlas = ExtResource("2_7p8hl")
-region = Rect2(32, 0, 32, 32)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_0aqjk"]
-atlas = ExtResource("2_7p8hl")
-region = Rect2(64, 0, 32, 32)
-
-[sub_resource type="SpriteFrames" id="SpriteFrames_28kot"]
-animations = [{
-"frames": [{
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_7p8hl")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_sl3pm")
-}],
-"loop": 1,
-"name": &"climb",
-"speed": 5.0
-}, {
-"frames": [{
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_csdy4")
-}],
-"loop": 1,
-"name": &"death",
-"speed": 5.0
-}, {
-"frames": [{
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_4yb8v")
-}],
-"loop": 1,
-"name": &"idle",
-"speed": 5.0
-}, {
-"frames": [{
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_0b0jg")
-}],
-"loop": 1,
-"name": &"jump",
-"speed": 5.0
-}, {
-"frames": [{
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_osf24")
-}],
-"loop": 1,
-"name": &"melee",
-"speed": 5.0
-}, {
-"frames": [{
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_qrkhp")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_0aqjk")
-}],
-"loop": 1,
-"name": &"run",
-"speed": 5.0
-}]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_xrivr"]
 size = Vector2(32, 64)
@@ -102,33 +14,6 @@ size = Vector2(32, 65)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_13qdw"]
 size = Vector2(32, 64)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_kyjql"]
-atlas = ExtResource("2_7p8hl")
-region = Rect2(128, 32, 32, 32)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_30cjq"]
-atlas = ExtResource("2_7p8hl")
-region = Rect2(128, 0, 32, 32)
-
-[sub_resource type="SpriteFrames" id="SpriteFrames_hou0b"]
-animations = [{
-"frames": [{
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_kyjql")
-}],
-"loop": 1,
-"name": &"aiming",
-"speed": 5.0
-}, {
-"frames": [{
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_30cjq")
-}],
-"loop": 1,
-"name": &"default",
-"speed": 5.0
-}]
 
 [sub_resource type="Gradient" id="Gradient_l4yx7"]
 offsets = PackedFloat32Array(0, 0.67551625, 0.70501477, 0.96755165, 0.99705017)
@@ -163,16 +48,14 @@ bg_color = Color(0.8784314, 0, 0.28235295, 1)
 [node name="Player" type="CharacterBody2D" unique_id=25147227]
 z_index = 25
 z_as_relative = false
-texture_filter = 1
 collision_layer = 6
 script = ExtResource("1_tcwrj")
 
-[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=541871297]
-texture_filter = 1
-scale = Vector2(2, 2)
-sprite_frames = SubResource("SpriteFrames_28kot")
-animation = &"idle"
-autoplay = "idle"
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=91982507]
+z_index = 25
+z_as_relative = false
+scale = Vector2(0.25, 0.5)
+texture = ExtResource("2_7k1jl")
 
 [node name="Hurtbox" type="CollisionShape2D" parent="." unique_id=962338468]
 z_as_relative = false
@@ -201,11 +84,11 @@ shape = SubResource("RectangleShape2D_13qdw")
 [node name="LaunchPoint" type="Marker2D" parent="Center" unique_id=1244710761]
 position = Vector2(32, 0)
 
-[node name="AimDot" type="AnimatedSprite2D" parent="Center/LaunchPoint" unique_id=1389394422]
+[node name="AimDot" type="Sprite2D" parent="Center/LaunchPoint" unique_id=906158970]
+z_index = 27
+z_as_relative = false
 scale = Vector2(2, 2)
-sprite_frames = SubResource("SpriteFrames_hou0b")
-animation = &"aiming"
-autoplay = "aiming"
+texture = ExtResource("3_kyjql")
 
 [node name="BucketPosition" type="Marker2D" parent="." unique_id=1041089716]
 z_index = 26
@@ -250,5 +133,4 @@ show_percentage = false
 
 [node name="MeleeAudio" type="AudioStreamPlayer" parent="." unique_id=125071536]
 stream = ExtResource("5_csdy4")
-volume_db = -10.0
-pitch_scale = 0.8
+volume_db = -8.0

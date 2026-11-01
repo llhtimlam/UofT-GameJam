@@ -106,9 +106,6 @@
 [ext_resource type="Script" uid="uid://d4edo4reojj3j" path="res://scenes/tutorial/entity/tutorial_dummy.gd" id="104_qwh8d"]
 [ext_resource type="Script" uid="uid://0vkshb1pext0" path="res://scenes/tutorial/entity/troll_trap.gd" id="105_jbhgf"]
 [ext_resource type="PackedScene" uid="uid://dltphbngx2bii" path="res://scenes/tutorial/entity/tutorial_color_zone.tscn" id="106_4gor6"]
-[ext_resource type="AudioStream" uid="uid://16to76ukj1fv" path="res://assets/sounds/sfx/blackhole.ogg" id="108_b1pmq"]
-[ext_resource type="AudioStream" uid="uid://cpd3bhba5q3cn" path="res://assets/sounds/bgm/bgm1.ogg" id="109_sljqk"]
-[ext_resource type="AudioStream" uid="uid://dis4uk21v4xnq" path="res://assets/sounds/bgm/bgm2.ogg" id="110_2ju4k"]
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_qa1lq"]
 animations = [{
@@ -429,7 +426,7 @@ autoplay = "default"
 
 [node name="Haze" type="Sprite2D" parent="." unique_id=495667480]
 z_index = -100
-position = Vector2(-241.00002, -636)
+position = Vector2(-241, -637)
 scale = Vector2(0.66049385, 0.66049385)
 texture = ExtResource("2_g40di")
 
@@ -447,56 +444,8 @@ texture = ExtResource("2_g40di")
 
 [node name="Haze4" type="Sprite2D" parent="." unique_id=1008672749]
 z_index = -100
-position = Vector2(6710, -636)
+position = Vector2(6710, -638)
 scale = Vector2(0.66049385, 0.66049385)
-texture = ExtResource("2_g40di")
-
-[node name="Haze5" type="Sprite2D" parent="." unique_id=1865465459]
-z_index = -100
-position = Vector2(-241.00002, -1491.66)
-scale = Vector2(0.66049385, -0.66)
-texture = ExtResource("2_g40di")
-
-[node name="Haze6" type="Sprite2D" parent="." unique_id=1525470410]
-z_index = -100
-position = Vector2(2076, -1491.66)
-scale = Vector2(0.66049385, -0.66)
-texture = ExtResource("2_g40di")
-
-[node name="Haze7" type="Sprite2D" parent="." unique_id=1450759519]
-z_index = -100
-position = Vector2(4393, -1491.66)
-scale = Vector2(0.66049385, -0.66)
-texture = ExtResource("2_g40di")
-
-[node name="Haze8" type="Sprite2D" parent="." unique_id=1665126924]
-z_index = -100
-position = Vector2(6710, -1491.66)
-scale = Vector2(0.66049385, -0.66)
-texture = ExtResource("2_g40di")
-
-[node name="Haze9" type="Sprite2D" parent="." unique_id=1681590644]
-z_index = -100
-position = Vector2(-241.00002, 219.66)
-scale = Vector2(0.66049385, -0.66)
-texture = ExtResource("2_g40di")
-
-[node name="Haze10" type="Sprite2D" parent="." unique_id=219553648]
-z_index = -100
-position = Vector2(2076, 219.66)
-scale = Vector2(0.66049385, -0.66)
-texture = ExtResource("2_g40di")
-
-[node name="Haze11" type="Sprite2D" parent="." unique_id=454939040]
-z_index = -100
-position = Vector2(4393, 219.66)
-scale = Vector2(0.66049385, -0.66)
-texture = ExtResource("2_g40di")
-
-[node name="Haze12" type="Sprite2D" parent="." unique_id=1931330803]
-z_index = -100
-position = Vector2(6710, 219.66)
-scale = Vector2(0.66049385, -0.66)
 texture = ExtResource("2_g40di")
 
 [node name="OldTileMapLayer" type="TileMapLayer" parent="." unique_id=1805886352]
@@ -884,24 +833,5 @@ shape = SubResource("RectangleShape2D_xrivr")
 [node name="ColorZone" parent="." unique_id=248434155 instance=ExtResource("106_4gor6")]
 position = Vector2(4320, -834)
 scale = Vector2(0.5, 0.5)
-
-[node name="AudioController" type="Node2D" parent="." unique_id=1192666718]
-
-[node name="Blackhole" type="AudioStreamPlayer" parent="AudioController" unique_id=64619588]
-stream = ExtResource("108_b1pmq")
-volume_db = -22.336
-autoplay = true
-parameters/looping = true
-
-[node name="Bgm1" type="AudioStreamPlayer" parent="AudioController" unique_id=1442725861]
-stream = ExtResource("109_sljqk")
-volume_db = -15.356
-pitch_scale = 0.81
-
-[node name="Bgm2" type="AudioStreamPlayer" parent="AudioController" unique_id=1262596781]
-stream = ExtResource("110_2ju4k")
-volume_db = -10.819
-autoplay = true
-parameters/looping = true
 
 [editable path="ColorZone"]

@@ -125,7 +125,7 @@ var stun_max: float = 1.
 # Audio
 @onready var melee_audio: AudioStreamPlayer = $MeleeAudio
 
-#@onready var camera: Camera2D = $Camera2D
+@onready var camera: Camera2D = $Camera2D
 
 # User Input Mapping
 #func _input(event: InputEvent) -> void:
@@ -532,7 +532,7 @@ func enemy_ai() -> void:
 	pass
 
 func update_color() -> void:
-	$AnimatedSprite2D.self_modulate = Color.WHITE
+	$Sprite2D.self_modulate = Color.WHITE
 	var base_color: Color
 	if not fill_style:
 		fill_style = HealthBar.get_theme_stylebox("fill").duplicate()

@@ -1,7 +1,7 @@
 [gd_resource type="TileSet" format=3 uid="uid://bud3eyi0ff07x"]
 
 [ext_resource type="Texture2D" uid="uid://cluxuby0ss7m6" path="res://assets/tileset/spaceship_tileset.png" id="1_vdej1"]
-[ext_resource type="Texture2D" uid="uid://dif3k4f1qln1s" path="res://assets/tileset/tutorial_tileset.png" id="2_vdej1"]
+[ext_resource type="Texture2D" uid="uid://cpt6cmhs4wusy" path="res://assets/tileset/tutorial_tiles.png" id="2_n2koq"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_ubhmb"]
 texture = ExtResource("1_vdej1")
@@ -31,7 +31,7 @@ texture = ExtResource("1_vdej1")
 5:3/0 = 0
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_wghc7"]
-texture = ExtResource("2_vdej1")
+texture = ExtResource("2_n2koq")
 0:0/0 = 0
 1:0/0 = 0
 2:0/0 = 0
