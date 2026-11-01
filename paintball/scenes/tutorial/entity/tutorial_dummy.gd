@@ -525,13 +525,13 @@ func enemy_ai() -> void:
 	pass
 
 func update_color() -> void:
-	$Sprite2D.self_modulate = Color.WHITE
+	$AnimatedSprite2D.self_modulate = Color.WHITE
 	var base_color: Color
 	match TEAM_ID:
 		1: base_color = Globals.p1_color
 		2: base_color = Globals.p2_color
 		_: base_color = Color.WHITE
-	$Sprite2D.self_modulate = base_color.lerp(Color.WHITE, Globals.white_blend_intensity)
+	$AnimatedSprite2D.self_modulate = base_color.lerp(Color.WHITE, Globals.white_blend_intensity)
 	
 func play_hit_audio() -> void:
 	melee_audio.play(0.15)

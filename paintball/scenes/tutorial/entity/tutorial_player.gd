@@ -107,7 +107,7 @@ const MELEE_SCENE = preload("res://scenes/game_scene/melee/melee.tscn")
 var is_aiming: bool = false
 @onready var center: Marker2D = $Center
 @onready var projectile: Marker2D = $Center/LaunchPoint
-@onready var aim_dot: Sprite2D = $Center/LaunchPoint/AimDot
+@onready var aim_dot: AnimatedSprite2D = $Center/LaunchPoint/AimDot
 const PROJECTILE_SCENE = preload("res://scenes/game_scene/projectile/projectile.tscn")
 
 # World Boundary
@@ -410,6 +410,29 @@ func _physics_process(delta: float) -> void:
 	aim_cd = max(aim_cd - delta, 0.0)
 	shoot_cd = max(shoot_cd - delta, 0.0)
 	iframe = max(iframe - delta, 0.0)
+	
+	if velocity.x < 0:
+		melee_hitbox.position = Vector2(-32,0)
+		$AnimatedSprite2D.flip_h = true
+	elif velocity.x > 0:
+		melee_hitbox.position = Vector2(32,0)
+		$AnimatedSprite2D.flip_h = false
+	
+	if melee_hitbox.get_child_count() != 0:
+			$AnimatedSprite2D.play("melee")
+	elif is_climbing:
+		$AnimatedSprite2D.play("climb")
+	elif is_aiming:
+			$AnimatedSprite2D.play("idle")
+	else:
+		if grounded:
+			if velocity.x == 0:
+					$AnimatedSprite2D.play("idle")
+			else:
+				$AnimatedSprite2D.play("run")
+		else:
+			$AnimatedSprite2D.play("jump")
+	
 	# World Boundary
 	if position.y > Y_BOUNDARY:
 		player_ready.emit(self, PLAYER_ID, TEAM_ID)
@@ -536,13 +559,13 @@ func enemy_ai() -> void:
 	pass
 
 func update_color() -> void:
-	$Sprite2D.self_modulate = Color.WHITE
+	$AnimatedSprite2D.self_modulate = Color.WHITE
 	var base_color: Color
 	match TEAM_ID:
 		1: base_color = Globals.p1_color
 		2: base_color = Globals.p2_color
 		_: base_color = Color.WHITE
-	$Sprite2D.self_modulate = base_color.lerp(Color.WHITE, Globals.white_blend_intensity)
+	$AnimatedSprite2D.self_modulate = base_color.lerp(Color.WHITE, Globals.white_blend_intensity)
 
 func move_and_scale_camera():
 	var camera_target = Vector2(clamp(position.x,CAMERA_MIN_X,CAMERA_MAX_X),CAMERA_Y)

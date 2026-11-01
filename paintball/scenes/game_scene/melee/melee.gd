@@ -28,6 +28,7 @@ func _ready() -> void:
 	area_entered.connect(_on_area_entered)
 	HIT_VISUAL.flip_h = (facing_dir == -1.0)
 	HITBOX.position.x *= facing_dir
+	HIT_VISUAL.position.x *= facing_dir
 	update_color()
 	
 func _physics_process(delta: float) -> void:
@@ -73,4 +74,5 @@ func update_color() -> void:
 		2: base_color = Globals.p2_color
 		-1: base_color = Globals.turret_color
 		_: base_color = Color.WHITE
-	HIT_VISUAL.self_modulate = base_color.lerp(Color.WHITE, Globals.white_blend_intensity)
+	HIT_VISUAL.self_modulate = base_color
+	#HIT_VISUAL.self_modulate = base_color.lerp(Color.WHITE, Globals.white_blend_intensity)

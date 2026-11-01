@@ -1,10 +1,98 @@
 [gd_scene format=3 uid="uid://b13ls6u5sdx58"]
 
 [ext_resource type="Script" uid="uid://ne6u15egda57" path="res://scenes/tutorial/entity/tutorial_player.gd" id="1_nrhys"]
-[ext_resource type="Texture2D" uid="uid://miqo1wbx3pow" path="res://icon.svg" id="2_5dyy2"]
-[ext_resource type="Texture2D" uid="uid://cduwedquj1wde" path="res://assets/item/paint.png" id="3_gux2t"]
 [ext_resource type="Script" uid="uid://dndiybdxky6cb" path="res://scenes/game_scene/player/progressBar.gd" id="4_iye3m"]
 [ext_resource type="AudioStream" uid="uid://b363j5sswbq4i" path="res://assets/sounds/sfx/melee.ogg" id="5_00wk7"]
+[ext_resource type="Texture2D" uid="uid://bliubps7k0jbu" path="res://assets/player/Player1BasicSprite.png" id="5_nrhys"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_7p8hl"]
+atlas = ExtResource("5_nrhys")
+region = Rect2(32, 32, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_sl3pm"]
+atlas = ExtResource("5_nrhys")
+region = Rect2(64, 32, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_csdy4"]
+atlas = ExtResource("5_nrhys")
+region = Rect2(96, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_4yb8v"]
+atlas = ExtResource("5_nrhys")
+region = Rect2(0, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_0b0jg"]
+atlas = ExtResource("5_nrhys")
+region = Rect2(0, 32, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_osf24"]
+atlas = ExtResource("5_nrhys")
+region = Rect2(96, 32, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_qrkhp"]
+atlas = ExtResource("5_nrhys")
+region = Rect2(32, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_0aqjk"]
+atlas = ExtResource("5_nrhys")
+region = Rect2(64, 0, 32, 32)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_5dyy2"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_7p8hl")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_sl3pm")
+}],
+"loop": 1,
+"name": &"climb",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_csdy4")
+}],
+"loop": 1,
+"name": &"death",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_4yb8v")
+}],
+"loop": 1,
+"name": &"idle",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_0b0jg")
+}],
+"loop": 1,
+"name": &"jump",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_osf24")
+}],
+"loop": 1,
+"name": &"melee",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_qrkhp")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_0aqjk")
+}],
+"loop": 1,
+"name": &"run",
+"speed": 5.0
+}]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_xrivr"]
 size = Vector2(32, 64)
@@ -14,6 +102,33 @@ size = Vector2(32, 65)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_13qdw"]
 size = Vector2(32, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_kyjql"]
+atlas = ExtResource("5_nrhys")
+region = Rect2(128, 32, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_30cjq"]
+atlas = ExtResource("5_nrhys")
+region = Rect2(128, 0, 32, 32)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_kawcf"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_kyjql")
+}],
+"loop": 1,
+"name": &"aiming",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_30cjq")
+}],
+"loop": 1,
+"name": &"default",
+"speed": 5.0
+}]
 
 [sub_resource type="Gradient" id="Gradient_l4yx7"]
 offsets = PackedFloat32Array(0, 0.67551625, 0.70501477, 0.96755165, 0.99705017)
@@ -45,11 +160,12 @@ z_as_relative = false
 collision_layer = 6
 script = ExtResource("1_nrhys")
 
-[node name="Sprite2D" type="Sprite2D" parent="." unique_id=91982507]
-z_index = 25
-z_as_relative = false
-scale = Vector2(0.25, 0.5)
-texture = ExtResource("2_5dyy2")
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=1844405852]
+texture_filter = 1
+scale = Vector2(2, 2)
+sprite_frames = SubResource("SpriteFrames_5dyy2")
+animation = &"idle"
+autoplay = "idle"
 
 [node name="Hurtbox" type="CollisionShape2D" parent="." unique_id=962338468]
 z_as_relative = false
@@ -78,11 +194,11 @@ shape = SubResource("RectangleShape2D_13qdw")
 [node name="LaunchPoint" type="Marker2D" parent="Center" unique_id=1244710761]
 position = Vector2(32, 0)
 
-[node name="AimDot" type="Sprite2D" parent="Center/LaunchPoint" unique_id=906158970]
-z_index = 27
-z_as_relative = false
+[node name="AimDot" type="AnimatedSprite2D" parent="Center/LaunchPoint" unique_id=246535326]
 scale = Vector2(2, 2)
-texture = ExtResource("3_gux2t")
+sprite_frames = SubResource("SpriteFrames_kawcf")
+animation = &"aiming"
+autoplay = "aiming"
 
 [node name="BucketPosition" type="Marker2D" parent="." unique_id=1041089716]
 z_index = 26
