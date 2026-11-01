@@ -20,8 +20,8 @@ var ui_instance: CanvasLayer
 var combined: bool = false
 
 # UI
-@onready var healthbar1: ColorRect = $PlayerUI1/ProgressBar
-@onready var healthbar2: ColorRect = $PlayerUI2/ProgressBar
+#@onready var healthbar1: ColorRect = $PlayerUI1/ProgressBar
+#@onready var healthbar2: ColorRect = $PlayerUI2/ProgressBar
 
 var p1_ready: bool = false
 var p2_ready: bool = false

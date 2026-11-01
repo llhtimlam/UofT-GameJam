@@ -46,9 +46,6 @@ const BUCKET_SCENE = preload("res://scenes/game_scene/paint_bucket/paint_bucket.
 @onready var bucket_spawn_p2: Marker2D = $P2PaintBucketSpawnPoint
 @onready var bucket_spawn_turret: Marker2D = $TurretPaintBucketSpawnPoint
 
-# Audio
-@onready var melee: AudioStreamPlayer = $AudioController/Melee
-
 func _ready() -> void:
 	# Player
 	DUMMY.player_eliminated.connect(player_killed)

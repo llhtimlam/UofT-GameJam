@@ -123,7 +123,7 @@ var stun_max: float = 1.
 # Audio
 @onready var melee_audio: AudioStreamPlayer = $MeleeAudio
 
-@onready var camera: Camera2D = $Camera2D
+#@onready var camera: Camera2D = $Camera2D
 
 # User Input Mapping
 #func _input(event: InputEvent) -> void:
