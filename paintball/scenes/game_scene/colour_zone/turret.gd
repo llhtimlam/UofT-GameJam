@@ -2,6 +2,9 @@ extends StaticBody2D
 
 signal last_hit_attacker
 
+@export var stop_damage: bool = false
+@export var ai_enabled: bool = false
+
 @onready var capture_bar: ProgressBar = $CaptureBar
 
 const MAX_HP : float = 40
@@ -101,10 +104,10 @@ func _physics_process(delta: float) -> void:
 		if hurtbox.disabled:
 			hurtbox.set_deferred("disabled", false)
 	
-	if map_attack_vertical_cd <= 0:
+	if map_attack_vertical_cd <= 0 and ai_enabled:
 		_map_attack_vertical_preset()
 		map_attack_vertical_cd = MAP_ATTACK_VERTICAL_CD
-	if map_attack_horizontal_cd <= 0:
+	if map_attack_horizontal_cd <= 0 and ai_enabled:
 		_map_attack_horizontal_preset()
 		map_attack_horizontal_cd = MAP_ATTACK_HORIZONTAL_CD
 	
@@ -128,7 +131,7 @@ func _physics_process(delta: float) -> void:
 		center.rotation = target_angle
 	else:
 		center.rotation = PI/2
-	if attack_cd <= 0:
+	if attack_cd <= 0 and ai_enabled:
 		if aim_target != null and is_equal_approx(center.rotation, target_angle):
 			if attack_preset == 1:
 				shoot_shotgun_projectile(SHOTGUN_PROJECTILE_DMG, SHOTGUN_PROJECTILE_SPEED, SHOTGUN_PROJECTILE_KNOCKBACK, facing_dir, target_angle, aim_target, -1 , TEAM_ID)
@@ -247,6 +250,8 @@ func _generate_horizontal_map_attack(y: float) -> void:
 	map_attack_horizontal_instance.global_position = Vector2(0, y)
 	
 func take_damage(damage, _attacker_id, attacker_team) -> void:
+	if stop_damage:
+		return
 	if attacker_team == TEAM_ID:
 		return
 	hp -= damage

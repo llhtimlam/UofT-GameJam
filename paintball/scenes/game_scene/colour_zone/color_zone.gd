@@ -9,13 +9,15 @@ var SCORE_REWARD: float = 16.0
 var CAPTURE_THRESHOLD: float = 64.0
 var score_bias: float = 0.0:
 	set(value):
-		score_bias = clamp(value, -255.0, 255.0)
+		score_bias = clamp(value, -CAPTURE_THRESHOLD, CAPTURE_THRESHOLD)
 
 var players_in_zone: Array[CharacterBody2D] = []
 var candidate_team: int
 var is_claimable: bool = false
 var is_captured: bool = false
 var captured_team: int = -1 
+
+var stop_score: bool = false
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
@@ -26,6 +28,8 @@ func _ready() -> void:
 	capture_zone.body_exited.connect(_on_body_exited)
 
 func score_system(team_id: int) -> void:
+	if stop_score:
+		return
 	if team_id == 1:
 		score_bias += SCORE_REWARD
 	elif team_id == 2:
@@ -36,11 +40,11 @@ func score_system(team_id: int) -> void:
 		turret_colorwheel.score = Vector3(0, 255., absf(score_bias))
 	else:
 		turret_colorwheel.score = Vector3(0, 255., 0)
-	if score_bias > CAPTURE_THRESHOLD:
+	if score_bias >= CAPTURE_THRESHOLD:
 		candidate_team = 1
 		is_claimable = true
 		turret_colorwheel.claimable_animation(true)
-	elif score_bias < -CAPTURE_THRESHOLD:
+	elif score_bias <= -CAPTURE_THRESHOLD:
 		candidate_team = 2
 		is_claimable = true
 		turret_colorwheel.claimable_animation(true)

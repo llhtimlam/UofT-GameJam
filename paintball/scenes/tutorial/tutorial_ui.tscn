@@ -1,4 +1,4 @@
-[gd_scene format=3 uid="uid://cuvevc1tn3l7j"]
+[gd_scene format=3 uid="uid://blhw8a315mdip"]
 
 [ext_resource type="Script" uid="uid://b1ig2okrgdmev" path="res://scenes/tutorial/tutorial_ui.gd" id="1_5h3r2"]
 [ext_resource type="PackedScene" uid="uid://pa5m0tkkqu7f" path="res://scenes/tutorial/player/tutorial_map_p1.tscn" id="2_7aaay"]
@@ -38,10 +38,8 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-mouse_filter = 2
 
 [node name="SubViewportContainer1" type="SubViewportContainer" parent="." unique_id=685893217]
-texture_filter = 1
 anchors_preset = -1
 anchor_right = 0.499
 anchor_bottom = 1.0
@@ -61,10 +59,9 @@ render_target_update_mode = 4
 [node name="WorldEnvironment" type="WorldEnvironment" parent="SubViewportContainer1/Viewport1" unique_id=980375645]
 environment = SubResource("Environment_om0p0")
 
-[node name="Map1" parent="SubViewportContainer1/Viewport1" unique_id=822111050 instance=ExtResource("2_7aaay")]
+[node name="TutorialP1" parent="SubViewportContainer1/Viewport1" unique_id=822111050 instance=ExtResource("2_7aaay")]
 
 [node name="SubViewportContainer2" type="SubViewportContainer" parent="." unique_id=1850222501]
-texture_filter = 3
 anchors_preset = -1
 anchor_left = 0.501
 anchor_right = 1.0
@@ -87,12 +84,13 @@ render_target_update_mode = 4
 [node name="WorldEnvironment" type="WorldEnvironment" parent="SubViewportContainer2/Viewport2" unique_id=1933334175]
 environment = SubResource("Environment_om0p0")
 
-[node name="Map2" parent="SubViewportContainer2/Viewport2" unique_id=1724583917 instance=ExtResource("3_7aaay")]
+[node name="TutorialP2" parent="SubViewportContainer2/Viewport2" unique_id=1427236914 instance=ExtResource("3_7aaay")]
+position = Vector2(577.152, 0)
 
-[connection signal="player_ready" from="SubViewportContainer1/Viewport1/Map1/Player" to="." method="_on_player_player_ready"]
-[connection signal="player_ready" from="SubViewportContainer2/Viewport2/Map2/Player" to="." method="_on_player_player_ready"]
+[connection signal="player_eliminated" from="SubViewportContainer1/Viewport1/TutorialP1/Player" to="." method="_on_player_player_eliminated"]
+[connection signal="player_ready" from="SubViewportContainer2/Viewport2/TutorialP2/Player" to="." method="_on_player_player_ready"]
 
-[editable path="SubViewportContainer1/Viewport1/Map1"]
-[editable path="SubViewportContainer1/Viewport1/Map1/ColorZone"]
-[editable path="SubViewportContainer2/Viewport2/Map2"]
-[editable path="SubViewportContainer2/Viewport2/Map2/ColorZone"]
+[editable path="SubViewportContainer1/Viewport1/TutorialP1"]
+[editable path="SubViewportContainer1/Viewport1/TutorialP1/ColorZone"]
+[editable path="SubViewportContainer2/Viewport2/TutorialP2"]
+[editable path="SubViewportContainer2/Viewport2/TutorialP2/ColorZone"]

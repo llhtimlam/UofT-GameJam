@@ -21,8 +21,8 @@ var ATTACK_CD: float = 10.0
 @export var MAP_ATTACK_SPEED: float = 300.0
 @export var MAP_ATTACK_KNOCKBACK: float = 600.0
 @export var IFRAME_CD: float = 0.3
-@export var ASCEND_SPEED: float = 700.0
-@export var DESCEND_SPEED: float = 100.0
+@export var ASCEND_SPEED: float = 1400.0
+@export var DESCEND_SPEED: float = 400.0
 var AGGRO_CD: float = PI
 
 var iframe: float = 0.0

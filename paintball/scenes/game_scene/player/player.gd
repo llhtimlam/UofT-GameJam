@@ -122,12 +122,15 @@ const CAMERA_Y = -648.5
 var camera_i: Vector2 = Vector2.ZERO
 var screens_merging = false
 var camera_target = Vector2.ZERO
+var camera_tracking_disabled: bool = false
 
 # UI
 const INDICATOR_Y = -60
 const INDICATOR_BUCKET_Y = -90
 @onready var StunBar: TextureProgressBar = $StunBar
-@onready var DashBar: TextureProgressBar = $DashBar
+@onready var ShootBar: TextureProgressBar = $ShootBar
+@onready var HealthBar: ProgressBar = $HealthBar
+var fill_style: StyleBoxFlat = null
 var stun_max: float = 1.
 
 # Audio
@@ -239,14 +242,17 @@ func _physics_process(delta: float) -> void:
 	# UI
 	StunBar.value = stun_cd/stun_max
 	StunBar.Scale = camera.zoom.x
-	DashBar.value = shoot_cd/SHOOT_CD
-	DashBar.Scale = camera.zoom.x
+	ShootBar.value = shoot_cd/SHOOT_CD
+	ShootBar.Scale = camera.zoom.x
+	HealthBar.value = HEALTH
 	if is_instance_valid(held_bucket):
 		StunBar.Location = Vector2(0,INDICATOR_BUCKET_Y)
-		DashBar.Location = Vector2(0,INDICATOR_BUCKET_Y)
+		ShootBar.Location = Vector2(0,INDICATOR_BUCKET_Y)
+		HealthBar.position.y = INDICATOR_BUCKET_Y + 20
 	else:
 		StunBar.Location = Vector2(0,INDICATOR_Y)
-		DashBar.Location = Vector2(0,INDICATOR_Y)
+		ShootBar.Location = Vector2(0,INDICATOR_Y)
+		HealthBar.position.y = INDICATOR_Y + 20
 	
 	
 	match control_type:
@@ -541,13 +547,27 @@ func enemy_ai() -> void:
 func update_color() -> void:
 	$Sprite2D.self_modulate = Color.WHITE
 	var base_color: Color
+	if not fill_style:
+		fill_style = HealthBar.get_theme_stylebox("fill").duplicate()
+		HealthBar.add_theme_stylebox_override("fill", fill_style)
 	match TEAM_ID:
-		1: base_color = Globals.p1_color
-		2: base_color = Globals.p2_color
-		_: base_color = Color.WHITE
-	$Sprite2D.self_modulate = base_color.lerp(Color.WHITE, Globals.white_blend_intensity)
-
+		1: 
+			base_color = Globals.p1_color
+			$Sprite2D.self_modulate = base_color.lerp(Color.WHITE, Globals.p1_white_blend_intensity)
+			fill_style.bg_color = Globals.p1_color
+		2: 
+			base_color = Globals.p2_color
+			$Sprite2D.self_modulate = base_color.lerp(Color.WHITE, Globals.p2_white_blend_intensity)
+			fill_style.bg_color = Globals.p2_color
+		_: 
+			base_color = Color.WHITE
+			$Sprite2D.self_modulate = base_color.lerp(Color.WHITE, Globals.turret_white_blend_intensity)
+			fill_style.bg_color = Color(0.745, 0., 0.065, 1)
+	HealthBar.add_theme_stylebox_override("fill", fill_style)
+	
 func move_and_scale_camera():
+	if camera_tracking_disabled:
+		return
 	if not screens_merging: #let ui.gd override the target if merging
 		camera_target = Vector2(clamp(position.x,CAMERA_MIN_X,CAMERA_MAX_X),CAMERA_Y)
 	if get_viewport().size.y > MIN_SCREEN_HEIGHT:

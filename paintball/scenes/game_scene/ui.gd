@@ -1,17 +1,9 @@
 extends CanvasLayer
 
-# Color labels
-@onready var P1Cols: ColorRect = $PlayerUI1/Cols
-@onready var P2Cols: ColorRect = $PlayerUI2/Cols
-@export var red: Color = Color.RED
-@export var green: Color = Color.GREEN
-@export var blue: Color = Color.BLUE
-@export var player_1_color: Vector3 = Vector3.ZERO
-@export var player_2_color: Vector3 = Vector3.ZERO
-
 # Split screen
-const MERGE_PROPORTION = .35
-const SPLIT_PROPORTION = .75
+var center: Vector2
+const MERGE_PROPORTION = .75
+const SPLIT_PROPORTION = .8
 const SCREEN_MERGE_DIST = 5
 const SCREEN_MERGE_DIST_2D = 15
 @onready var container1: SubViewportContainer = $SubViewportContainer1
@@ -20,23 +12,10 @@ const SCREEN_MERGE_DIST_2D = 15
 @onready var viewport2: SubViewport = $SubViewportContainer2/Viewport2
 @onready var player1: CharacterBody2D = viewport1.get_node("Map/Player1")
 @onready var player2: CharacterBody2D = viewport1.get_node("Map/Player2")
+@onready var map: Node2D = $SubViewportContainer1/Viewport1/Map
 var combined: bool = false
 
-# UI
-@onready var healthbar1: ColorRect = $PlayerUI1/ProgressBar
-@onready var healthbar2: ColorRect = $PlayerUI2/ProgressBar
-
-# Called when the node enters the scene tree for the first time.
 func _ready() -> void:
-	# Color labels
-	var r = red.srgb_to_linear()
-	var g = green.srgb_to_linear()
-	var b = blue.srgb_to_linear()
-	var col_matrix = Basis(Vector3(r.r, r.g, r.b),Vector3(g.r, g.g, g.b),Vector3(b.r, b.g, b.b))
-	P1Cols.material.set_shader_parameter("colors", col_matrix)
-	P2Cols.material = P2Cols.material.duplicate()
-	P2Cols.material.set_shader_parameter("colors", col_matrix)
-	
 	# Split screen
 	var camera1 = player1.get_node("Camera2D")
 	var camera2 = player2.get_node("Camera2D")
@@ -46,24 +25,17 @@ func _ready() -> void:
 	camera1.make_current()
 	camera2.custom_viewport = viewport2
 	camera2.make_current()
-
+	
+	map.viewport_focus_center.connect(viewport_focus_center)
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _physics_process(_delta: float) -> void:
-	# Color labels
-	P1Cols.material.set_shader_parameter("cur_col", player_1_color/255.)
-	P2Cols.material.set_shader_parameter("cur_col", player_2_color/255.)
-	
-	# Health
-	healthbar1.anchor_right = .5 + .5 * (player1.HEALTH/100.)
-	healthbar2.anchor_right = .5 + .5 * player2.HEALTH/100.
-	
 	# Split screen
 	var p1_prop = player1.get_screen_transform().get_origin()/Vector2(get_window().size)
 	var p2_prop = player2.get_screen_transform().get_origin()/Vector2(get_window().size)
 	var diff = (p1_prop - p2_prop).abs()
 	
-	var center = (player1.position + player2.position)*.5
+	center = (player1.position + player2.position)*.5
 	var merge_dist = SCREEN_MERGE_DIST
 	if get_window().size.y < player1.MIN_SCREEN_HEIGHT: #camera moves in y
 		var covered_area = player1.MIN_SCREEN_HEIGHT - get_viewport().size.y
@@ -108,3 +80,7 @@ func split_cameras():
 	player1.camera_i = Vector2.ZERO
 	container1.anchor_right = 0.499
 	container2.anchor_left = 0.501
+
+func viewport_focus_center():
+	combined = false
+	combine_cameras(Vector2(0, center.y))

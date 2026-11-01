@@ -1,23 +1,18 @@
 [gd_scene format=3 uid="uid://huvh6esbosuh"]
 
 [ext_resource type="Script" uid="uid://4k4b1nrmlhhr" path="res://scenes/game_scene/colour_zone/turret_color_wheel.gd" id="1_2kxbw"]
-[ext_resource type="Shader" uid="uid://b0rhp3fug4naq" path="res://assets/color_wheel.gdshader" id="1_fx1lj"]
+[ext_resource type="Shader" uid="uid://b4ug1tpy51j05" path="res://assets/color_wheel.gdshader" id="1_fx1lj"]
 [ext_resource type="Texture2D" uid="uid://pwk8kqxx8pmm" path="res://assets/background/triangle_base.png" id="2_2kxbw"]
 [ext_resource type="Texture2D" uid="uid://bexx3tdwvmjcp" path="res://assets/background/triangle_glow.png" id="3_dwrgg"]
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_yivnm"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_2kxbw"]
 shader = ExtResource("1_fx1lj")
-shader_parameter/custom_color_middle = Vector3(1, 0, 0)
-shader_parameter/custom_color_left = Vector3(0, 1, 0)
-shader_parameter/custom_color_right = Vector3(0, 0, 1)
-shader_parameter/fill_percentage = 0.0
-
-[sub_resource type="Gradient" id="Gradient_geu3a"]
-
-[sub_resource type="GradientTexture2D" id="GradientTexture2D_682nn"]
-gradient = SubResource("Gradient_geu3a")
-width = 256
-height = 256
+shader_parameter/c1 = Vector3(1, 0, 0)
+shader_parameter/c2 = Vector3(0, 1, 0)
+shader_parameter/c3 = Vector3(0, 0, 1)
+shader_parameter/p1 = 1.0
+shader_parameter/p2 = 1.0
+shader_parameter/p3 = 1.0
 
 [sub_resource type="Animation" id="Animation_2kxbw"]
 length = 0.001
@@ -114,11 +109,14 @@ _data = {
 scale = Vector2(1, -1)
 script = ExtResource("1_2kxbw")
 
-[node name="ColorWheel" type="Sprite2D" parent="." unique_id=1651613932]
+[node name="ColorWheel" type="ColorRect" parent="." unique_id=790936497]
 z_index = 8
 z_as_relative = false
-material = SubResource("ShaderMaterial_yivnm")
-texture = SubResource("GradientTexture2D_682nn")
+material = SubResource("ShaderMaterial_2kxbw")
+offset_left = -93.0
+offset_top = -104.0
+offset_right = 92.0
+offset_bottom = 54.0
 
 [node name="TriangleBase" type="Sprite2D" parent="." unique_id=145619206]
 z_index = 7

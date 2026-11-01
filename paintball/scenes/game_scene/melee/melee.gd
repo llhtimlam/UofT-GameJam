@@ -69,8 +69,13 @@ func update_color() -> void:
 	HIT_VISUAL.self_modulate = Color.WHITE
 	var base_color: Color
 	match ATTACKER_TEAM:
-		1: base_color = Globals.p1_color
-		2: base_color = Globals.p2_color
-		-1: base_color = Globals.turret_color
+		1: 
+			base_color = Globals.p1_color
+			HIT_VISUAL.self_modulate = base_color.lerp(Color.WHITE, Globals.p1_white_blend_intensity)
+		2: 
+			base_color = Globals.p2_color
+			HIT_VISUAL.self_modulate = base_color.lerp(Color.WHITE, Globals.p2_white_blend_intensity)
+		-1: 
+			base_color = Globals.turret_color
+			HIT_VISUAL.self_modulate = base_color.lerp(Color.WHITE, Globals.turret_white_blend_intensity)
 		_: base_color = Color.WHITE
-	HIT_VISUAL.self_modulate = base_color.lerp(Color.WHITE, Globals.white_blend_intensity)

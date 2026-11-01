@@ -6,7 +6,7 @@ var TEAM_ID: int = -1:
 		TEAM_ID = value
 
 # Display
-@onready var display_triangle: Sprite2D = $ColorWheel
+@onready var display_triangle: ColorRect = $ColorWheel
 
 # Animation
 @onready var anim_player: AnimationPlayer = $AnimationPlayer
@@ -16,17 +16,17 @@ var display_middle_rgb: Vector3 = Vector3.ZERO:
 	set(value):
 		display_middle_rgb = value
 		if is_inside_tree() and display_triangle and display_triangle.material is ShaderMaterial:
-			display_triangle.material.set_shader_parameter("custom_color_middle", value)
+			display_triangle.material.set_shader_parameter("c1", powv(value,2.2))
 var display_left_rgb: Vector3 = Vector3.ZERO:
 	set(value):
 		display_left_rgb = value
 		if is_inside_tree() and display_triangle and display_triangle.material is ShaderMaterial:
-			display_triangle.material.set_shader_parameter("custom_color_left", value)
+			display_triangle.material.set_shader_parameter("c2", powv(value,2.2))
 var display_right_rgb: Vector3 = Vector3.ZERO:
 	set(value):
 		display_right_rgb = value
 		if is_inside_tree() and display_triangle and display_triangle.material is ShaderMaterial:
-			display_triangle.material.set_shader_parameter("custom_color_right", value)
+			display_triangle.material.set_shader_parameter("c3", powv(value,2.2))
 
 # Score: Self: infinite, P1 P2 : 0
 var normalized_score: Vector3 = Vector3(0., 1., 0.)
@@ -50,6 +50,9 @@ var score: Vector3 = Vector3(0., 255., 0.): # Format: (P1, Turret, P2)
 			display_middle_rgb = Globals.normalized_turret_color * normalized_score.y
 			display_left_rgb = diluted_sides_rgb
 			display_right_rgb = diluted_sides_rgb
+
+func powv(v,f) -> Vector3:
+	return Vector3(v.x**f, v.y**f, v.z**f)
 
 func _ready() -> void:
 	if display_triangle and display_triangle.material:

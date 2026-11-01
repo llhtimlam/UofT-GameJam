@@ -1,5 +1,7 @@
 extends Node2D
 
+signal request_update_color
+
 # Player
 const PLAYER_SCENE = preload("res://scenes/game_scene/player/player.tscn")
 var users: Array[String] = ["P1", "P2"]
@@ -46,6 +48,11 @@ const BUCKET_SCENE = preload("res://scenes/game_scene/paint_bucket/paint_bucket.
 @onready var bucket_spawn_p2: Marker2D = $P2PaintBucketSpawnPoint
 @onready var bucket_spawn_turret: Marker2D = $TurretPaintBucketSpawnPoint
 
+# Paintable
+@onready var main_tile: TileMapLayer = $MainPlatform
+@onready var tutorial_tile: TileMapLayer = $TutorialText
+@onready var spaceship_tile: TileMapLayer = $Spaceship
+
 # Audio
 @onready var melee: AudioStreamPlayer = $AudioController/Melee
 
@@ -79,19 +86,19 @@ func _ready() -> void:
 	var rope_instance_p1_base = ROPE_SCENE.instantiate()
 	add_child(rope_instance_p1_base)
 	rope_instance_p1_base.tilemap = rope_tile
-	rope_instance_p1_base.setup_rope(Vector2i(27,-24), Vector2i(27,-20))
+	rope_instance_p1_base.setup_rope(Vector2i(-27,-24), Vector2i(-27,-20))
 	var rope_instance_turret_left = ROPE_SCENE.instantiate()
 	add_child(rope_instance_turret_left)
 	rope_instance_turret_left.tilemap = rope_tile
-	rope_instance_turret_left.setup_rope(Vector2i(31,-24), Vector2i(31,-19))
+	rope_instance_turret_left.setup_rope(Vector2i(-31,-24), Vector2i(-31,-19))
 	var rope_instance_turret_right = ROPE_SCENE.instantiate()
 	add_child(rope_instance_turret_right)
 	rope_instance_turret_right.tilemap = rope_tile
-	rope_instance_turret_right.setup_rope(Vector2i(129,-23), Vector2i(129,-20))
+	rope_instance_turret_right.setup_rope(Vector2i(-129,-23), Vector2i(-129,-20))
 	var rope_instance_p2_base = ROPE_SCENE.instantiate()
 	add_child(rope_instance_p2_base)
 	rope_instance_p2_base.tilemap = rope_tile
-	rope_instance_p2_base.setup_rope(Vector2i(140,-23), Vector2i(140,-20))
+	rope_instance_p2_base.setup_rope(Vector2i(-140,-23), Vector2i(-140,-20))
 	
 	#Setup Platform
 	platform1.enabled = false
@@ -101,6 +108,8 @@ func _ready() -> void:
 	platform21a.enabled = false
 	platform21b.enabled = false
 	platform12.enabled = false
+	
+	update_color()
 	
 func player_killed(player, attacker_id: int, attacker_team: int):
 	#TODO: mobile spawn point once capture points exist
@@ -206,6 +215,10 @@ func _transition_2_to_1() -> void:
 			platform1.enabled = true
 			current_platform = next_platform
 
-
-func _on_player_player_ready(player: CharacterBody2D, player_id: int, player_team: int) -> void:
-	pass # Replace with function body.
+func update_color() -> void:
+	main_tile.self_modulate = Color.WHITE
+	main_tile.self_modulate = Globals.p2_color
+	tutorial_tile.self_modulate = Color.WHITE
+	tutorial_tile.self_modulate = Globals.p2_color.lerp(Color.WHITE, Globals.p2_white_blend_intensity)
+	spaceship_tile.self_modulate = Color.WHITE
+	spaceship_tile.self_modulate = Globals.p2_color.lerp(Color.WHITE, Globals.p2_white_blend_intensity)

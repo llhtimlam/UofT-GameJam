@@ -1,5 +1,10 @@
 extends Node2D
 
+signal viewport_focus_center
+
+const WIN_SCENE = preload("res://scenes/tutorial/tutorial_ui.tscn")
+var ending_instance: CanvasLayer
+
 # Player
 const PLAYER_SCENE = preload("res://scenes/game_scene/player/player.tscn")
 var users: Array[String] = ["P1", "P2"]
@@ -17,6 +22,8 @@ var p2_base_instance: Node2D = null
 @onready var P1Base: Marker2D = $P1Base
 @onready var P2Base: Marker2D = $P2Base
 @onready var CloneWheel: Marker2D = $CloneSpawnPoint
+@onready var colorzone: Node2D = $ColorZone
+@onready var turret: StaticBody2D = $ColorZone/Turret
 
 # Platform
 @onready var platform1: TileMapLayer = $Platform1
@@ -57,6 +64,12 @@ const BUCKET_SCENE = preload("res://scenes/game_scene/paint_bucket/paint_bucket.
 @onready var bucket_spawn_p2: Marker2D = $P2PaintBucketSpawnPoint
 @onready var bucket_spawn_turret: Marker2D = $TurretPaintBucketSpawnPoint
 
+# Paintable
+@onready var p1_plaform: TileMapLayer = $P1MapLayer
+@onready var p2_plaform: TileMapLayer = $P2MapLayer
+@onready var turret_plaform: TileMapLayer = $TurretMapLayer
+@onready var center_blackhole: AnimatedSprite2D = $BlackHole
+
 # Audio
 @onready var melee: AudioStreamPlayer = $AudioController/Melee
 
@@ -94,6 +107,7 @@ func _ready() -> void:
 	p1_base_instance.global_position = P1Base.global_position
 	p1_base_instance.colorwheel_clone.global_position = CloneWheel.global_position
 	p1_base_instance.hurtbox_clone.global_position = CloneWheel.global_position
+	p1_base_instance.win_team.connect(win)
 	
 	p2_base_instance = BASE_SCENE.instantiate()
 	p2_base_instance.TEAM_ID = 2
@@ -103,6 +117,7 @@ func _ready() -> void:
 	p2_base_instance.global_position = P2Base.global_position
 	p2_base_instance.colorwheel_clone.global_position = CloneWheel.global_position
 	p2_base_instance.hurtbox_clone.global_position = CloneWheel.global_position
+	p2_base_instance.win_team.connect(win)
 	
 	# Setup rope
 	var rope_instance_p1_base = ROPE_SCENE.instantiate()
@@ -142,8 +157,32 @@ func _ready() -> void:
 	platform32a.enabled = false
 	platform32b.enabled = false
 	
+	# Visual
+	update_platform_color()
+	
+	# Debug
+	#await get_tree().create_timer(5.0).timeout
+	p1_base_instance.win()
+	
+func win(team_id: int):
+	turret.ai_enabled = false
+	colorzone.stop_score = true
+	PLAYER1.set_physics_process(false)
+	PLAYER2.set_physics_process(false)
+	PLAYER1.camera_tracking_disabled = true
+	PLAYER2.camera_tracking_disabled = true
+	viewport_focus_center.emit()
+	#get_tree().paused = true
+	await get_tree().create_timer(5.0).timeout
+	match team_id:
+		1: end_game()
+		2: end_game()
+	
+func end_game():
+	ending_instance = WIN_SCENE.instantiate()
+	get_tree().change_scene_to_file("res://scenes/main.tscn")
+	
 func player_killed(player, attacker_id: int, attacker_team: int):
-	#TODO: mobile spawn point once capture points exist
 	if player.TEAM_ID == 1:
 		if attacker_team == 2:
 			p1_base_instance.lost_score_to(p2_base_instance)
@@ -320,5 +359,17 @@ func _transition_3_to_2() -> void:
 			platform2.enabled = true
 			current_platform = next_platform
 
-func _on_player_2_player_eliminated(player: CharacterBody2D) -> void:
-	pass # Replace with function body.
+func update_platform_color() -> void:
+	# Platform
+	p1_plaform.self_modulate = Color.WHITE
+	p1_plaform.self_modulate = Globals.p1_color
+	p2_plaform.self_modulate = Color.WHITE
+	p2_plaform.self_modulate = Globals.p2_color
+	turret_plaform.self_modulate = Color.WHITE
+	turret_plaform.self_modulate = Globals.turret_color
+	
+func update_color(color: Color) -> void:
+	# Sprite
+	if center_blackhole:
+		center_blackhole.self_modulate = Color.WHITE
+		center_blackhole.self_modulate = color

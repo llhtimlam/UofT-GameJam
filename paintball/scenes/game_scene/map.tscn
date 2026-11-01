@@ -2,7 +2,6 @@
 
 [ext_resource type="Script" uid="uid://ux4q5evgyks" path="res://scenes/game_scene/map.gd" id="1_2m4d5"]
 [ext_resource type="Texture2D" uid="uid://b50barlg03qg8" path="res://assets/background/animated_blackhole/d1512ad5-c56d-433f-8d48-4f5e4a54399e-0.png" id="2_0n02b"]
-[ext_resource type="PackedScene" uid="uid://u1ulorklcu5g" path="res://scenes/game_scene/player/player.tscn" id="2_2m4d5"]
 [ext_resource type="Texture2D" uid="uid://qanrvw5rwuf5" path="res://assets/background/animated_blackhole/d1512ad5-c56d-433f-8d48-4f5e4a54399e-1.png" id="3_42y4p"]
 [ext_resource type="Texture2D" uid="uid://htn3dabtgy7u" path="res://assets/background/animated_blackhole/d1512ad5-c56d-433f-8d48-4f5e4a54399e-2.png" id="4_pu1w6"]
 [ext_resource type="Texture2D" uid="uid://da0ccrkdrxsqc" path="res://assets/background/animated_blackhole/d1512ad5-c56d-433f-8d48-4f5e4a54399e-3.png" id="5_4ji5y"]
@@ -101,6 +100,8 @@
 [ext_resource type="Texture2D" uid="uid://vujtk2hnm1og" path="res://assets/background/animated_blackhole/d1512ad5-c56d-433f-8d48-4f5e4a54399e-94.png" id="96_mfkdx"]
 [ext_resource type="Texture2D" uid="uid://dk5iydpyc87dd" path="res://assets/background/animated_blackhole/d1512ad5-c56d-433f-8d48-4f5e4a54399e-95.png" id="97_wdb0g"]
 [ext_resource type="TileSet" uid="uid://en4sll6evhh8" path="res://scenes/game_scene/tileset/tile_set.tres" id="100_um714"]
+[ext_resource type="PackedScene" uid="uid://u1ulorklcu5g" path="res://scenes/tutorial/entity/tutorial_player.tscn" id="100_x51vt"]
+[ext_resource type="Script" uid="uid://b0iohuh6rl7g5" path="res://scenes/game_scene/player/player.gd" id="101_x51vt"]
 [ext_resource type="AudioStream" uid="uid://16to76ukj1fv" path="res://assets/sounds/sfx/blackhole.ogg" id="102_4w5tc"]
 [ext_resource type="AudioStream" uid="uid://cpd3bhba5q3cn" path="res://assets/sounds/bgm/bgm1.ogg" id="103_um714"]
 [ext_resource type="AudioStream" uid="uid://dis4uk21v4xnq" path="res://assets/sounds/bgm/bgm2.ogg" id="104_x51vt"]
@@ -518,18 +519,15 @@ tile_set = ExtResource("100_um714")
 tile_map_data = PackedByteArray("AADt//f/AAABAAAAAADt/+v/AAABAAAAAADu//f/AAACAAAAAADv//f/AAACAAAAAADw//f/AAACAAAAAAD1//P/AAACAAAAAAD2//P/AAACAAAAAAD3//P/AAACAAAAAADz/+//AAACAAAAAAD0/+//AAACAAAAAAD1/+//AAACAAAAAADu/+v/AAACAAAAAADv/+v/AAACAAAAAADw/+v/AAACAAAAAAAHAPD/AAACAAAAAAAIAPD/AAACAAAAAAAJAPD/AAACAAAAAAAPAOz/AAACAAAAAAAQAOz/AAACAAAAAAARAOz/AAACAAAAAAAOAPT/AAACAAAAAAAPAPT/AAACAAAAAAAQAPT/AAACAAAAAADz//f/AAADAAAAAADx//f/AAACAAAAAADy//f/AAACAAAAAADz//P/AAABAAAAAAD0//P/AAACAAAAAADy/+//AAACAAAAAADx/+//AAABAAAAAAAMAPT/AAABAAAAAAASAPT/AAADAAAAAAATAOz/AAADAAAAAAARAPT/AAACAAAAAAANAPT/AAACAAAAAAASAOz/AAACAAAAAAD2/+//AAADAAAAAAD4//P/AAADAAAAAAAMAPD/AAADAAAAAAAKAPD/AAACAAAAAAALAPD/AAACAAAAAAAGAPD/AAABAAAAAADx/+v/AAACAAAAAADy/+v/AAACAAAAAADz/+v/AAADAAAAAAD0//r/AAABAAIAAAD5//r/AAADAAIAAAAMAPj/AAADAAIAAAATAPv/AAADAAIAAAANAPv/AAABAAIAAAAGAPj/AAABAAIAAAAHAPj/AAACAAIAAAAIAPj/AAACAAIAAAAJAPj/AAACAAIAAAAKAPj/AAACAAIAAAALAPj/AAACAAIAAAAOAPv/AAACAAIAAAAPAPv/AAACAAIAAAAQAPv/AAACAAIAAAARAPv/AAACAAIAAAASAPv/AAACAAIAAAD1//r/AAACAAIAAAD2//r/AAACAAIAAAD3//r/AAACAAIAAAD4//r/AAACAAIAAAALAOz/AAABAAAAAAAMAOz/AAACAAAAAAANAOz/AAACAAAAAAAOAOz/AAACAAAAAAD2/+f/AAABAAIAAAAGAOf/AAABAAIAAAD6/+f/AAADAAIAAAAKAOf/AAADAAIAAAD3/+f/AAACAAIAAAD4/+f/AAACAAIAAAD5/+f/AAACAAIAAAAHAOf/AAACAAIAAAAIAOf/AAACAAIAAAAJAOf/AAACAAIAAAA=")
 tile_set = ExtResource("100_um714")
 
-[node name="Player1" parent="." unique_id=25147227 instance=ExtResource("2_2m4d5")]
-position = Vector2(-1088, -2000)
+[node name="Player1" parent="." unique_id=25147227 instance=ExtResource("100_x51vt")]
+position = Vector2(-1080, -2000)
+script = ExtResource("101_x51vt")
 
-[node name="Camera2D2" type="Camera2D" parent="Player1" unique_id=1545230877]
-
-[node name="Player2" parent="." unique_id=817086128 instance=ExtResource("2_2m4d5")]
+[node name="Player2" parent="." unique_id=1843884854 instance=ExtResource("100_x51vt")]
 position = Vector2(1120, -2000)
-control_type = "P2"
+script = ExtResource("101_x51vt")
 TEAM_ID = 2
 PLAYER_ID = 2
-
-[node name="Camera2D2" type="Camera2D" parent="Player2" unique_id=737629106]
 
 [node name="P1Base" type="Marker2D" parent="." unique_id=591551844]
 position = Vector2(-1088, -680)
@@ -583,6 +581,9 @@ parameters/looping = true
 
 [node name="Melee" type="AudioStreamPlayer" parent="AudioController" unique_id=571261770]
 stream = ExtResource("105_um714")
+
+[connection signal="player_eliminated" from="Player1" to="." method="_on_player_1_player_eliminated"]
+[connection signal="player_eliminated" from="Player2" to="." method="_on_player_2_player_eliminated"]
 
 [editable path="ColorZone"]
 [editable path="ColorZone/Turret"]

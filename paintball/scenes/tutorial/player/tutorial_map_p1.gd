@@ -1,5 +1,7 @@
 extends Node2D
 
+signal request_update_color
+
 # Player
 const PLAYER_SCENE = preload("res://scenes/game_scene/player/player.tscn")
 var users: Array[String] = ["P1", "P2"]
@@ -45,6 +47,11 @@ const BUCKET_SCENE = preload("res://scenes/game_scene/paint_bucket/paint_bucket.
 @onready var bucket_spawn_p1: Marker2D = $P1PaintBucketSpawnPoint
 @onready var bucket_spawn_p2: Marker2D = $P2PaintBucketSpawnPoint
 @onready var bucket_spawn_turret: Marker2D = $TurretPaintBucketSpawnPoint
+
+# Paintable
+@onready var main_tile: TileMapLayer = $MainPlatform
+@onready var tutorial_tile: TileMapLayer = $TutorialText
+@onready var spaceship_tile: TileMapLayer = $Spaceship
 
 # Audio
 @onready var melee: AudioStreamPlayer = $AudioController/Melee
@@ -101,6 +108,8 @@ func _ready() -> void:
 	platform21a.enabled = false
 	platform21b.enabled = false
 	platform12.enabled = false
+	
+	update_color()
 	
 func player_killed(player, attacker_id: int, attacker_team: int):
 	#TODO: mobile spawn point once capture points exist
@@ -206,6 +215,10 @@ func _transition_2_to_1() -> void:
 			platform1.enabled = true
 			current_platform = next_platform
 
-
-func _on_player_player_ready(player: CharacterBody2D, player_id: int, player_team: int) -> void:
-	pass # Replace with function body.
+func update_color() -> void:
+	main_tile.self_modulate = Color.WHITE
+	main_tile.self_modulate = Globals.p1_color
+	tutorial_tile.self_modulate = Color.WHITE
+	tutorial_tile.self_modulate = Globals.p1_color.lerp(Color.WHITE, Globals.p1_white_blend_intensity)
+	spaceship_tile.self_modulate = Color.WHITE
+	spaceship_tile.self_modulate = Globals.p1_color.lerp(Color.WHITE, Globals.p1_white_blend_intensity)

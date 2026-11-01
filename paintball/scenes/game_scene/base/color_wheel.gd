@@ -7,7 +7,7 @@ var TEAM_ID: int = 1:
 		_update_progress_bar_color()
 
 # Display
-@onready var display_triangle: Sprite2D = $ColorWheel
+@onready var display_triangle: ColorRect = $ColorWheel
 @onready var display_middle: TextureProgressBar = $MiddleScore
 @onready var display_left: TextureProgressBar = $LeftScore
 @onready var display_right: TextureProgressBar = $RightScore
@@ -15,6 +15,7 @@ var TEAM_ID: int = 1:
 # Animation
 var spin_tween: Tween
 var zoom_tween: Tween
+@onready var anim_player: AnimationPlayer = $AnimationPlayer
 
 # Audio
 @onready var colour_wheel_damage: AudioStreamPlayer = $AudioController/ColourWheelDamage
@@ -25,31 +26,37 @@ var display_middle_rgb: Vector3 = Vector3.ZERO:
 	set(value):
 		display_middle_rgb = value
 		if is_inside_tree() and display_triangle and display_triangle.material is ShaderMaterial:
-			display_triangle.material.set_shader_parameter("custom_color_middle", value)
+			display_triangle.material.set_shader_parameter("c1", powv(value,2.2))
 var display_left_rgb: Vector3 = Vector3.ZERO:
 	set(value):
 		display_left_rgb = value
 		if is_inside_tree() and display_triangle and display_triangle.material is ShaderMaterial:
-			display_triangle.material.set_shader_parameter("custom_color_left", value)
+			display_triangle.material.set_shader_parameter("c2", powv(value,2.2))
 var display_right_rgb: Vector3 = Vector3.ZERO:
 	set(value):
 		display_right_rgb = value
 		if is_inside_tree() and display_triangle and display_triangle.material is ShaderMaterial:
-			display_triangle.material.set_shader_parameter("custom_color_right", value)
+			display_triangle.material.set_shader_parameter("c3", powv(value,2.2))
 
 # Progress bar input: 0.0 to 100.0 Progress Bar Percentages (float)
 var display_middle_pct: float = 0.0:
 	set(value):
 		display_middle_pct = value
 		if display_middle: display_middle.value = value
+		if is_inside_tree() and display_triangle and display_triangle.material is ShaderMaterial:
+			display_triangle.material.set_shader_parameter("p1", value/100)
 var display_left_pct: float = 0.0:
 	set(value):
 		display_left_pct = value
 		if display_left: display_left.value = value
+		if is_inside_tree() and display_triangle and display_triangle.material is ShaderMaterial:
+			display_triangle.material.set_shader_parameter("p2", value/100)
 var display_right_pct: float = 0.0:
 	set(value):
 		display_right_pct = value
 		if display_right: display_right.value = value
+		if is_inside_tree() and display_triangle and display_triangle.material is ShaderMaterial:
+			display_triangle.material.set_shader_parameter("p3", value/100)
 
 # Conversion Helper Vector3 (255,255,255) to display triangle and progress bar
 var normalized_score: Vector3 = Vector3.ZERO
@@ -74,7 +81,11 @@ var score: Vector3 = Vector3.ZERO: # Format: (P1, Turret, P2)
 			display_left_rgb = Globals.normalized_turret_color * normalized_score.y
 			display_right_rgb = Globals.normalized_p1_color * normalized_score.x
 
+func powv(v,f) -> Vector3:
+	return Vector3(v.x**f, v.y**f, v.z**f)
+
 func _ready() -> void:
+	anim_player.process_mode = Node.PROCESS_MODE_ALWAYS
 	if display_triangle and display_triangle.material:
 		display_triangle.material = display_triangle.material.duplicate()
 	_update_progress_bar_color()
@@ -135,5 +146,5 @@ func flip_animation() -> void:
 	zoom_tween.tween_property(self, "scale", Vector2(-1.0, -1.0), 0.15)
 	zoom_tween.tween_property(self, "scale", Vector2.ONE, 0.15)
 	
-func _process(delta: float) -> void:
-	pass
+func win_animation() -> void:
+	anim_player.play("win_animation")

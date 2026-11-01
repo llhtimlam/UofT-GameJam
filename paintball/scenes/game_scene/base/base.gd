@@ -1,5 +1,7 @@
 extends Area2D
 
+signal win_team(team_id: int)
+
 var TEAM_ID: int = 1
 var defender: CharacterBody2D
 
@@ -54,6 +56,8 @@ func _physics_process(delta: float) -> void:
 func update_score(add_score: Vector3 = Vector3.ZERO) -> void:
 	var combined_score = score + add_score
 	score = combined_score
+	if score == Vector3(255., 255., 255.) and is_harvesting:
+		win()
 	
 func take_damage(damage, attacker_id, _attacker_team) -> void:
 	if attacker_id == TEAM_ID:
@@ -128,3 +132,8 @@ func overthrown(attacker_base: Node = null) -> void:
 	self.score -= amount_lost
 	if attacker_base != null:
 		attacker_base.update_score(amount_lost)
+
+func win() -> void:
+	win_team.emit(TEAM_ID)
+	if colorwheel_clone:
+		colorwheel_clone.win_animation()

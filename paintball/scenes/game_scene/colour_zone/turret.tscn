@@ -614,7 +614,7 @@ sprite_frames = SubResource("SpriteFrames_xrivr")
 autoplay = "default"
 
 [node name="HandShadow" type="AnimatedSprite2D" parent="Hand" unique_id=1537217391]
-modulate = Color(0, 0, 0, 1)
+self_modulate = Color(0, 0, 0, 1)
 z_index = 15
 z_as_relative = false
 position = Vector2(1.4570462e-05, 0)
