@@ -420,14 +420,50 @@ z_index = -100
 position = Vector2(0, -648.5)
 texture = ExtResource("8_geu3a")
 
-[node name="Haze2" type="Sprite2D" parent="." unique_id=976854816]
+[node name="Haze2" type="Sprite2D" parent="Haze" unique_id=976854816]
 z_index = -100
-position = Vector2(3508, -648.5)
+position = Vector2(3508, 0)
 texture = ExtResource("8_geu3a")
 
-[node name="Haze3" type="Sprite2D" parent="." unique_id=95900187]
+[node name="Haze3" type="Sprite2D" parent="Haze" unique_id=95900187]
 z_index = -100
-position = Vector2(-3508, -648.5)
+position = Vector2(-3508, 0)
+texture = ExtResource("8_geu3a")
+
+[node name="Haze6" type="Sprite2D" parent="Haze" unique_id=576412741]
+z_index = -100
+position = Vector2(-3508, -1296)
+rotation = 3.1415927
+texture = ExtResource("8_geu3a")
+
+[node name="Haze4" type="Sprite2D" parent="Haze" unique_id=430780935]
+z_index = -100
+position = Vector2(0, -1296)
+rotation = 3.1415927
+texture = ExtResource("8_geu3a")
+
+[node name="Haze5" type="Sprite2D" parent="Haze" unique_id=100283470]
+z_index = -100
+position = Vector2(3508, -1296)
+rotation = 3.1415927
+texture = ExtResource("8_geu3a")
+
+[node name="Haze7" type="Sprite2D" parent="Haze" unique_id=704254123]
+z_index = -100
+position = Vector2(0, 1296)
+rotation = 3.1415927
+texture = ExtResource("8_geu3a")
+
+[node name="Haze8" type="Sprite2D" parent="Haze" unique_id=847243299]
+z_index = -100
+position = Vector2(-3508, 1296)
+rotation = 3.1415927
+texture = ExtResource("8_geu3a")
+
+[node name="Haze9" type="Sprite2D" parent="Haze" unique_id=126650948]
+z_index = -100
+position = Vector2(3508, 1296)
+rotation = 3.1415927
 texture = ExtResource("8_geu3a")
 
 [node name="P1MapLayer" type="TileMapLayer" parent="." unique_id=2055237803]
