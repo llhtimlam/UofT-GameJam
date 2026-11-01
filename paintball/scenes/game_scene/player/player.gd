@@ -422,14 +422,16 @@ func _physics_process(delta: float) -> void:
 	iframe = max(iframe - delta, 0.0)
 	
 	if velocity.x < 0:
-		melee_hitbox.position = Vector2(-32,0)
 		$AnimatedSprite2D.flip_h = true
 	elif velocity.x > 0:
-		melee_hitbox.position = Vector2(32,0)
 		$AnimatedSprite2D.flip_h = false
 	
 	if melee_hitbox.get_child_count() != 0:
-			$AnimatedSprite2D.play("melee")
+		$AnimatedSprite2D.play("melee")
+		if velocity.x < 0:
+			melee_hitbox.position = Vector2(-32,0)
+		elif velocity.x > 0:
+			melee_hitbox.position = Vector2(32,0)
 	elif is_climbing:
 		$AnimatedSprite2D.play("climb")
 	elif is_aiming:
@@ -585,6 +587,8 @@ func update_color() -> void:
 			base_color = Color.WHITE
 			$AnimatedSprite2D.self_modulate = base_color.lerp(Color.WHITE, Globals.turret_white_blend_intensity)
 			fill_style.bg_color = Color(0.745, 0., 0.065, 1)
+	
+	aim_dot.modulate = $AnimatedSprite2D.self_modulate
 	HealthBar.add_theme_stylebox_override("fill", fill_style)
 	
 func move_and_scale_camera():

@@ -395,9 +395,16 @@ func _physics_process(delta: float) -> void:
 		
 			if facing_dir == -1.0:
 				shoot_angle = PI - aim_angle
+				aim_dot.flip_v = true
 			else:
 				shoot_angle = aim_angle
+				aim_dot.flip_v = false
 			center.rotation = shoot_angle
+			
+			if shoot_angle <= PI/2:
+				$AnimatedSprite2D.flip_h = false
+			else:
+				$AnimatedSprite2D.flip_h = true
 			
 			if input_shoot and aim_cd <= 0:
 				shoot_projectile(PROJECTILE_DMG, PROJECTILE_SPEED, PROJECTILE_KNOCKBACK, facing_dir, shoot_angle, PLAYER_ID ,TEAM_ID)
@@ -418,14 +425,17 @@ func _physics_process(delta: float) -> void:
 	iframe = max(iframe - delta, 0.0)
 	
 	if velocity.x < 0:
-		melee_hitbox.position = Vector2(-32,0)
 		$AnimatedSprite2D.flip_h = true
 	elif velocity.x > 0:
-		melee_hitbox.position = Vector2(32,0)
 		$AnimatedSprite2D.flip_h = false
 	
 	if melee_hitbox.get_child_count() != 0:
-			$AnimatedSprite2D.play("melee")
+		$AnimatedSprite2D.play("melee")
+		if velocity.x < 0:
+			melee_hitbox.position = Vector2(-32,0)
+		elif velocity.x > 0:
+			melee_hitbox.position = Vector2(32,0)
+			
 	elif is_climbing:
 		$AnimatedSprite2D.play("climb")
 	elif is_aiming:
@@ -580,6 +590,8 @@ func update_color() -> void:
 			base_color = Color.WHITE
 			$AnimatedSprite2D.self_modulate = base_color.lerp(Color.WHITE, Globals.turret_white_blend_intensity)
 			fill_style.bg_color = Color(0.745, 0., 0.065, 1)
+	
+	aim_dot.modulate = $AnimatedSprite2D.self_modulate
 	HealthBar.add_theme_stylebox_override("fill", fill_style)
 
 
