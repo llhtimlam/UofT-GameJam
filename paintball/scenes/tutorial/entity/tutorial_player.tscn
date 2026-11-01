@@ -121,5 +121,3 @@ pitch_scale = 0.8
 
 [node name="Camera2D" type="Camera2D" parent="." unique_id=1483005472]
 position = Vector2(0, -100)
-limit_top = -936
-limit_bottom = -288
