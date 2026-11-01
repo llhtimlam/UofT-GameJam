@@ -53,9 +53,6 @@ const BUCKET_SCENE = preload("res://scenes/game_scene/paint_bucket/paint_bucket.
 @onready var tutorial_tile: TileMapLayer = $TutorialText
 @onready var spaceship_tile: TileMapLayer = $Spaceship
 
-# Audio
-@onready var melee: AudioStreamPlayer = $AudioController/Melee
-
 func _ready() -> void:
 	# Player
 	DUMMY.player_eliminated.connect(player_killed)

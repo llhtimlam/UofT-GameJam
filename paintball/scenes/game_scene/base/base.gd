@@ -9,7 +9,6 @@ var defender: CharacterBody2D
 @onready var colorwheel_clone: Node2D = $ColorWheelClone
 @onready var hurtbox_clone: CollisionShape2D = $CollisionShape2DClone
 @onready var return_colour_audio: AudioStreamPlayer = $ReturnColour
-@onready var zone_captured_audio: AudioStreamPlayer = $ZoneCaptured
 
 var score: Vector3 = Vector3.ZERO: # Format: (P1, Turret, P2)
 	set(value):
