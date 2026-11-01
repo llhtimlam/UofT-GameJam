@@ -162,7 +162,7 @@ func _ready() -> void:
 	
 	# Debug
 	#await get_tree().create_timer(5.0).timeout
-	p1_base_instance.win()
+	#p1_base_instance.win()
 	
 func win(team_id: int):
 	turret.ai_enabled = false

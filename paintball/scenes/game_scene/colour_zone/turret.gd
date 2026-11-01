@@ -3,7 +3,7 @@ extends StaticBody2D
 signal last_hit_attacker
 
 @export var stop_damage: bool = false
-@export var ai_enabled: bool = false
+@export var ai_enabled: bool = true
 
 @onready var capture_bar: ProgressBar = $CaptureBar
 

@@ -145,8 +145,12 @@ script = ExtResource("1_nrhys")
 
 [node name="Camera2D" type="Camera2D" parent="." unique_id=1764947080]
 process_callback = 0
+limit_top = -936
+limit_bottom = -288
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=1930260672]
+z_index = 30
+z_as_relative = false
 scale = Vector2(2, 2)
 sprite_frames = SubResource("SpriteFrames_5dyy2")
 animation = &"idle"
@@ -177,7 +181,7 @@ shape = SubResource("RectangleShape2D_13qdw")
 [node name="Center" type="Marker2D" parent="." unique_id=1906815753]
 
 [node name="LaunchPoint" type="Marker2D" parent="Center" unique_id=1244710761]
-position = Vector2(32, 0)
+position = Vector2(24, 0)
 
 [node name="AimDot" type="Sprite2D" parent="Center/LaunchPoint" unique_id=752757155]
 z_index = 27
