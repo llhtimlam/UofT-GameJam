@@ -96,8 +96,6 @@ position = Vector2(0, -48)
 
 [node name="Camera2D" type="Camera2D" parent="." unique_id=1764947080]
 process_callback = 0
-limit_top = -936
-limit_bottom = -288
 
 [node name="StunBar" type="TextureProgressBar" parent="." unique_id=643186231]
 texture_filter = 2
