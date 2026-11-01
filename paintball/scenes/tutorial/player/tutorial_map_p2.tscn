@@ -776,12 +776,14 @@ position = Vector2(-2568, -513)
 script = ExtResource("104_c62ox")
 dummy = true
 control_type = "AI"
+PLAYER_ID = 3
 
 [node name="Dummy2" parent="." unique_id=1916540062 instance=ExtResource("104_lh36l")]
 position = Vector2(-1651, -813)
 script = ExtResource("104_c62ox")
 dummy = true
 control_type = "AI"
+PLAYER_ID = 4
 HEALTH = 1.0
 
 [node name="Dummy3" parent="." unique_id=1930823637 instance=ExtResource("104_lh36l")]
@@ -789,6 +791,7 @@ position = Vector2(-2255, -367)
 script = ExtResource("104_c62ox")
 dummy = true
 control_type = "AI"
+PLAYER_ID = 5
 
 [node name="P1Base" type="Marker2D" parent="." unique_id=602379840]
 position = Vector2(-2928, -750)

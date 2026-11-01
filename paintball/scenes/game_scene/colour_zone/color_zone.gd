@@ -67,6 +67,8 @@ func _process(_delta: float) -> void:
 			capture_by(player)
 			
 func capture_by(player: CharacterBody2D) -> void:
+	if is_captured:
+		return
 	zone_captured_audio.play()
 	captured_team = player.TEAM_ID
 	turret.TEAM_ID = captured_team

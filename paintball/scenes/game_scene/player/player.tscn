@@ -147,6 +147,8 @@ script = ExtResource("1_tcwrj")
 process_callback = 0
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=2087237235]
+z_index = 30
+z_as_relative = false
 scale = Vector2(2, 2)
 sprite_frames = SubResource("SpriteFrames_28kot")
 animation = &"idle"
@@ -177,7 +179,7 @@ shape = SubResource("RectangleShape2D_13qdw")
 [node name="Center" type="Marker2D" parent="." unique_id=1906815753]
 
 [node name="LaunchPoint" type="Marker2D" parent="Center" unique_id=1244710761]
-position = Vector2(32, 0)
+position = Vector2(24, 0)
 
 [node name="AimDot" type="Sprite2D" parent="Center/LaunchPoint" unique_id=906158970]
 z_index = 27

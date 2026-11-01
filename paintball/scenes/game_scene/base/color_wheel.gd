@@ -26,17 +26,17 @@ var display_middle_rgb: Vector3 = Vector3.ZERO:
 	set(value):
 		display_middle_rgb = value
 		if is_inside_tree() and display_triangle and display_triangle.material is ShaderMaterial:
-			display_triangle.material.set_shader_parameter("c1", powv(value,2.2))
+			display_triangle.material.set_shader_parameter("c1", display_middle_rgb)
 var display_left_rgb: Vector3 = Vector3.ZERO:
 	set(value):
 		display_left_rgb = value
 		if is_inside_tree() and display_triangle and display_triangle.material is ShaderMaterial:
-			display_triangle.material.set_shader_parameter("c2", powv(value,2.2))
+			display_triangle.material.set_shader_parameter("c2", display_left_rgb)
 var display_right_rgb: Vector3 = Vector3.ZERO:
 	set(value):
 		display_right_rgb = value
 		if is_inside_tree() and display_triangle and display_triangle.material is ShaderMaterial:
-			display_triangle.material.set_shader_parameter("c3", powv(value,2.2))
+			display_triangle.material.set_shader_parameter("c3", display_right_rgb)
 
 # Progress bar input: 0.0 to 100.0 Progress Bar Percentages (float)
 var display_middle_pct: float = 0.0:
