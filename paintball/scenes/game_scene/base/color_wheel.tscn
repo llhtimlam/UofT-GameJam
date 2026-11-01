@@ -11,12 +11,10 @@
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_yivnm"]
 shader = ExtResource("1_olyei")
-shader_parameter/c1 = Vector3(1, 0, 0)
-shader_parameter/c2 = Vector3(0, 1, 0)
-shader_parameter/c3 = Vector3(0, 0, 1)
-shader_parameter/p1 = 1.0
-shader_parameter/p2 = 1.0
-shader_parameter/p3 = 1.0
+shader_parameter/custom_color_middle = Vector3(0.72, 0.08, 0)
+shader_parameter/custom_color_left = Vector3(0, 1, 0)
+shader_parameter/custom_color_right = Vector3(0, 0, 1.005)
+shader_parameter/fill_percentage = 0.0
 
 [sub_resource type="Animation" id="Animation_pdqay"]
 length = 0.001

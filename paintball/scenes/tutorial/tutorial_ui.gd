@@ -37,6 +37,8 @@ func start_game(player: CharacterBody2D, player_id: int, player_team: int) -> vo
 	if p1_ready and p2_ready:
 		ui_instance = UI_SCENE.instantiate()
 		add_child(ui_instance)
+		container1.queue_free()
+		container2.queue_free()
 
 
 func _on_player_player_eliminated(player: CharacterBody2D, attacker_id: int, attacker_team: int) -> void:

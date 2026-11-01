@@ -1,8 +1,12 @@
 [gd_scene format=3 uid="uid://bs0v5ghu01fwr"]
 
 [ext_resource type="Script" uid="uid://d0jmcs1fcls3u" path="res://scenes/game_scene/melee/melee.gd" id="1_eik8v"]
-[ext_resource type="Texture2D" uid="uid://miqo1wbx3pow" path="res://icon.svg" id="2_f8ttp"]
+[ext_resource type="Texture2D" uid="uid://bliubps7k0jbu" path="res://assets/player/Player1BasicSprite.png" id="2_ff8q8"]
 [ext_resource type="AudioStream" uid="uid://b363j5sswbq4i" path="res://assets/sounds/sfx/melee.ogg" id="3_ff8q8"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_um714"]
+atlas = ExtResource("2_ff8q8")
+region = Rect2(160, 32, 32, 32)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_xrivr"]
 size = Vector2(128, 64)
@@ -15,12 +19,14 @@ script = ExtResource("1_eik8v")
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=1197881797]
 z_index = 29
 z_as_relative = false
-scale = Vector2(1, 0.5)
-texture = ExtResource("2_f8ttp")
+position = Vector2(41, 31)
+scale = Vector2(4, 4)
+texture = SubResource("AtlasTexture_um714")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1601651630]
+position = Vector2(8, -1)
 shape = SubResource("RectangleShape2D_xrivr")
 
 [node name="MeleeAudio" type="AudioStreamPlayer" parent="." unique_id=2009071376]
 stream = ExtResource("3_ff8q8")
-volume_db = -3.0
+volume_db = -10.0
