@@ -399,10 +399,17 @@ func _physics_process(delta: float) -> void:
 		
 			if facing_dir == -1.0:
 				shoot_angle = PI - aim_angle
+				aim_dot.flip_v = true
 			else:
 				shoot_angle = aim_angle
+				aim_dot.flip_v = false
 			center.rotation = shoot_angle
 			
+			if shoot_angle <= PI/2:
+				$AnimatedSprite2D.flip_h = false
+			else:
+				$AnimatedSprite2D.flip_h = true
+				
 			if input_shoot and aim_cd <= 0:
 				shoot_projectile(PROJECTILE_DMG, PROJECTILE_SPEED, PROJECTILE_KNOCKBACK, facing_dir, shoot_angle, PLAYER_ID ,TEAM_ID)
 				exit_aiming()
