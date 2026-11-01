@@ -461,6 +461,9 @@ func _physics_process(delta: float) -> void:
 		self.visible = false
 		set_physics_process(false)
 	
+	# Camera
+	move_and_scale_camera()
+	
 func take_damage(amount: float, attacker_id: int, attacker_team: int) -> void:
 	if is_dead:
 		return
@@ -599,7 +602,6 @@ func update_color() -> void:
 	
 	aim_dot.modulate = $AnimatedSprite2D.self_modulate
 	HealthBar.add_theme_stylebox_override("fill", fill_style)
-
 
 func move_and_scale_camera():
 	var camera_target = Vector2(clamp(position.x,CAMERA_MIN_X,CAMERA_MAX_X),CAMERA_Y)

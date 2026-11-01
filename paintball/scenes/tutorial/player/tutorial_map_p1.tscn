@@ -426,7 +426,7 @@ autoplay = "default"
 
 [node name="Haze" type="Sprite2D" parent="." unique_id=495667480]
 z_index = -100
-position = Vector2(-241, -637)
+position = Vector2(-241.00002, -636)
 scale = Vector2(0.66049385, 0.66049385)
 texture = ExtResource("2_g40di")
 
@@ -444,8 +444,56 @@ texture = ExtResource("2_g40di")
 
 [node name="Haze4" type="Sprite2D" parent="." unique_id=1008672749]
 z_index = -100
-position = Vector2(6710, -638)
+position = Vector2(6710, -636)
 scale = Vector2(0.66049385, 0.66049385)
+texture = ExtResource("2_g40di")
+
+[node name="Haze5" type="Sprite2D" parent="." unique_id=1865465459]
+z_index = -100
+position = Vector2(-241.00002, -1491.66)
+scale = Vector2(0.66049385, -0.66)
+texture = ExtResource("2_g40di")
+
+[node name="Haze6" type="Sprite2D" parent="." unique_id=1525470410]
+z_index = -100
+position = Vector2(2076, -1491.66)
+scale = Vector2(0.66049385, -0.66)
+texture = ExtResource("2_g40di")
+
+[node name="Haze7" type="Sprite2D" parent="." unique_id=1450759519]
+z_index = -100
+position = Vector2(4393, -1491.66)
+scale = Vector2(0.66049385, -0.66)
+texture = ExtResource("2_g40di")
+
+[node name="Haze8" type="Sprite2D" parent="." unique_id=1665126924]
+z_index = -100
+position = Vector2(6710, -1491.66)
+scale = Vector2(0.66049385, -0.66)
+texture = ExtResource("2_g40di")
+
+[node name="Haze9" type="Sprite2D" parent="." unique_id=1681590644]
+z_index = -100
+position = Vector2(-241.00002, 219.66)
+scale = Vector2(0.66049385, -0.66)
+texture = ExtResource("2_g40di")
+
+[node name="Haze10" type="Sprite2D" parent="." unique_id=219553648]
+z_index = -100
+position = Vector2(2076, 219.66)
+scale = Vector2(0.66049385, -0.66)
+texture = ExtResource("2_g40di")
+
+[node name="Haze11" type="Sprite2D" parent="." unique_id=454939040]
+z_index = -100
+position = Vector2(4393, 219.66)
+scale = Vector2(0.66049385, -0.66)
+texture = ExtResource("2_g40di")
+
+[node name="Haze12" type="Sprite2D" parent="." unique_id=1931330803]
+z_index = -100
+position = Vector2(6710, 219.66)
+scale = Vector2(0.66049385, -0.66)
 texture = ExtResource("2_g40di")
 
 [node name="OldTileMapLayer" type="TileMapLayer" parent="." unique_id=1805886352]
