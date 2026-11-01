@@ -4,8 +4,8 @@ extends Node2D
 const PLAYER_SCENE = preload("res://scenes/game_scene/player/player.tscn")
 var users: Array[String] = ["P1", "P2"]
 var player_instances: Array[CharacterBody2D] = []
-@export var PLAYER1: Node2D
-@export var PLAYER2: Node2D
+@export var PLAYER: Node2D
+@export var DUMMY: Node2D
 
 @onready var P1Spawn: Marker2D = $Player1SpawnPoint
 @onready var P2Spawn: Marker2D = $Player2SpawnPoint
@@ -21,26 +21,15 @@ var p2_base_instance: Node2D = null
 # Platform
 @onready var platform1: TileMapLayer = $Platform1
 @onready var platform2: TileMapLayer = $Platform2
-@onready var platform3: TileMapLayer = $Platform3
-@onready var platform12: TileMapLayer = $Platform12
-@onready var platform23: TileMapLayer = $Platform23
-@onready var platform31: TileMapLayer = $Platform31
 @onready var platform12a: TileMapLayer = $Platform12a
 @onready var platform12b: TileMapLayer = $Platform12b
 @onready var platform21a: TileMapLayer = $Platform21a
 @onready var platform21b: TileMapLayer = $Platform21b
-@onready var platform13a: TileMapLayer = $Platform13a
-@onready var platform13b: TileMapLayer = $Platform13b
-@onready var platform31a: TileMapLayer = $Platform31a
-@onready var platform31b: TileMapLayer = $Platform31b
-@onready var platform23a: TileMapLayer = $Platform23a
-@onready var platform23b: TileMapLayer = $Platform23b
-@onready var platform32a: TileMapLayer = $Platform32a
-@onready var platform32b: TileMapLayer = $Platform32b
-var PLATFORM_LIFETIME: float = 8.0
-var PLATFORM_VARIANCE: float = 2.0
-var PLATFORM_TRANSITION_TIME: float = 3.0
-var PLATFORM_OVERLAP_TIME: float = 5.0
+@onready var platform12: TileMapLayer = $Platform12
+var PLATFORM_LIFETIME: float = 2.0
+var PLATFORM_VARIANCE: float = 0.0
+var PLATFORM_TRANSITION_TIME: float = 2.0
+var PLATFORM_OVERLAP_TIME: float = 2.0
 
 var current_platform: int = 1
 var next_platform: int
@@ -60,87 +49,58 @@ const BUCKET_SCENE = preload("res://scenes/game_scene/paint_bucket/paint_bucket.
 # Audio
 @onready var melee: AudioStreamPlayer = $AudioController/Melee
 
-
 func _ready() -> void:
 	# Player
-	PLAYER1.player_eliminated.connect(player_killed)
-	PLAYER2.player_eliminated.connect(player_killed)
-	# Load User
-	"""
-	var player1_instance = PLAYER_SCENE.instantiate()
-	player1_instance.TEAM_ID = 1
-	player1_instance.PLAYER_ID = 1
-	player1_instance.control_type = "P1"
-	player1_instance.global_position = P1Spawn.global_position
-	player1_instance.player_eliminated.connect(player_killed)
-	player_instances.append(player1_instance)
-	add_child.call_deferred(player1_instance)
-	
-	var player2_instance = PLAYER_SCENE.instantiate()
-	player2_instance.TEAM_ID = 2
-	player2_instance.PLAYER_ID = 2
-	player2_instance.control_type = "P2"
-	player2_instance.global_position = P2Spawn.global_position
-	player2_instance.player_eliminated.connect(player_killed)
-	player_instances.append(player2_instance)
-	add_child.call_deferred(player2_instance)
-	"""
+	DUMMY.player_eliminated.connect(player_killed)
 	# Base
 	p1_base_instance = BASE_SCENE.instantiate()
 	p1_base_instance.TEAM_ID = 1
-	p1_base_instance.defender = PLAYER1
-	p1_base_instance.score = Vector3(64,0,0)
+	p1_base_instance.defender = PLAYER
+	p1_base_instance.score = Vector3(255,0,0)
 	add_child(p1_base_instance)
 	p1_base_instance.global_position = P1Base.global_position
 	p1_base_instance.colorwheel_clone.global_position = CloneWheel.global_position
 	p1_base_instance.hurtbox_clone.global_position = CloneWheel.global_position
+	p1_base_instance.colorwheel_clone.scale = Vector2(0.5, 0.5)
+	p1_base_instance.hurtbox_clone.scale = Vector2(0.5, 0.5)
 	
 	p2_base_instance = BASE_SCENE.instantiate()
 	p2_base_instance.TEAM_ID = 2
-	p2_base_instance.defender = PLAYER2
-	p2_base_instance.score = Vector3(0,0,64)
+	p2_base_instance.defender = DUMMY
+	p2_base_instance.score = Vector3(0,0,255)
 	add_child(p2_base_instance)
 	p2_base_instance.global_position = P2Base.global_position
 	p2_base_instance.colorwheel_clone.global_position = CloneWheel.global_position
 	p2_base_instance.hurtbox_clone.global_position = CloneWheel.global_position
+	p2_base_instance.colorwheel_clone.scale = Vector2(0.5, 0.5)
+	p2_base_instance.hurtbox_clone.scale = Vector2(0.5, 0.5)
 	
 	# Setup rope
 	var rope_instance_p1_base = ROPE_SCENE.instantiate()
 	add_child(rope_instance_p1_base)
 	rope_instance_p1_base.tilemap = rope_tile
-	rope_instance_p1_base.setup_rope(Vector2i(-23,-28), Vector2i(-23,-9))
+	rope_instance_p1_base.setup_rope(Vector2i(27,-24), Vector2i(27,-20))
 	var rope_instance_turret_left = ROPE_SCENE.instantiate()
 	add_child(rope_instance_turret_left)
 	rope_instance_turret_left.tilemap = rope_tile
-	rope_instance_turret_left.setup_rope(Vector2i(-23,-28), Vector2i(-23,-9))
+	rope_instance_turret_left.setup_rope(Vector2i(31,-24), Vector2i(31,-19))
 	var rope_instance_turret_right = ROPE_SCENE.instantiate()
 	add_child(rope_instance_turret_right)
 	rope_instance_turret_right.tilemap = rope_tile
-	rope_instance_turret_right.setup_rope(Vector2i(23,-28), Vector2i(23,-9))
+	rope_instance_turret_right.setup_rope(Vector2i(129,-23), Vector2i(129,-20))
 	var rope_instance_p2_base = ROPE_SCENE.instantiate()
 	add_child(rope_instance_p2_base)
 	rope_instance_p2_base.tilemap = rope_tile
-	rope_instance_p2_base.setup_rope(Vector2i(23,-28), Vector2i(23,-9))
+	rope_instance_p2_base.setup_rope(Vector2i(140,-23), Vector2i(140,-20))
 	
 	#Setup Platform
 	platform1.enabled = false
 	platform2.enabled = false
-	platform3.enabled = false
-	platform12.enabled = false
-	platform23.enabled = false
-	platform31.enabled = false
 	platform12a.enabled = false
 	platform12b.enabled = false
 	platform21a.enabled = false
 	platform21b.enabled = false
-	platform13a.enabled = false
-	platform13b.enabled = false
-	platform31a.enabled = false
-	platform31b.enabled = false
-	platform23a.enabled = false
-	platform23b.enabled = false
-	platform32a.enabled = false
-	platform32b.enabled = false
+	platform12.enabled = false
 	
 func player_killed(player, attacker_id: int, attacker_team: int):
 	#TODO: mobile spawn point once capture points exist
@@ -199,7 +159,7 @@ func _physics_process(delta: float) -> void:
 				transition_step = 0
 	
 func _pick_next_platform() -> void:
-	var choices: Array[int] = [1, 2, 3]
+	var choices: Array[int] = [1, 2]
 	choices.erase(current_platform)
 	next_platform = choices.pick_random()
 
@@ -209,20 +169,10 @@ func _advance_transition() -> void:
 			match next_platform:
 				2:
 					_transition_1_to_2()
-				3:
-					_transition_1_to_3()
 		2:
 			match next_platform:
 				1:
 					_transition_2_to_1()
-				3:
-					_transition_2_to_3()
-		3:
-			match next_platform:
-				1:
-					_transition_3_to_1()
-				2:
-					_transition_3_to_2()
 	
 func _transition_1_to_2() -> void:
 	match transition_step:
@@ -238,22 +188,6 @@ func _transition_1_to_2() -> void:
 		3:
 			platform12b.enabled = false
 			platform2.enabled = true
-			current_platform = next_platform
-
-func _transition_1_to_3() -> void:
-	match transition_step:
-		0:
-			platform1.enabled = false
-			platform13a.enabled = true
-		1:
-			platform13a.enabled = false
-			platform31.enabled = true
-		2:
-			platform31.enabled = false
-			platform13b.enabled = true
-		3:
-			platform13b.enabled = false
-			platform3.enabled = true
 			current_platform = next_platform
 
 func _transition_2_to_1() -> void:
@@ -272,53 +206,6 @@ func _transition_2_to_1() -> void:
 			platform1.enabled = true
 			current_platform = next_platform
 
-func _transition_2_to_3() -> void:
-	match transition_step:
-		0:
-			platform2.enabled = false
-			platform23a.enabled = true
-		1:
-			platform23a.enabled = false
-			platform23.enabled = true
-		2:
-			platform23.enabled = false
-			platform23b.enabled = true
-		3:
-			platform23b.enabled = false
-			platform3.enabled = true
-			current_platform = next_platform
 
-func _transition_3_to_1() -> void:
-	match transition_step:
-		0:
-			platform3.enabled = false
-			platform31a.enabled = true
-		1:
-			platform31a.enabled = false
-			platform31.enabled = true
-		2:
-			platform31.enabled = false
-			platform31b.enabled = true
-		3:
-			platform31b.enabled = false
-			platform1.enabled = true
-			current_platform = next_platform
-
-func _transition_3_to_2() -> void:
-	match transition_step:
-		0:
-			platform3.enabled = false
-			platform32a.enabled = true
-		1:
-			platform32a.enabled = false
-			platform23.enabled = true
-		2:
-			platform23.enabled = false
-			platform32b.enabled = true
-		3:
-			platform32b.enabled = false
-			platform2.enabled = true
-			current_platform = next_platform
-
-func _on_player_2_player_eliminated(player: CharacterBody2D) -> void:
+func _on_player_player_ready(player: CharacterBody2D, player_id: int, player_team: int) -> void:
 	pass # Replace with function body.

@@ -1,36 +1,98 @@
-[gd_scene format=3 uid="uid://bfl7a1ofya0k7"]
+[gd_scene format=3 uid="uid://cuvevc1tn3l7j"]
 
-[ext_resource type="Script" uid="uid://1alxau3d2mnl" path="res://scenes/camera/camera_controller.gd" id="1_5h3r2"]
-[ext_resource type="Shader" uid="uid://b3cdj4fsrtpki" path="res://scenes/camera/split_screen.gdshader" id="2_7aaay"]
+[ext_resource type="Script" uid="uid://b1ig2okrgdmev" path="res://scenes/tutorial/tutorial_ui.gd" id="1_5h3r2"]
+[ext_resource type="PackedScene" uid="uid://pa5m0tkkqu7f" path="res://scenes/tutorial/player/tutorial_map_p1.tscn" id="2_7aaay"]
+[ext_resource type="PackedScene" uid="uid://bispn0b063p0t" path="res://scenes/tutorial/player/tutorial_map_p2.tscn" id="3_7aaay"]
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_13qdw"]
-shader = ExtResource("2_7aaay")
-shader_parameter/viewport_size = Vector2(0, 0)
-shader_parameter/split_active = false
-shader_parameter/player1_position = Vector2(0, 0)
-shader_parameter/player2_position = Vector2(0, 0)
-shader_parameter/split_line_thickness = 3.0000000447036
-shader_parameter/split_line_color = Color(1, 1, 1, 1)
+[sub_resource type="Environment" id="Environment_6amc0"]
+background_mode = 3
+background_canvas_max_layer = 1
+glow_enabled = true
+glow_levels/1 = 2.0
+glow_levels/2 = 2.0
+glow_levels/3 = 1.0
+glow_levels/4 = 0.0
+glow_bloom = 0.1
+glow_hdr_threshold = 0.4
 
-[sub_resource type="ViewportTexture" id="ViewportTexture_7aaay"]
-viewport_path = NodePath("Viewport1")
+[sub_resource type="Environment" id="Environment_om0p0"]
+background_mode = 3
+glow_enabled = true
+glow_levels/1 = 2.0
+glow_levels/2 = 2.0
+glow_levels/3 = 2.0
+glow_levels/4 = 2.0
+glow_levels/5 = 2.0
+glow_hdr_threshold = 0.4
 
-[node name="CameraController" type="Node2D" unique_id=1234799232]
+[node name="UI" type="CanvasLayer" unique_id=2008955717]
+follow_viewport_enabled = true
 script = ExtResource("1_5h3r2")
-max_separation = 10.0
 
-[node name="Viewport1" type="SubViewport" parent="." unique_id=783318892]
-size = Vector2i(1152, 648)
+[node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=1182529437]
+environment = SubResource("Environment_6amc0")
 
-[node name="Camera1" type="Camera2D" parent="Viewport1" unique_id=952974612]
+[node name="ColorRect" type="ColorRect" parent="." unique_id=2045100640]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
 
-[node name="Viewport2" type="SubViewport" parent="." unique_id=1231154027]
-size = Vector2i(1152, 648)
+[node name="SubViewportContainer1" type="SubViewportContainer" parent="." unique_id=685893217]
+texture_filter = 1
+anchors_preset = -1
+anchor_right = 0.499
+anchor_bottom = 1.0
+size_flags_horizontal = 3
+stretch = true
 
-[node name="Camera2" type="Camera2D" parent="Viewport2" unique_id=183669669]
+[node name="Viewport1" type="SubViewport" parent="SubViewportContainer1" unique_id=1904170426]
+disable_3d = true
+own_world_3d = true
+handle_input_locally = false
+canvas_item_default_texture_filter = 0
+size = Vector2i(574, 648)
+size_2d_override = Vector2i(574, 648)
+size_2d_override_stretch = true
+render_target_update_mode = 4
 
-[node name="View" type="TextureRect" parent="." unique_id=89010114]
-material = SubResource("ShaderMaterial_13qdw")
-offset_right = 1152.0
-offset_bottom = 648.0
-texture = SubResource("ViewportTexture_7aaay")
+[node name="WorldEnvironment" type="WorldEnvironment" parent="SubViewportContainer1/Viewport1" unique_id=980375645]
+environment = SubResource("Environment_om0p0")
+
+[node name="Map1" parent="SubViewportContainer1/Viewport1" unique_id=822111050 instance=ExtResource("2_7aaay")]
+
+[node name="SubViewportContainer2" type="SubViewportContainer" parent="." unique_id=1850222501]
+texture_filter = 3
+anchors_preset = -1
+anchor_left = 0.501
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+stretch = true
+
+[node name="Viewport2" type="SubViewport" parent="SubViewportContainer2" unique_id=641527814]
+disable_3d = true
+own_world_3d = true
+handle_input_locally = false
+canvas_item_default_texture_filter = 0
+size = Vector2i(574, 648)
+size_2d_override = Vector2i(574, 648)
+size_2d_override_stretch = true
+render_target_update_mode = 4
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="SubViewportContainer2/Viewport2" unique_id=1933334175]
+environment = SubResource("Environment_om0p0")
+
+[node name="Map2" parent="SubViewportContainer2/Viewport2" unique_id=1724583917 instance=ExtResource("3_7aaay")]
+
+[connection signal="player_ready" from="SubViewportContainer1/Viewport1/Map1/Player" to="." method="_on_player_player_ready"]
+[connection signal="player_ready" from="SubViewportContainer2/Viewport2/Map2/Player" to="." method="_on_player_player_ready"]
+
+[editable path="SubViewportContainer1/Viewport1/Map1"]
+[editable path="SubViewportContainer1/Viewport1/Map1/ColorZone"]
+[editable path="SubViewportContainer2/Viewport2/Map2"]
+[editable path="SubViewportContainer2/Viewport2/Map2/ColorZone"]

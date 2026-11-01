@@ -32,6 +32,10 @@ window/stretch/aspect="expand"
 attack=""
 turret=""
 
+[gui]
+
+theme/custom_font="uid://bkjktwv0q73sb"
+
 [input]
 
 Player1_UP={

@@ -1,0 +1,277 @@
+extends StaticBody2D
+
+signal last_hit_attacker
+
+@onready var capture_bar: ProgressBar = $CaptureBar
+
+const MAX_HP : float = 40
+var hp : float = MAX_HP
+var TEAM_ID: int = -1
+
+var MAP_ATTACK_VERTICAL_CD: float = 4.0
+var MAP_ATTACK_HORIZONTAL_CD: float = 15.0
+var ATTACK_CD: float = 10.0
+@export var SHOTGUN_PROJECTILE_DMG: float = 0.0
+@export var SHOTGUN_PROJECTILE_SPEED: float = 300.0
+@export var SHOTGUN_PROJECTILE_KNOCKBACK: float = 100.0
+@export var RIFLE_PROJECTILE_DMG: float = 0.0
+@export var RIFLE_PROJECTILE_SPEED: float = 300.0
+@export var RIFLE_PROJECTILE_KNOCKBACK: float = 400.0
+@export var MAP_ATTACK_DMG: float = 0.0
+@export var MAP_ATTACK_SPEED: float = 300.0
+@export var MAP_ATTACK_KNOCKBACK: float = 600.0
+@export var IFRAME_CD: float = 0.3
+@export var ASCEND_SPEED: float = 700.0
+@export var DESCEND_SPEED: float = 100.0
+var AGGRO_CD: float = PI
+
+var iframe: float = 0.0
+
+var map_attack_vertical_cd: float = 5.0
+var map_attack_horizontal_cd: float = 12.0
+var map_attack_preset: int = 1
+var attack_cd: float = 2.0
+var attack_preset: int = 1
+
+var vertical_x_preset1: Array[float] = [-432, -216, 0, 216, 432]
+var vertical_x_preset2: Array[float] = [-360, -144, 72, 288]
+var vertical_x_preset3: Array[float] = [-288, -72, 144, 360]
+var horizontal_y_preset1: Array[float] = [-1056]
+var horizontal_y_preset2: Array[float] = [-1090]
+var horizontal_y_preset3: Array[float] = [-1130]
+
+var aimable_targets: Array[CharacterBody2D]
+var aim_target: CharacterBody2D
+var aggro_timer: float = 0.0
+var target_direction: Vector2
+var target_angle: float
+var shoot_angle: float
+var facing_dir: float = 1.0
+
+const SHOTGUN_SCENE = preload("res://scenes/game_scene/projectile/shotgun.tscn")
+const RIFLE_SCENE = preload("res://scenes/game_scene/projectile/rifle.tscn")
+@onready var center: Marker2D = $Center
+@onready var projectile: Marker2D = $Center/LaunchPoint
+@onready var attack_detection: Area2D = $AttackZone
+@onready var hurtbox: CollisionShape2D = $CollisionShape2D
+
+const MAP_ATTACK_VERTICAL_SCENE = preload("res://scenes/game_scene/colour_zone/map_attack/map_attack_vertical.tscn")
+const MAP_ATTACK_HORIZONTAL_SCENE = preload("res://scenes/game_scene/colour_zone/map_attack/map_attack_horizontal.tscn")
+
+# Bucket spawn rate
+var BUCKET_SPAWN_CHANCE_ON_ATTACK: float = 0.05
+var BUCKET_SPAWN_CHANCE_ON_HIT: float = 1.0
+var BUCKET_REWARD: float = 48.0
+var BUCKET_REWARD_VARIANCE: float = 0.0
+
+# Shadow
+@onready var shadow_1: AnimatedSprite2D = $Skeleton2D/Head/Head/HeadShadow
+@onready var shadow_2: AnimatedSprite2D = $Skeleton2D/Head/Body/Body/BodyShadow
+@onready var shadow_3: AnimatedSprite2D = $Skeleton2D/Head/Body/Leg/Leg/LegShadow
+@onready var shadow_4: AnimatedSprite2D = $Hand/HandShadow
+var shadows: Array = []
+
+@onready var anim_player: AnimationPlayer = $AnimationPlayer
+@onready var attack_anim_player: AnimationPlayer = $AttackAnimationPlayer
+
+func _ready() -> void:
+	add_to_group("turret")
+	shadows = [shadow_1, shadow_2, shadow_3, shadow_4]
+	attack_cd = ATTACK_CD
+	attack_detection.body_entered.connect(_on_body_entered)
+	attack_detection.area_entered.connect(_on_area_entered)
+	attack_detection.body_exited.connect(_on_body_exited)
+	attack_detection.area_exited.connect(_on_area_exited)
+	anim_player.play("Idle")
+
+func _physics_process(delta: float) -> void:
+	map_attack_vertical_cd = max(map_attack_vertical_cd - delta, 0.0)
+	map_attack_horizontal_cd = max(map_attack_horizontal_cd - delta, 0.0)
+	aggro_timer = max(aggro_timer - delta, 0.0)
+	attack_cd = max(attack_cd - delta, 0.0)
+	iframe = max(iframe - delta, 0.0)
+	
+	# iframe mechanic (fly up when attacked)
+	if iframe > 0.0:
+		position.y -= ASCEND_SPEED * delta
+		if not hurtbox.disabled:
+			hurtbox.set_deferred("disabled", true)
+	else:
+		position.y = move_toward(position.y, 0, DESCEND_SPEED * delta)
+		if hurtbox.disabled:
+			hurtbox.set_deferred("disabled", false)
+	
+	if false:
+		_map_attack_vertical_preset()
+		map_attack_vertical_cd = MAP_ATTACK_VERTICAL_CD
+	if false:
+		_map_attack_horizontal_preset()
+		map_attack_horizontal_cd = MAP_ATTACK_HORIZONTAL_CD
+	
+	# Random Aim target
+	aimable_targets = aimable_targets.filter(
+		func(target):
+			return is_instance_valid(target) and not target.is_dead and target.TEAM_ID != TEAM_ID
+	)
+	if aim_target != null and not aimable_targets.has(aim_target):
+		_pick_random_target()
+	if aimable_targets.size() > 0:
+		if aim_target == null or aggro_timer <= 0.0:
+			_pick_random_target()
+			aggro_timer = AGGRO_CD
+	else:
+		aim_target = null
+	if aim_target != null:
+		target_direction = center.global_position.direction_to(aim_target.global_position)
+		facing_dir = signf(target_direction.x) 
+		target_angle = target_direction.angle()
+		center.rotation = target_angle
+	else:
+		center.rotation = PI/2
+	if false:
+		if aim_target != null and is_equal_approx(center.rotation, target_angle):
+			if attack_preset == 1:
+				shoot_shotgun_projectile(SHOTGUN_PROJECTILE_DMG, SHOTGUN_PROJECTILE_SPEED, SHOTGUN_PROJECTILE_KNOCKBACK, facing_dir, target_angle, aim_target, -1 , TEAM_ID)
+			elif attack_preset == 2:
+				shoot_rifle_projectile(RIFLE_PROJECTILE_DMG, RIFLE_PROJECTILE_SPEED, RIFLE_PROJECTILE_KNOCKBACK, facing_dir, aim_target, -1 ,TEAM_ID)
+			attack_cd = ATTACK_CD
+			attack_anim_player.play("Attack")
+			attack_preset = [1, 2].pick_random()
+			# Spawn Bucket
+			spawn_bucket(BUCKET_SPAWN_CHANCE_ON_ATTACK)
+
+# Utility Function
+func _on_body_entered(body: Node2D) -> void:
+	_hit_target(body, true)
+
+func _on_area_entered(area: Area2D) -> void:
+	_hit_target(area, true)
+
+func _on_body_exited(body: Node2D) -> void:
+	_hit_target(body, false)
+
+func _on_area_exited(area: Area2D) -> void:
+	_hit_target(area, false)
+
+# Hitbox Manager
+func _hit_target(target: Node, hit: bool) -> void:
+	if target.is_in_group("player"):
+		if hit:
+			if not aimable_targets.has(target):
+				aimable_targets.append(target)
+		else:
+			aimable_targets.erase(target)
+	
+func _pick_random_target() -> void:
+	if aimable_targets.size() > 0:
+		aim_target = aimable_targets.pick_random()
+	else:
+		aim_target = null
+
+func shoot_shotgun_projectile(base_damage: float, speed: float, knockback: float, p_facing_dir: float, angle: float, target: CharacterBody2D, attacker_id: int, attacker_team: int) -> void:
+	var shotgun_instance = SHOTGUN_SCENE.instantiate()
+	# Projectile Collision 2
+	shotgun_instance.ATTACKER_ID = attacker_id
+	shotgun_instance.ATTACKER_TEAM = attacker_team
+	shotgun_instance.facing_angle = angle
+	shotgun_instance.facing_dir = p_facing_dir
+	shotgun_instance.target = target
+	shotgun_instance.ray_origin = center
+	shotgun_instance.launch_point = projectile
+	shotgun_instance.damage = base_damage
+	shotgun_instance.speed = speed
+	shotgun_instance.knockback = knockback
+	shotgun_instance.lifetime = 4.0
+	get_parent().get_parent().add_child(shotgun_instance)
+	shotgun_instance.global_position = projectile.global_position
+
+func shoot_rifle_projectile(base_damage: float, speed: float, knockback: float, p_facing_dir: float, target: CharacterBody2D, attacker_id: int, attacker_team: int) -> void:
+	var rifle_instance = RIFLE_SCENE.instantiate()
+	# Projectile Collision 2
+	rifle_instance.ATTACKER_ID = attacker_id
+	rifle_instance.ATTACKER_TEAM = attacker_team
+	rifle_instance.facing_dir = p_facing_dir
+	rifle_instance.target = target
+	rifle_instance.ray_origin = center
+	rifle_instance.launch_point = projectile
+	rifle_instance.damage = base_damage
+	rifle_instance.speed = speed
+	rifle_instance.knockback = knockback
+	rifle_instance.lifetime = 2.5
+	get_parent().get_parent().add_child(rifle_instance)
+	rifle_instance.global_position = projectile.global_position
+
+func _map_attack_vertical_preset() -> int:
+	var vertical_map_attack_preset = [1,2,3].pick_random()
+	for i in _get_vertical_preset(vertical_map_attack_preset):
+		_generate_vertical_map_attack(i)
+	return vertical_map_attack_preset
+	
+func _map_attack_horizontal_preset() -> int:
+	var horizontal_map_attack_preset = [1,2,3].pick_random()
+	for i in _get_horizontal_preset(horizontal_map_attack_preset):
+		_generate_horizontal_map_attack(i)
+	return horizontal_map_attack_preset
+	
+func _get_vertical_preset(id: int) -> Array[float]:
+	match id:
+		1: return vertical_x_preset1
+		2: return vertical_x_preset2
+		_: return vertical_x_preset3
+	
+func _get_horizontal_preset(id: int) -> Array[float]:
+	match id:
+		1: return horizontal_y_preset1
+		2: return horizontal_y_preset2
+		_: return horizontal_y_preset3
+	
+func _generate_vertical_map_attack(x: float) -> void:
+	var map_attack_vertical_instance = MAP_ATTACK_VERTICAL_SCENE.instantiate()
+	# Map Attack Collision 2
+	map_attack_vertical_instance.ATTACKER_ID = -1
+	map_attack_vertical_instance.ATTACKER_TEAM = TEAM_ID
+	map_attack_vertical_instance.facing_dir = signf(x)
+	map_attack_vertical_instance.damage = MAP_ATTACK_DMG
+	map_attack_vertical_instance.knockback = MAP_ATTACK_KNOCKBACK
+	get_parent().get_parent().add_child(map_attack_vertical_instance)
+	map_attack_vertical_instance.global_position = Vector2(x, -1150)
+	
+func _generate_horizontal_map_attack(y: float) -> void:
+	var map_attack_horizontal_instance = MAP_ATTACK_HORIZONTAL_SCENE.instantiate()
+	# Map Attack Collision 2
+	map_attack_horizontal_instance.ATTACKER_ID = -1
+	map_attack_horizontal_instance.ATTACKER_TEAM = TEAM_ID
+	map_attack_horizontal_instance.damage = MAP_ATTACK_DMG
+	map_attack_horizontal_instance.knockback = MAP_ATTACK_KNOCKBACK
+	get_parent().get_parent().add_child(map_attack_horizontal_instance)
+	map_attack_horizontal_instance.global_position = Vector2(0, y)
+	
+func take_damage(damage, _attacker_id, attacker_team) -> void:
+	if attacker_team == TEAM_ID:
+		return
+	hp -= damage
+	iframe = IFRAME_CD
+	capture_bar.value = hp
+	if hp <= 0:
+		hp = MAX_HP
+		last_hit_attacker.emit(attacker_team)
+		spawn_bucket(BUCKET_SPAWN_CHANCE_ON_HIT)
+	
+func spawn_bucket(spawn_chance: float) -> void:
+	if randf() < spawn_chance:
+		var bucket_score_value = randf_range(
+			BUCKET_REWARD - BUCKET_REWARD_VARIANCE,
+			BUCKET_REWARD + BUCKET_REWARD_VARIANCE
+		)
+		Bucket.spawn(
+			get_parent().get_parent(),
+			TEAM_ID,
+			get_parent().get_parent().bucket_spawn_turret.global_position,
+			Vector3(0, bucket_score_value, 0)
+		)
+	
+func update_shadow_color(color: Color) -> void:
+	for shadow in shadows:
+		if shadow:
+			shadow.self_modulate = Color.WHITE
+			shadow.self_modulate = color

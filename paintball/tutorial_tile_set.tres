@@ -1,0 +1,62 @@
+[gd_resource type="TileSet" format=3 uid="uid://bud3eyi0ff07x"]
+
+[ext_resource type="Texture2D" uid="uid://cluxuby0ss7m6" path="res://assets/tileset/spaceship_tileset.png" id="1_vdej1"]
+[ext_resource type="Texture2D" uid="uid://cpt6cmhs4wusy" path="res://assets/tileset/tutorial_tiles.png" id="2_n2koq"]
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_ubhmb"]
+texture = ExtResource("1_vdej1")
+0:0/0 = 0
+1:0/0 = 0
+2:0/0 = 0
+3:0/0 = 0
+4:0/0 = 0
+5:0/0 = 0
+0:1/0 = 0
+1:1/0 = 0
+2:1/0 = 0
+3:1/0 = 0
+4:1/0 = 0
+5:1/0 = 0
+0:2/0 = 0
+1:2/0 = 0
+2:2/0 = 0
+3:2/0 = 0
+4:2/0 = 0
+5:2/0 = 0
+0:3/0 = 0
+1:3/0 = 0
+2:3/0 = 0
+3:3/0 = 0
+4:3/0 = 0
+5:3/0 = 0
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_wghc7"]
+texture = ExtResource("2_n2koq")
+0:0/0 = 0
+1:0/0 = 0
+2:0/0 = 0
+3:0/0 = 0
+4:0/0 = 0
+5:0/0 = 0
+0:1/0 = 0
+1:1/0 = 0
+2:1/0 = 0
+3:1/0 = 0
+4:1/0 = 0
+5:1/0 = 0
+0:2/0 = 0
+1:2/0 = 0
+2:2/0 = 0
+3:2/0 = 0
+4:2/0 = 0
+5:2/0 = 0
+0:3/0 = 0
+1:3/0 = 0
+2:3/0 = 0
+3:3/0 = 0
+4:3/0 = 0
+5:3/0 = 0
+
+[resource]
+sources/0 = SubResource("TileSetAtlasSource_ubhmb")
+sources/1 = SubResource("TileSetAtlasSource_wghc7")
