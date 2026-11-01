@@ -125,7 +125,7 @@ var stun_max: float = 1.
 # Audio
 @onready var melee_audio: AudioStreamPlayer = $MeleeAudio
 
-@onready var camera: Camera2D = $Camera2D
+#@onready var camera: Camera2D = $Camera2D
 
 # User Input Mapping
 #func _input(event: InputEvent) -> void:
@@ -232,9 +232,9 @@ func _physics_process(delta: float) -> void:
 	
 	# UI
 	StunBar.value = stun_cd/stun_max
-	StunBar.Scale = camera.zoom.x
+	#StunBar.Scale = camera.zoom.x
 	ShootBar.value = shoot_cd/SHOOT_CD
-	ShootBar.Scale = camera.zoom.x
+	#ShootBar.Scale = camera.zoom.x
 	HealthBar.value = HEALTH
 	if is_instance_valid(held_bucket):
 		StunBar.Location = Vector2(0,INDICATOR_BUCKET_Y)
@@ -411,6 +411,28 @@ func _physics_process(delta: float) -> void:
 	shoot_cd = max(shoot_cd - delta, 0.0)
 	iframe = max(iframe - delta, 0.0)
 	
+	if velocity.x < 0:
+		melee_hitbox.position = Vector2(-32,0)
+		$AnimatedSprite2D.flip_h = true
+	elif velocity.x > 0:
+		melee_hitbox.position = Vector2(32,0)
+		$AnimatedSprite2D.flip_h = false
+	
+	if melee_hitbox.get_child_count() != 0:
+			$AnimatedSprite2D.play("melee")
+	elif is_climbing:
+		$AnimatedSprite2D.play("climb")
+	elif is_aiming:
+			$AnimatedSprite2D.play("idle")
+	else:
+		if grounded:
+			if velocity.x == 0:
+					$AnimatedSprite2D.play("idle")
+			else:
+				$AnimatedSprite2D.play("run")
+		else:
+			$AnimatedSprite2D.play("jump")
+			
 	# World Boundary
 	if position.y > Y_BOUNDARY:
 		take_damage(100,0,0)
@@ -532,7 +554,7 @@ func enemy_ai() -> void:
 	pass
 
 func update_color() -> void:
-	$Sprite2D.self_modulate = Color.WHITE
+	$AnimatedSprite2D.self_modulate = Color.WHITE
 	var base_color: Color
 	if not fill_style:
 		fill_style = HealthBar.get_theme_stylebox("fill").duplicate()
@@ -540,15 +562,15 @@ func update_color() -> void:
 	match TEAM_ID:
 		1: 
 			base_color = Globals.p1_color
-			$Sprite2D.self_modulate = base_color.lerp(Color.WHITE, Globals.p1_white_blend_intensity)
+			$AnimatedSprite2D.self_modulate = base_color.lerp(Color.WHITE, Globals.p1_white_blend_intensity)
 			fill_style.bg_color = Globals.p1_color
 		2: 
 			base_color = Globals.p2_color
-			$Sprite2D.self_modulate = base_color.lerp(Color.WHITE, Globals.p2_white_blend_intensity)
+			$AnimatedSprite2D.self_modulate = base_color.lerp(Color.WHITE, Globals.p2_white_blend_intensity)
 			fill_style.bg_color = Globals.p2_color
 		_: 
 			base_color = Color.WHITE
-			$Sprite2D.self_modulate = base_color.lerp(Color.WHITE, Globals.turret_white_blend_intensity)
+			$AnimatedSprite2D.self_modulate = base_color.lerp(Color.WHITE, Globals.turret_white_blend_intensity)
 			fill_style.bg_color = Color(0.745, 0., 0.065, 1)
 	HealthBar.add_theme_stylebox_override("fill", fill_style)
 	

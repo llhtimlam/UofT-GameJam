@@ -22,12 +22,13 @@ var damaged_targets: Array[Node2D] = []
 @onready var melee_audio: AudioStreamPlayer = $MeleeAudio
 
 func _ready() -> void:
-	#melee_audio.play()
+	melee_audio.play()
 	add_to_group("melee")
 	body_entered.connect(_on_body_entered)
 	area_entered.connect(_on_area_entered)
 	HIT_VISUAL.flip_h = (facing_dir == -1.0)
 	HITBOX.position.x *= facing_dir
+	HIT_VISUAL.position.x *= facing_dir
 	update_color()
 	
 func _physics_process(delta: float) -> void:

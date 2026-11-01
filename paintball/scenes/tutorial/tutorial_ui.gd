@@ -9,16 +9,16 @@ var ui_instance: CanvasLayer
 @onready var container2: SubViewportContainer = $SubViewportContainer2
 @onready var viewport1: SubViewport = $SubViewportContainer1/Viewport1
 @onready var viewport2: SubViewport = $SubViewportContainer2/Viewport2
-@onready var player1: CharacterBody2D = viewport1.get_node("TutorialP1/Player")
-@onready var player2: CharacterBody2D = viewport2.get_node("TutorialP2/Player")
+@onready var player1: CharacterBody2D = $SubViewportContainer1/Viewport1/TutorialP1/Player
+@onready var player2: CharacterBody2D = $SubViewportContainer2/Viewport2/TutorialP2/Player
 
 var p1_ready: bool = false
 var p2_ready: bool = false
 
 func _ready() -> void:
 	# Split screen
-	var camera1 = player1.get_node("Camera2D")
-	var camera2 = player2.get_node("Camera2D")
+	var camera1 = player1.get_child(0)
+	var camera2 = player2.get_child(0)
 
 	camera1.custom_viewport = viewport1
 	camera2.custom_viewport = viewport2

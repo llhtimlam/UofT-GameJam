@@ -102,7 +102,7 @@
 [ext_resource type="Texture2D" uid="uid://vujtk2hnm1og" path="res://assets/background/animated_blackhole/d1512ad5-c56d-433f-8d48-4f5e4a54399e-94.png" id="96_yu8y4"]
 [ext_resource type="Texture2D" uid="uid://dk5iydpyc87dd" path="res://assets/background/animated_blackhole/d1512ad5-c56d-433f-8d48-4f5e4a54399e-95.png" id="97_2tx0w"]
 [ext_resource type="TileSet" uid="uid://ce4snw46cwvku" path="res://key_tile_set.tres" id="102_fb2wd"]
-[ext_resource type="PackedScene" uid="uid://u1ulorklcu5g" path="res://scenes/tutorial/entity/tutorial_player.tscn" id="104_cu4l5"]
+[ext_resource type="PackedScene" uid="uid://u1ulorklcu5g" path="res://scenes/tutorial/entity/tutorial_player.tscn" id="104_kk1rx"]
 [ext_resource type="Script" uid="uid://d4edo4reojj3j" path="res://scenes/tutorial/entity/tutorial_dummy.gd" id="104_qwh8d"]
 [ext_resource type="Script" uid="uid://0vkshb1pext0" path="res://scenes/tutorial/entity/troll_trap.gd" id="105_jbhgf"]
 [ext_resource type="PackedScene" uid="uid://dltphbngx2bii" path="res://scenes/tutorial/entity/tutorial_color_zone.tscn" id="106_4gor6"]
@@ -414,8 +414,8 @@ script = ExtResource("1_jwoa3")
 PLAYER = NodePath("Player")
 DUMMY = NodePath("Dummy")
 
-[node name="Player" parent="." unique_id=25147227 instance=ExtResource("104_cu4l5")]
-position = Vector2(16, -514)
+[node name="Player" parent="." unique_id=25147227 instance=ExtResource("104_kk1rx")]
+position = Vector2(16, -513)
 
 [node name="BlackHole" type="AnimatedSprite2D" parent="." unique_id=2023210398]
 z_index = -10
@@ -768,20 +768,20 @@ tile_set = ExtResource("4_g40di")
 tile_map_data = PackedByteArray("AACIAO3/AAAAAAAAAAA=")
 tile_set = ExtResource("4_g40di")
 
-[node name="Dummy" parent="." unique_id=1001768620 instance=ExtResource("104_cu4l5")]
+[node name="Dummy" parent="." unique_id=1001768620 instance=ExtResource("104_kk1rx")]
 position = Vector2(2600, -513)
 script = ExtResource("104_qwh8d")
 dummy = true
 control_type = "AI"
+TEAM_ID = 2
 
-[node name="Dummy2" parent="." unique_id=462200123 instance=ExtResource("104_cu4l5")]
+[node name="Dummy2" parent="." unique_id=462200123 instance=ExtResource("104_kk1rx")]
 position = Vector2(1683, -813)
 script = ExtResource("104_qwh8d")
 dummy = true
 control_type = "AI"
-HEALTH = 1.0
 
-[node name="Dummy3" parent="." unique_id=332030887 instance=ExtResource("104_cu4l5")]
+[node name="Dummy3" parent="." unique_id=332030887 instance=ExtResource("104_kk1rx")]
 position = Vector2(2287, -367)
 script = ExtResource("104_qwh8d")
 dummy = true

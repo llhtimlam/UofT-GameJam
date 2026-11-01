@@ -415,7 +415,7 @@ PLAYER = NodePath("Player")
 DUMMY = NodePath("Dummy")
 
 [node name="Player" parent="." unique_id=25147227 instance=ExtResource("104_lh36l")]
-position = Vector2(16, -514)
+position = Vector2(16, -513)
 control_type = "P2"
 TEAM_ID = 2
 PLAYER_ID = 2

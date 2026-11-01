@@ -80,13 +80,4 @@ render_target_update_mode = 4
 [node name="WorldEnvironment" type="WorldEnvironment" parent="SubViewportContainer2/Viewport2" unique_id=1933334175]
 environment = SubResource("Environment_om0p0")
 
-[node name="TutorialP2" parent="SubViewportContainer2/Viewport2" unique_id=1427236914 instance=ExtResource("3_7aaay")]
-position = Vector2(577.152, 0)
-
-[connection signal="player_eliminated" from="SubViewportContainer1/Viewport1/TutorialP1/Player" to="." method="_on_player_player_eliminated"]
-[connection signal="player_ready" from="SubViewportContainer2/Viewport2/TutorialP2/Player" to="." method="_on_player_player_ready"]
-
-[editable path="SubViewportContainer1/Viewport1/TutorialP1"]
-[editable path="SubViewportContainer1/Viewport1/TutorialP1/ColorZone"]
-[editable path="SubViewportContainer2/Viewport2/TutorialP2"]
-[editable path="SubViewportContainer2/Viewport2/TutorialP2/ColorZone"]
+[node name="TutorialP2" parent="SubViewportContainer2/Viewport2" unique_id=1789391230 instance=ExtResource("3_7aaay")]
