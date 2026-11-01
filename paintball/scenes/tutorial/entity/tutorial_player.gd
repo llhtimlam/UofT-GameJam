@@ -7,6 +7,7 @@ extends CharacterBody2D
 @export var character_id: int = 0
 var player_name: String = ""
 signal player_eliminated(player: CharacterBody2D, attacker_id: int, attacker_team: int)
+signal player_ready(player: CharacterBody2D, player_id: int, player_team: int)
 
 # Animation
 var is_spawned: bool = false
@@ -110,7 +111,7 @@ var is_aiming: bool = false
 const PROJECTILE_SCENE = preload("res://scenes/game_scene/projectile/projectile.tscn")
 
 # World Boundary
-const Y_BOUNDARY = 200
+const Y_BOUNDARY = -200
 
 # UI
 const INDICATOR_Y = -60
@@ -122,6 +123,7 @@ var stun_max: float = 1.
 # Audio
 @onready var melee_audio: AudioStreamPlayer = $MeleeAudio
 
+@onready var camera: Camera2D = $Camera2D
 
 # User Input Mapping
 #func _input(event: InputEvent) -> void:
@@ -208,6 +210,7 @@ func reset_state():
 	set_physics_process(true)
 	hurtbox.set_deferred("disabled", false)
 	
+	
 func _ready() -> void:
 	add_to_group("player")
 	if hurtbox and hurtbox.shape:
@@ -280,7 +283,7 @@ func _physics_process(delta: float) -> void:
 	else:
 		# Gravity
 		if not grounded:
-			velocity.y += GRAVITY * delta * 0
+			velocity.y += GRAVITY * delta
 	# Crouching
 	if not is_aiming and not is_stun and not is_climbing and grounded and input_down:
 		is_crouching = true
@@ -400,10 +403,11 @@ func _physics_process(delta: float) -> void:
 	aim_cd = max(aim_cd - delta, 0.0)
 	shoot_cd = max(shoot_cd - delta, 0.0)
 	iframe = max(iframe - delta, 0.0)
-	
 	# World Boundary
 	if position.y > Y_BOUNDARY:
-		take_damage(100,0,0)
+		player_ready.emit(self, PLAYER_ID, TEAM_ID)
+		self.visible = false
+		set_physics_process(false)
 	
 func take_damage(amount: float, attacker_id: int, attacker_team: int) -> void:
 	if is_dead:
@@ -412,7 +416,7 @@ func take_damage(amount: float, attacker_id: int, attacker_team: int) -> void:
 		return
 		
 	HEALTH -= amount * damage_reduction
-	if HEALTH <= 0.0 and not is_dead:
+	if false:
 		if is_instance_valid(held_bucket):
 			held_bucket.transfer(attacker_id, attacker_team)
 		is_dead = true

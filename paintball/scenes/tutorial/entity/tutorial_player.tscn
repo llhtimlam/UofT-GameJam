@@ -117,3 +117,8 @@ script = ExtResource("4_iye3m")
 [node name="MeleeAudio" type="AudioStreamPlayer" parent="." unique_id=125071536]
 stream = ExtResource("5_00wk7")
 volume_db = -8.0
+
+[node name="Camera2D" type="Camera2D" parent="." unique_id=1483005472]
+position = Vector2(0, -100)
+limit_top = -936
+limit_bottom = -288
