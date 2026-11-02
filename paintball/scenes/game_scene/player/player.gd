@@ -236,236 +236,234 @@ func _ready() -> void:
 	update_color()
 	
 func _physics_process(delta: float) -> void:
-	if is_dead:
-		return
-	
-	# UI
-	StunBar.value = stun_cd/stun_max
-	StunBar.Scale = camera.zoom.x
-	ShootBar.value = shoot_cd/SHOOT_CD
-	ShootBar.Scale = camera.zoom.x
-	HealthBar.value = HEALTH
-	if is_instance_valid(held_bucket):
-		StunBar.Location = Vector2(0,INDICATOR_BUCKET_Y)
-		ShootBar.Location = Vector2(0,INDICATOR_BUCKET_Y)
-		HealthBar.position.y = INDICATOR_BUCKET_Y + 20
-	else:
-		StunBar.Location = Vector2(0,INDICATOR_Y)
-		ShootBar.Location = Vector2(0,INDICATOR_Y)
-		HealthBar.position.y = INDICATOR_Y + 20
-	
-	
-	match control_type:
-		"P1":
-			_read_player_input("Player1_UP", "Player1_DOWN",
-							   "Player1_LEFT", "Player1_RIGHT",
-							   "Player1_JUMP", "Player1_DASH",
-							   "Player1_MELEE", "Player1_SHOOT")
-		"P2":
-			_read_player_input("Player2_UP", "Player2_DOWN",
-							   "Player2_LEFT", "Player2_RIGHT",
-							   "Player2_JUMP", "Player2_DASH",
-							   "Player2_MELEE", "Player2_SHOOT")
-	
-	var grounded = is_on_floor()
-	# Climbing start action
-	if can_climb:
-		if not is_aiming or not is_stun:
-			if not is_climbing and climb_cd <= 0:
-				if input_up and can_climb_up:
-					set_climbing(true)
-				elif input_down and can_climb_down:
-					set_climbing(true)
-	else:
-		set_climbing(false)
-	# Snapping to rope center
-	if is_climbing and not was_climbing:
-		if active_rope != null:
-			global_position.x = active_rope.get_center_x()
-			
-			base_velocity = 0.0
-			velocity.x = 0.0
-			
-	was_climbing = is_climbing
-	# Climbing action
-	if is_climbing:
-		if input_up:
-			velocity.y = move_toward(velocity.y, -CLIMB_SPEED, CLIMB_ACCELERATION)
-		elif input_down:
-			velocity.y = move_toward(velocity.y, CLIMB_SPEED, CLIMB_ACCELERATION)
+	if not is_dead:
+		# UI
+		StunBar.value = stun_cd/stun_max
+		StunBar.Scale = camera.zoom.x
+		ShootBar.value = shoot_cd/SHOOT_CD
+		ShootBar.Scale = camera.zoom.x
+		HealthBar.value = HEALTH
+		if is_instance_valid(held_bucket):
+			StunBar.Location = Vector2(0,INDICATOR_BUCKET_Y)
+			ShootBar.Location = Vector2(0,INDICATOR_BUCKET_Y)
+			HealthBar.position.y = INDICATOR_BUCKET_Y + 20
 		else:
-			velocity.y = move_toward(velocity.y, 0, CLIMB_DECELERATION)
-		base_velocity = 0
-		grounded = false
-	else:
-		# Gravity
-		if not grounded:
-			velocity.y += GRAVITY * delta
-	# Crouching
-	if not is_aiming and not is_stun and not is_climbing and grounded and input_down:
-		is_crouching = true
-	else:
-		is_crouching = false
-	if is_crouching:
-		hurtbox.shape.size = Vector2(45,42)
-		if facing_dir == -1.0:
-			hurtbox.position = Vector2(0.5,11.0)
-			bucket_slot.position = Vector2(-10,-28)
-		else:
-			hurtbox.position = Vector2(-0.5,11.0)
-			bucket_slot.position = Vector2(10,-28)
-	else:
-		hurtbox.position = Vector2(0, 3)
-		hurtbox.shape.size = Vector2(44,58)
-		if facing_dir == -1.0:
-			bucket_slot.position = Vector2(-6,-42)
-		else:
-			bucket_slot.position = Vector2(6,-42)
+			StunBar.Location = Vector2(0,INDICATOR_Y)
+			ShootBar.Location = Vector2(0,INDICATOR_Y)
+			HealthBar.position.y = INDICATOR_Y + 20
 		
-	# Horizontal movement
-	if input_right:
-		facing_dir = 1.0
-		dir = 1.0
 		
-	elif input_left:
-		facing_dir = -1.0
-		dir = -1.0
-	else:
-		dir = 0.0
-	# Debuff override
-	if is_aiming or is_stun or is_climbing:
-		dir = 0.0
-	if is_slow or is_crouching:
-		dir *= SLOWNESS_MODIFIER
-	# Jumping action
-	if input_jump and is_on_floor() and not is_aiming:
-		velocity.y = JUMP_VELOCITY
-
-	# Velocity.x checkout
-	if grounded:
-		base_velocity = move_toward(base_velocity, dir * MAX_SPEED, GROUND_ACCELERATION)
-		knockback_velocity = move_toward(knockback_velocity, 0, GROUND_DECELERATION)
-	else:
-		base_velocity = move_toward(base_velocity, dir * MAX_SPEED, JUMP_ACCELERATION)
-		knockback_velocity = move_toward(knockback_velocity, 0, JUMP_DECELERATION)
-	# Rope escape jump
-	if input_jump and is_climbing:
-		if input_right:
+		match control_type:
+			"P1":
+				_read_player_input("Player1_UP", "Player1_DOWN",
+								   "Player1_LEFT", "Player1_RIGHT",
+								   "Player1_JUMP", "Player1_DASH",
+								   "Player1_MELEE", "Player1_SHOOT")
+			"P2":
+				_read_player_input("Player2_UP", "Player2_DOWN",
+								   "Player2_LEFT", "Player2_RIGHT",
+								   "Player2_JUMP", "Player2_DASH",
+								   "Player2_MELEE", "Player2_SHOOT")
+		
+		var grounded = is_on_floor()
+		# Climbing start action
+		if can_climb:
+			if not is_aiming or not is_stun:
+				if not is_climbing and climb_cd <= 0:
+					if input_up and can_climb_up:
+						set_climbing(true)
+					elif input_down and can_climb_down:
+						set_climbing(true)
+		else:
 			set_climbing(false)
-			velocity.y = JUMPOFF_SPEED_Y
-			base_velocity = facing_dir * JUMPOFF_SPEED_X
-			climb_cd = CLIMB_CD
-		elif input_left:
-			set_climbing(false)
-			velocity.y = JUMPOFF_SPEED_Y
-			base_velocity = facing_dir * JUMPOFF_SPEED_X
-			climb_cd = CLIMB_CD
-	
-	velocity.x = base_velocity + knockback_velocity
-	move_and_slide()
-	if not is_aiming and not is_stun and not is_climbing:
-		# Dash
-		if input_dash and dash_cd <= 0:
-				dash_dir = facing_dir
-				dash_cd = DASH_CD
-				dash_duration = DASH_DURATION
-		
-		if dash_duration > 0:
-			var dash_progress : float = (dash_duration / DASH_DURATION) ** 3
-			var dash_distance : float = dash_dir * DASH_DISTANCE * sin(dash_progress * PI)
-			if dash_duration > DASH_DURATION / 2:
-				velocity.y = 0.0
-			move_and_collide(Vector2(dash_distance, 0))
-		# Melee
-		if input_melee and melee_cd <= 0 and not is_aiming:
-			melee_cd = MELEE_CD
-			melee(MELEE_DMG, MELEE_KNOCKBACK, facing_dir, PLAYER_ID ,TEAM_ID)
-	
-	if not is_climbing:
-		# Range
-		if input_shoot and shoot_cd <= 0 and not is_aiming:
-			if aim_cd <= 0:
-				aim_angle = 0
-			aim_cd = AIM_CD
-			enter_aiming()
-		
-		elif is_aiming:
-			if input_dialup:
-				if input_melee:
-					aim_angle -= delta * FINE_DIAL_SPEED
-				else:
-					aim_angle -= delta * DIAL_SPEED
-			if input_dialdown:
-				if input_melee:
-					aim_angle += delta * FINE_DIAL_SPEED
-				else:
-					aim_angle += delta * DIAL_SPEED
-			aim_angle = clamp(aim_angle, -PI/2, PI/2)
-		
-			if facing_dir == -1.0:
-				shoot_angle = PI - aim_angle
-				aim_dot.flip_v = true
-			else:
-				shoot_angle = aim_angle
-				aim_dot.flip_v = false
-			center.rotation = shoot_angle
-			
-			if shoot_angle <= PI/2:
-				$AnimatedSprite2D.flip_h = false
-			else:
-				$AnimatedSprite2D.flip_h = true
+		# Snapping to rope center
+		if is_climbing and not was_climbing:
+			if active_rope != null:
+				global_position.x = active_rope.get_center_x()
 				
-			if input_shoot and aim_cd <= 0:
-				shoot_projectile(PROJECTILE_DMG, PROJECTILE_SPEED, PROJECTILE_KNOCKBACK, facing_dir, shoot_angle, PLAYER_ID ,TEAM_ID)
-				exit_aiming()
-				shoot_cd = SHOOT_CD
-			if input_cancel:
-				exit_aiming()
-	# Cooldown
-	if stun_cd <= 0:
-		is_stun = false
-	stun_cd = max(stun_cd - delta, 0.0)
-	climb_cd = max(climb_cd - delta, 0.0)
-	dash_cd = max(dash_cd - delta, 0.0)
-	dash_duration = max(dash_duration - delta, 0.0)
-	melee_cd = max(melee_cd - delta, 0.0)
-	aim_cd = max(aim_cd - delta, 0.0)
-	shoot_cd = max(shoot_cd - delta, 0.0)
-	iframe = max(iframe - delta, 0.0)
-	
-	if velocity.x < 0:
-		$AnimatedSprite2D.flip_h = true
-	elif velocity.x > 0:
-		$AnimatedSprite2D.flip_h = false
-	
-	if melee_hitbox.get_child_count() != 0:
-		$AnimatedSprite2D.play("melee")
-		if velocity.x < 0:
-			melee_hitbox.position = Vector2(-32,0)
-		elif velocity.x > 0:
-			melee_hitbox.position = Vector2(32,0)
-	elif is_climbing:
-		$AnimatedSprite2D.play("climb")
-	elif is_aiming:
-			$AnimatedSprite2D.play("idle")
-	else:
-		if grounded:
-			if is_crouching:
-				if velocity.x == 0:
-						$AnimatedSprite2D.play("crouch")
-				else:
-					$AnimatedSprite2D.play("crouch_move")
+				base_velocity = 0.0
+				velocity.x = 0.0
+				
+		was_climbing = is_climbing
+		# Climbing action
+		if is_climbing:
+			if input_up:
+				velocity.y = move_toward(velocity.y, -CLIMB_SPEED, CLIMB_ACCELERATION)
+			elif input_down:
+				velocity.y = move_toward(velocity.y, CLIMB_SPEED, CLIMB_ACCELERATION)
 			else:
-				if velocity.x == 0:
-						$AnimatedSprite2D.play("idle")
-				else:
-					$AnimatedSprite2D.play("run")
+				velocity.y = move_toward(velocity.y, 0, CLIMB_DECELERATION)
+			base_velocity = 0
+			grounded = false
 		else:
-			$AnimatedSprite2D.play("jump")
-	
-	# World Boundary
-	if position.y > Y_BOUNDARY:
-		take_damage(100,0,0)
+			# Gravity
+			if not grounded:
+				velocity.y += GRAVITY * delta
+		# Crouching
+		if not is_aiming and not is_stun and not is_climbing and grounded and input_down:
+			is_crouching = true
+		else:
+			is_crouching = false
+		if is_crouching:
+			hurtbox.shape.size = Vector2(45,42)
+			if facing_dir == -1.0:
+				hurtbox.position = Vector2(0.5,11.0)
+				bucket_slot.position = Vector2(-10,-28)
+			else:
+				hurtbox.position = Vector2(-0.5,11.0)
+				bucket_slot.position = Vector2(10,-28)
+		else:
+			hurtbox.position = Vector2(0, 3)
+			hurtbox.shape.size = Vector2(44,58)
+			if facing_dir == -1.0:
+				bucket_slot.position = Vector2(-6,-42)
+			else:
+				bucket_slot.position = Vector2(6,-42)
+			
+		# Horizontal movement
+		if input_right:
+			facing_dir = 1.0
+			dir = 1.0
+			
+		elif input_left:
+			facing_dir = -1.0
+			dir = -1.0
+		else:
+			dir = 0.0
+		# Debuff override
+		if is_aiming or is_stun or is_climbing:
+			dir = 0.0
+		if is_slow or is_crouching:
+			dir *= SLOWNESS_MODIFIER
+		# Jumping action
+		if input_jump and is_on_floor() and not is_aiming:
+			velocity.y = JUMP_VELOCITY
+
+		# Velocity.x checkout
+		if grounded:
+			base_velocity = move_toward(base_velocity, dir * MAX_SPEED, GROUND_ACCELERATION)
+			knockback_velocity = move_toward(knockback_velocity, 0, GROUND_DECELERATION)
+		else:
+			base_velocity = move_toward(base_velocity, dir * MAX_SPEED, JUMP_ACCELERATION)
+			knockback_velocity = move_toward(knockback_velocity, 0, JUMP_DECELERATION)
+		# Rope escape jump
+		if input_jump and is_climbing:
+			if input_right:
+				set_climbing(false)
+				velocity.y = JUMPOFF_SPEED_Y
+				base_velocity = facing_dir * JUMPOFF_SPEED_X
+				climb_cd = CLIMB_CD
+			elif input_left:
+				set_climbing(false)
+				velocity.y = JUMPOFF_SPEED_Y
+				base_velocity = facing_dir * JUMPOFF_SPEED_X
+				climb_cd = CLIMB_CD
+		
+		velocity.x = base_velocity + knockback_velocity
+		move_and_slide()
+		if not is_aiming and not is_stun and not is_climbing:
+			# Dash
+			if input_dash and dash_cd <= 0:
+					dash_dir = facing_dir
+					dash_cd = DASH_CD
+					dash_duration = DASH_DURATION
+			
+			if dash_duration > 0:
+				var dash_progress : float = (dash_duration / DASH_DURATION) ** 3
+				var dash_distance : float = dash_dir * DASH_DISTANCE * sin(dash_progress * PI)
+				if dash_duration > DASH_DURATION / 2:
+					velocity.y = 0.0
+				move_and_collide(Vector2(dash_distance, 0))
+			# Melee
+			if input_melee and melee_cd <= 0 and not is_aiming:
+				melee_cd = MELEE_CD
+				melee(MELEE_DMG, MELEE_KNOCKBACK, facing_dir, PLAYER_ID ,TEAM_ID)
+		
+		if not is_climbing:
+			# Range
+			if input_shoot and shoot_cd <= 0 and not is_aiming:
+				if aim_cd <= 0:
+					aim_angle = 0
+				aim_cd = AIM_CD
+				enter_aiming()
+			
+			elif is_aiming:
+				if input_dialup:
+					if input_melee:
+						aim_angle -= delta * FINE_DIAL_SPEED
+					else:
+						aim_angle -= delta * DIAL_SPEED
+				if input_dialdown:
+					if input_melee:
+						aim_angle += delta * FINE_DIAL_SPEED
+					else:
+						aim_angle += delta * DIAL_SPEED
+				aim_angle = clamp(aim_angle, -PI/2, PI/2)
+			
+				if facing_dir == -1.0:
+					shoot_angle = PI - aim_angle
+					aim_dot.flip_v = true
+				else:
+					shoot_angle = aim_angle
+					aim_dot.flip_v = false
+				center.rotation = shoot_angle
+				
+				if shoot_angle <= PI/2:
+					$AnimatedSprite2D.flip_h = false
+				else:
+					$AnimatedSprite2D.flip_h = true
+					
+				if input_shoot and aim_cd <= 0:
+					shoot_projectile(PROJECTILE_DMG, PROJECTILE_SPEED, PROJECTILE_KNOCKBACK, facing_dir, shoot_angle, PLAYER_ID ,TEAM_ID)
+					exit_aiming()
+					shoot_cd = SHOOT_CD
+				if input_cancel:
+					exit_aiming()
+		# Cooldown
+		if stun_cd <= 0:
+			is_stun = false
+		stun_cd = max(stun_cd - delta, 0.0)
+		climb_cd = max(climb_cd - delta, 0.0)
+		dash_cd = max(dash_cd - delta, 0.0)
+		dash_duration = max(dash_duration - delta, 0.0)
+		melee_cd = max(melee_cd - delta, 0.0)
+		aim_cd = max(aim_cd - delta, 0.0)
+		shoot_cd = max(shoot_cd - delta, 0.0)
+		iframe = max(iframe - delta, 0.0)
+		
+		if velocity.x < 0:
+			$AnimatedSprite2D.flip_h = true
+		elif velocity.x > 0:
+			$AnimatedSprite2D.flip_h = false
+		
+		if melee_hitbox.get_child_count() != 0:
+			$AnimatedSprite2D.play("melee")
+			if velocity.x < 0:
+				melee_hitbox.position = Vector2(-32,0)
+			elif velocity.x > 0:
+				melee_hitbox.position = Vector2(32,0)
+		elif is_climbing:
+			$AnimatedSprite2D.play("climb")
+		elif is_aiming:
+				$AnimatedSprite2D.play("idle")
+		else:
+			if grounded:
+				if is_crouching:
+					if velocity.x == 0:
+							$AnimatedSprite2D.play("crouch")
+					else:
+						$AnimatedSprite2D.play("crouch_move")
+				else:
+					if velocity.x == 0:
+							$AnimatedSprite2D.play("idle")
+					else:
+						$AnimatedSprite2D.play("run")
+			else:
+				$AnimatedSprite2D.play("jump")
+		
+		# World Boundary
+		if position.y > Y_BOUNDARY:
+			take_damage(100,0,0)
 	
 	# Camera
 	move_and_scale_camera()
@@ -486,7 +484,6 @@ func take_damage(amount: float, attacker_id: int, attacker_team: int) -> void:
 		base_velocity = 0.0
 		knockback_velocity = 0.0
 		self.visible = false
-		set_physics_process(false)
 		hurtbox.set_deferred("disabled", true)
 		player_eliminated.emit(self, attacker_id, attacker_team)
 
