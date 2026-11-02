@@ -112,7 +112,7 @@ func lost_score_to(attacker_base: Node = null) -> void:
 	if colorwheel_clone:
 		colorwheel_clone.flip_animation()
 	if attacker_base != null:
-		attacker_base.update_score(amount_lost)
+		attacker_base.deposit_score(amount_lost)
 	
 func set_outpost(is_deployed: bool) -> void:
 	if is_deployed:

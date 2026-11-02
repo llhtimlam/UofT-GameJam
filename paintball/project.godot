@@ -10,7 +10,7 @@ config_version=5
 
 [application]
 
-config/name="Paintball"
+config/name="Colour Feud"
 run/main_scene="uid://do2yv8r87pi70"
 config/features=PackedStringArray("4.7", "Forward Plus")
 config/icon="res://icon.svg"
