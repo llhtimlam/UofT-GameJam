@@ -5,6 +5,7 @@
 [ext_resource type="Texture2D" uid="uid://b50barlg03qg8" path="res://assets/background/animated_blackhole/d1512ad5-c56d-433f-8d48-4f5e4a54399e-0.png" id="2_ccuto"]
 [ext_resource type="Texture2D" uid="uid://ny84bglepa1c" path="res://assets/background/background_haze.png" id="2_g40di"]
 [ext_resource type="Texture2D" uid="uid://qanrvw5rwuf5" path="res://assets/background/animated_blackhole/d1512ad5-c56d-433f-8d48-4f5e4a54399e-1.png" id="3_fb2wd"]
+[ext_resource type="Script" uid="uid://c4s7ruxudjeb5" path="res://scenes/tutorial/player/tutorial_player.gd" id="3_qwh8d"]
 [ext_resource type="TileSet" uid="uid://en4sll6evhh8" path="res://scenes/game_scene/tileset/tile_set.tres" id="4_g40di"]
 [ext_resource type="Texture2D" uid="uid://htn3dabtgy7u" path="res://assets/background/animated_blackhole/d1512ad5-c56d-433f-8d48-4f5e4a54399e-2.png" id="4_jwoa3"]
 [ext_resource type="TileSet" uid="uid://bud3eyi0ff07x" path="res://tutorial_tile_set.tres" id="5_2ykr1"]
@@ -102,8 +103,8 @@
 [ext_resource type="Texture2D" uid="uid://vujtk2hnm1og" path="res://assets/background/animated_blackhole/d1512ad5-c56d-433f-8d48-4f5e4a54399e-94.png" id="96_yu8y4"]
 [ext_resource type="Texture2D" uid="uid://dk5iydpyc87dd" path="res://assets/background/animated_blackhole/d1512ad5-c56d-433f-8d48-4f5e4a54399e-95.png" id="97_2tx0w"]
 [ext_resource type="TileSet" uid="uid://ce4snw46cwvku" path="res://key_tile_set.tres" id="102_fb2wd"]
-[ext_resource type="PackedScene" uid="uid://u1ulorklcu5g" path="res://scenes/tutorial/entity/tutorial_player.tscn" id="104_kk1rx"]
-[ext_resource type="Script" uid="uid://d4edo4reojj3j" path="res://scenes/tutorial/entity/tutorial_dummy.gd" id="104_qwh8d"]
+[ext_resource type="Script" uid="uid://cdciqhxmm7ijr" path="res://scenes/tutorial/player/tutorial_dummy.gd" id="104_cu4l5"]
+[ext_resource type="PackedScene" uid="uid://u1ulorklcu5g" path="res://scenes/game_scene/player/player.tscn" id="104_kk1rx"]
 [ext_resource type="Script" uid="uid://0vkshb1pext0" path="res://scenes/tutorial/entity/troll_trap.gd" id="105_jbhgf"]
 [ext_resource type="PackedScene" uid="uid://dltphbngx2bii" path="res://scenes/tutorial/entity/tutorial_color_zone.tscn" id="106_4gor6"]
 
@@ -407,7 +408,7 @@ animations = [{
 size = Vector2(540, 32)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_xrivr"]
-size = Vector2(540, 160)
+size = Vector2(540, 146)
 
 [node name="TutorialP1" type="Node2D" unique_id=822111050 node_paths=PackedStringArray("PLAYER", "DUMMY")]
 script = ExtResource("1_jwoa3")
@@ -416,6 +417,7 @@ DUMMY = NodePath("Dummy")
 
 [node name="Player" parent="." unique_id=25147227 instance=ExtResource("104_kk1rx")]
 position = Vector2(16, -513)
+script = ExtResource("3_qwh8d")
 
 [node name="BlackHole" type="AnimatedSprite2D" parent="." unique_id=2023210398]
 z_index = -10
@@ -517,7 +519,7 @@ tile_set = ExtResource("5_2ykr1")
 [node name="TutorialText" type="TileMapLayer" parent="." unique_id=1740265100]
 z_index = 29
 z_as_relative = false
-tile_map_data = PackedByteArray("AAD//9v/AQAAAAAAAAD+/9z/AQAAAAEAAAD//9z/AQABAAAAAAAAANz/AQABAAEAAAD6//H/AAAFAAAAAAAGAO//AAADAAEAAAAAAOz/AAAAAAAAAAD//+3/AAAAAAEAAAAAAO3/AAABAAAAAAABAO3/AAABAAEAAAALAO//AQABAAAAAAArAO//AAABAAAAAAAlAOr/AAAFAAEAAAAlAOz/AAABAAEAAAAYAOf/AAAAAAAAAAAYAOn/AAABAAAAAAAiAOr/AAADAAMAAAAiAOz/AAAAAAEAAAAjAOr/AAAEAAMAAAA3AOz/AAADAAIAAAA4AOz/AAAEAAIAAAA5AOz/AAAFAAIAAABBAOz/AAACAAAAAABDAOz/AAADAAIAAABEAOz/AAAEAAIAAABFAOz/AAAFAAIAAABOAO//AAACAAAAAAA/AOv/AAAAAAAAAAA/AO3/AAABAAAAAAA5AOj/AAAAAAEAAAA7AOj/AAABAAEAAABcAO//AAAAAAAAAABsAO//AAADAAMAAABtAO//AAAEAAMAAAAGAPX/AAABAAMAAAAFAPX/AAAAAAMAAAAHAPX/AAACAAMAAABTAO3/AAADAAMAAABWAO3/AAACAAAAAABUAO3/AAAEAAMAAABXAO3/AAAFAAMAAACiAPH/AAAFAAAAAACMAOf/AAAAAAAAAACBAOT/AAACAAAAAAA7AOz/AQAAAAAAAAA=")
+tile_map_data = PackedByteArray("AAD//9v/AQAAAAAAAAD+/9z/AQAAAAEAAAD//9z/AQABAAAAAAAAANz/AQABAAEAAAD6//H/AAAFAAAAAAAGAO//AAADAAEAAAAAAOz/AAAAAAAAAAD//+3/AAAAAAEAAAAAAO3/AAABAAAAAAABAO3/AAABAAEAAAALAO//AQABAAAAAAArAO//AAABAAAAAAAYAOf/AAAAAAAAAAAYAOn/AAABAAAAAAA3AOz/AAADAAIAAAA4AOz/AAAEAAIAAAA5AOz/AAAFAAIAAABDAOz/AAADAAIAAABEAOz/AAAEAAIAAABFAOz/AAAFAAIAAABOAO//AAACAAAAAAA/AOv/AAAAAAAAAAA/AO3/AAABAAAAAAA5AOj/AAAAAAEAAAA7AOj/AAABAAEAAABcAO//AAAAAAAAAABsAO//AAADAAMAAABtAO//AAAEAAMAAAAGAPX/AAABAAMAAAAFAPX/AAAAAAMAAAAHAPX/AAACAAMAAACiAPH/AAAFAAAAAACMAOf/AAAAAAAAAACBAOT/AAACAAAAAAA7AOz/AQAAAAAAAAAjAO7/AAAAAAEAAAAkAOr/AQABAAAAAAAkAOz/AAAFAAEAAAAlAO7/AAABAAEAAABVAO3/AQABAAAAAABBAOz/AAACAAAAAAA=")
 tile_set = ExtResource("102_fb2wd")
 
 [node name="Text" type="Control" parent="." unique_id=1104511368]
@@ -603,9 +605,9 @@ vertical_alignment = 1
 z_index = 29
 z_as_relative = false
 layout_mode = 0
-offset_left = 1093.0
+offset_left = 1109.0
 offset_top = -771.0
-offset_right = 1211.0
+offset_right = 1227.0
 offset_bottom = -748.0
 text = "Jump off"
 horizontal_alignment = 1
@@ -807,7 +809,7 @@ tile_set = ExtResource("4_g40di")
 
 [node name="Dummy" parent="." unique_id=1001768620 instance=ExtResource("104_kk1rx")]
 position = Vector2(2600, -513)
-script = ExtResource("104_qwh8d")
+script = ExtResource("104_cu4l5")
 dummy = true
 control_type = "AI"
 TEAM_ID = 2
@@ -815,7 +817,7 @@ PLAYER_ID = 3
 
 [node name="Dummy2" parent="." unique_id=462200123 instance=ExtResource("104_kk1rx")]
 position = Vector2(1683, -813)
-script = ExtResource("104_qwh8d")
+script = ExtResource("104_cu4l5")
 dummy = true
 control_type = "AI"
 TEAM_ID = 2
@@ -824,7 +826,7 @@ HEALTH = 1.0
 
 [node name="Dummy3" parent="." unique_id=332030887 instance=ExtResource("104_kk1rx")]
 position = Vector2(2287, -367)
-script = ExtResource("104_qwh8d")
+script = ExtResource("104_cu4l5")
 dummy = true
 control_type = "AI"
 TEAM_ID = 2
@@ -865,7 +867,7 @@ script = ExtResource("105_jbhgf")
 shape = SubResource("RectangleShape2D_13qdw")
 
 [node name="TrollTrap2" type="Area2D" parent="." unique_id=998650129]
-position = Vector2(1590, -560)
+position = Vector2(1590, -554)
 collision_layer = 0
 collision_mask = 4
 script = ExtResource("105_jbhgf")

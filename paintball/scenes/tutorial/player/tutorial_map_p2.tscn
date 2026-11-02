@@ -1,6 +1,7 @@
 [gd_scene format=4 uid="uid://bispn0b063p0t"]
 
 [ext_resource type="Script" uid="uid://cy1ughvs4ffcn" path="res://scenes/tutorial/player/tutorial_map_p2.gd" id="1_3v5dm"]
+[ext_resource type="Script" uid="uid://c4s7ruxudjeb5" path="res://scenes/tutorial/player/tutorial_player.gd" id="3_3v5dm"]
 [ext_resource type="Texture2D" uid="uid://b50barlg03qg8" path="res://assets/background/animated_blackhole/d1512ad5-c56d-433f-8d48-4f5e4a54399e-0.png" id="3_hy7ml"]
 [ext_resource type="Texture2D" uid="uid://qanrvw5rwuf5" path="res://assets/background/animated_blackhole/d1512ad5-c56d-433f-8d48-4f5e4a54399e-1.png" id="4_0q1us"]
 [ext_resource type="Texture2D" uid="uid://htn3dabtgy7u" path="res://assets/background/animated_blackhole/d1512ad5-c56d-433f-8d48-4f5e4a54399e-2.png" id="5_j6uov"]
@@ -102,8 +103,8 @@
 [ext_resource type="TileSet" uid="uid://bud3eyi0ff07x" path="res://tutorial_tile_set.tres" id="101_ywivt"]
 [ext_resource type="TileSet" uid="uid://ce4snw46cwvku" path="res://key_tile_set.tres" id="102_hhm56"]
 [ext_resource type="TileSet" uid="uid://en4sll6evhh8" path="res://scenes/game_scene/tileset/tile_set.tres" id="103_ineqj"]
-[ext_resource type="Script" uid="uid://d4edo4reojj3j" path="res://scenes/tutorial/entity/tutorial_dummy.gd" id="104_c62ox"]
-[ext_resource type="PackedScene" uid="uid://u1ulorklcu5g" path="res://scenes/tutorial/entity/tutorial_player.tscn" id="104_lh36l"]
+[ext_resource type="Script" uid="uid://cdciqhxmm7ijr" path="res://scenes/tutorial/player/tutorial_dummy.gd" id="104_c62ox"]
+[ext_resource type="PackedScene" uid="uid://u1ulorklcu5g" path="res://scenes/game_scene/player/player.tscn" id="104_lh36l"]
 [ext_resource type="Script" uid="uid://0vkshb1pext0" path="res://scenes/tutorial/entity/troll_trap.gd" id="106_iyala"]
 [ext_resource type="PackedScene" uid="uid://dltphbngx2bii" path="res://scenes/tutorial/entity/tutorial_color_zone.tscn" id="107_83oqi"]
 
@@ -407,7 +408,7 @@ animations = [{
 size = Vector2(540, 32)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_xrivr"]
-size = Vector2(540, 160)
+size = Vector2(540, 146)
 
 [node name="TutorialP2" type="Node2D" unique_id=822111050 node_paths=PackedStringArray("PLAYER", "DUMMY")]
 script = ExtResource("1_3v5dm")
@@ -416,6 +417,7 @@ DUMMY = NodePath("Dummy")
 
 [node name="Player" parent="." unique_id=25147227 instance=ExtResource("104_lh36l")]
 position = Vector2(16, -513)
+script = ExtResource("3_3v5dm")
 control_type = "P2"
 TEAM_ID = 2
 PLAYER_ID = 2
@@ -877,7 +879,7 @@ script = ExtResource("106_iyala")
 shape = SubResource("RectangleShape2D_13qdw")
 
 [node name="TrollTrap2" type="Area2D" parent="." unique_id=998650129]
-position = Vector2(-1590, -560)
+position = Vector2(-1590, -554)
 collision_layer = 0
 collision_mask = 4
 script = ExtResource("106_iyala")

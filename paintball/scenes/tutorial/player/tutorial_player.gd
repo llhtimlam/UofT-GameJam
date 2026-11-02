@@ -59,7 +59,7 @@ var input_melee: bool = false
 var input_shoot: bool = false
 var input_dialup: bool = false
 var input_dialdown: bool = false
-var input_finedial: bool = false
+var input_cancel: bool = false
 
 var stun_cd: float = 0.0
 var climb_cd: float = 0.0
@@ -188,7 +188,7 @@ func _read_player_input(a_up: String, a_down: String, a_left: String, a_right: S
 		input_shoot = Input.is_action_just_released(a_shoot)
 		input_dialup = Input.is_action_pressed(a_up)
 		input_dialdown = Input.is_action_pressed(a_down)
-		input_finedial = Input.is_action_pressed(a_jump)
+		input_cancel = Input.is_action_pressed(a_jump)
 	
 	if input_left and input_right:
 		input_left = false
@@ -251,6 +251,7 @@ func _physics_process(delta: float) -> void:
 		ShootBar.Location = Vector2(0,INDICATOR_Y)
 		HealthBar.position.y = INDICATOR_Y + 20
 	
+	
 	match control_type:
 		"P1":
 			_read_player_input("Player1_UP", "Player1_DOWN",
@@ -303,21 +304,26 @@ func _physics_process(delta: float) -> void:
 	else:
 		is_crouching = false
 	if is_crouching:
-		hurtbox.shape.size = Vector2(52,36)
+		hurtbox.shape.size = Vector2(45,42)
 		if facing_dir == -1.0:
-			hurtbox.position = Vector2(-10,14)
-			bucket_slot.position = Vector2(-20,-20)
+			hurtbox.position = Vector2(0.5,11.0)
+			bucket_slot.position = Vector2(-10,-28)
 		else:
-			hurtbox.position = Vector2(10,14)
-			bucket_slot.position = Vector2(20,-20)
+			hurtbox.position = Vector2(-0.5,11.0)
+			bucket_slot.position = Vector2(10,-28)
 	else:
-		hurtbox.shape.size = Vector2(32,64)
-		hurtbox.position = Vector2.ZERO
-		bucket_slot.position = Vector2(0,-48)
+		hurtbox.position = Vector2(0, 3)
+		hurtbox.shape.size = Vector2(44,58)
+		if facing_dir == -1.0:
+			bucket_slot.position = Vector2(-6,-42)
+		else:
+			bucket_slot.position = Vector2(6,-42)
+		
 	# Horizontal movement
 	if input_right:
 		facing_dir = 1.0
 		dir = 1.0
+		
 	elif input_left:
 		facing_dir = -1.0
 		dir = -1.0
@@ -382,12 +388,12 @@ func _physics_process(delta: float) -> void:
 		
 		elif is_aiming:
 			if input_dialup:
-				if input_finedial:
+				if input_melee:
 					aim_angle -= delta * FINE_DIAL_SPEED
 				else:
 					aim_angle -= delta * DIAL_SPEED
 			if input_dialdown:
-				if input_finedial:
+				if input_melee:
 					aim_angle += delta * FINE_DIAL_SPEED
 				else:
 					aim_angle += delta * DIAL_SPEED
@@ -405,12 +411,12 @@ func _physics_process(delta: float) -> void:
 				$AnimatedSprite2D.flip_h = false
 			else:
 				$AnimatedSprite2D.flip_h = true
-			
+				
 			if input_shoot and aim_cd <= 0:
 				shoot_projectile(PROJECTILE_DMG, PROJECTILE_SPEED, PROJECTILE_KNOCKBACK, facing_dir, shoot_angle, PLAYER_ID ,TEAM_ID)
 				exit_aiming()
 				shoot_cd = SHOOT_CD
-			if input_melee:
+			if input_cancel:
 				exit_aiming()
 	# Cooldown
 	if stun_cd <= 0:

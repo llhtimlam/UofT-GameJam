@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://dmxjc5i5r5vf5"]
 
-[ext_resource type="Script" path="res://scenes/tutorial/entity/tutorial_player.gd" id="1_nrhys"]
+[ext_resource type="Script" uid="uid://c4s7ruxudjeb5" path="res://scenes/tutorial/player/tutorial_player.gd" id="1_5dyy2"]
 [ext_resource type="Texture2D" uid="uid://deodtgyappfsu" path="res://assets/Player1BasicSprite.png" id="2_nrhys"]
 [ext_resource type="Script" uid="uid://dndiybdxky6cb" path="res://scenes/game_scene/player/progressBar.gd" id="3_7k1jl"]
 [ext_resource type="Texture2D" uid="uid://bl5nb3u8a78nv" path="res://assets/player_sprite_with_crouch.png" id="3_nrhys"]
@@ -174,7 +174,7 @@ bg_color = Color(0.87815416, 0, 0.28180054, 1)
 z_index = 25
 z_as_relative = false
 collision_layer = 6
-script = ExtResource("1_nrhys")
+script = ExtResource("1_5dyy2")
 
 [node name="Camera2D" type="Camera2D" parent="." unique_id=1764947080]
 process_callback = 0
@@ -225,7 +225,7 @@ texture = SubResource("AtlasTexture_kawcf")
 
 [node name="BucketPosition" type="Marker2D" parent="." unique_id=1041089716]
 z_index = 26
-position = Vector2(0, -48)
+position = Vector2(6, -42)
 
 [node name="StunBar" type="TextureProgressBar" parent="." unique_id=643186231]
 texture_filter = 2
