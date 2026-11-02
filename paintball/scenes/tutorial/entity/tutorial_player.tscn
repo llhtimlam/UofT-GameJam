@@ -177,6 +177,7 @@ script = ExtResource("1_nrhys")
 
 [node name="Camera2D" type="Camera2D" parent="." unique_id=1764947080]
 process_callback = 0
+limit_enabled = false
 limit_top = -936
 limit_bottom = -288
 
@@ -263,6 +264,3 @@ show_percentage = false
 stream = ExtResource("5_csdy4")
 volume_db = -10.0
 pitch_scale = 0.8
-
-[node name="Camera2D" type="Camera2D" parent="." unique_id=1483005472]
-position = Vector2(0, -100)
