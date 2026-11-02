@@ -442,10 +442,16 @@ func _physics_process(delta: float) -> void:
 			$AnimatedSprite2D.play("idle")
 	else:
 		if grounded:
-			if velocity.x == 0:
-					$AnimatedSprite2D.play("idle")
+			if is_crouching:
+				if velocity.x == 0:
+						$AnimatedSprite2D.play("crouch")
+				else:
+					$AnimatedSprite2D.play("crouch_move")
 			else:
-				$AnimatedSprite2D.play("run")
+				if velocity.x == 0:
+						$AnimatedSprite2D.play("idle")
+				else:
+					$AnimatedSprite2D.play("run")
 		else:
 			$AnimatedSprite2D.play("jump")
 			
