@@ -132,6 +132,7 @@ const INDICATOR_BUCKET_Y = -90
 @onready var HealthBar: ProgressBar = $HealthBar
 var fill_style: StyleBoxFlat = null
 var stun_max: float = 1.
+@onready var iglow: Sprite2D = $iglow
 
 # Audio
 @onready var melee_audio: AudioStreamPlayer = $MeleeAudio
@@ -234,6 +235,7 @@ func _ready() -> void:
 	climbdown_hitbox.area_entered.connect(_on_climb_down_area_entered)
 	climbdown_hitbox.area_exited.connect(_on_climb_down_area_exited)
 	update_color()
+	iglow.visible = false
 	
 func _physics_process(delta: float) -> void:
 	if not is_dead:
@@ -473,8 +475,9 @@ func take_damage(amount: float, attacker_id: int, attacker_team: int) -> void:
 	if is_dead:
 		return
 	if iframe > 0 and attacker_team != 0:
+		iglow.visible = true
+		get_tree().create_timer(.6).timeout.connect(func(): iglow.visible = false)
 		return
-		
 	HEALTH -= amount * damage_reduction
 	if HEALTH <= 0.0 and not is_dead:
 		if is_instance_valid(held_bucket):

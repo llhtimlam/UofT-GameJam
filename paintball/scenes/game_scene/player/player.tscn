@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://u1ulorklcu5g"]
 
-[ext_resource type="Script" uid="uid://b0iohuh6rl7g5" path="res://scenes/game_scene/player/player.gd" id="1_tcwrj"]
+[ext_resource type="Script" uid="uid://coremsw5viwdk" path="res://scenes/game_scene/player/player.gd" id="1_tcwrj"]
 [ext_resource type="Texture2D" uid="uid://deodtgyappfsu" path="res://assets/Player1BasicSprite.png" id="2_7p8hl"]
 [ext_resource type="Script" uid="uid://dndiybdxky6cb" path="res://scenes/game_scene/player/progressBar.gd" id="3_7k1jl"]
 [ext_resource type="Texture2D" uid="uid://bl5nb3u8a78nv" path="res://assets/player_sprite_with_crouch.png" id="3_7p8hl"]
@@ -170,6 +170,19 @@ bg_color = Color(0.601223, 0.601223, 0.6012228, 0.23921569)
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_csdy4"]
 bg_color = Color(0.8784314, 0, 0.28235295, 1)
 
+[sub_resource type="Gradient" id="Gradient_csdy4"]
+interpolation_mode = 2
+offsets = PackedFloat32Array(0, 0.5270655, 1)
+colors = PackedColorArray(1, 1, 1, 1, 1, 1, 1, 0.16470589, 1, 1, 1, 0)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_csdy4"]
+gradient = SubResource("Gradient_csdy4")
+width = 256
+height = 256
+fill = 1
+fill_from = Vector2(0.5, 0.5)
+fill_to = Vector2(0, 0.5)
+
 [node name="Player" type="CharacterBody2D" unique_id=25147227]
 z_index = 25
 z_as_relative = false
@@ -269,3 +282,9 @@ pitch_scale = 0.8
 [node name="PlayerHit" type="AudioStreamPlayer" parent="." unique_id=1186127050]
 stream = ExtResource("6_csdy4")
 volume_db = -10.0
+
+[node name="iglow" type="Sprite2D" parent="." unique_id=772822668]
+texture_filter = 2
+position = Vector2(-4.7683716e-07, -4.7683716e-07)
+scale = Vector2(0.74121094, 0.7353516)
+texture = SubResource("GradientTexture2D_csdy4")
