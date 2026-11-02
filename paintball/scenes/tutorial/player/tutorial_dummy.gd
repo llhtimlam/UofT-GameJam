@@ -225,6 +225,7 @@ func _ready() -> void:
 	climbdown_hitbox.area_entered.connect(_on_climb_down_area_entered)
 	climbdown_hitbox.area_exited.connect(_on_climb_down_area_exited)
 	update_color()
+	$iglow.visible = false
 	
 func _physics_process(delta: float) -> void:
 	if is_dead:
