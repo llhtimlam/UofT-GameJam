@@ -55,7 +55,7 @@ render_target_update_mode = 4
 
 [node name="Map" parent="SubViewportContainer1/Viewport1" unique_id=1264092394 instance=ExtResource("1_vc43c")]
 
-[node name="Player2" parent="SubViewportContainer1/Viewport1/Map" index="27" unique_id=1843884854]
+[node name="Player2" parent="SubViewportContainer1/Viewport1/Map" index="25" unique_id=1843884854]
 control_type = "P2"
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="SubViewportContainer1/Viewport1" unique_id=980375645]

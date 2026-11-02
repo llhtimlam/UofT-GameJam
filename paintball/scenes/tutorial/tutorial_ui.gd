@@ -40,10 +40,8 @@ func start_game(player: CharacterBody2D, player_id: int, player_team: int) -> vo
 		container1.queue_free()
 		container2.queue_free()
 
-
 func _on_player_player_eliminated(player: CharacterBody2D, attacker_id: int, attacker_team: int) -> void:
 	pass # Replace with function body.
-
 
 func _on_player_player_ready(player: CharacterBody2D, player_id: int, player_team: int) -> void:
 	pass # Replace with function body.
