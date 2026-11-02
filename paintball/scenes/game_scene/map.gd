@@ -69,6 +69,8 @@ const BUCKET_SCENE = preload("res://scenes/game_scene/paint_bucket/paint_bucket.
 @onready var p2_plaform: TileMapLayer = $P2MapLayer
 @onready var turret_plaform: TileMapLayer = $TurretMapLayer
 @onready var center_blackhole: AnimatedSprite2D = $BlackHole
+@onready var p1_decor: TileMapLayer = $P1Decor
+@onready var p2_decor: TileMapLayer = $P2Decor
 
 # Audio
 @onready var melee: AudioStreamPlayer = $AudioController/Melee
@@ -371,6 +373,10 @@ func update_platform_color() -> void:
 	p2_plaform.self_modulate = Globals.p2_color
 	turret_plaform.self_modulate = Color.WHITE
 	turret_plaform.self_modulate = Globals.turret_color
+	p1_decor.self_modulate = Color.WHITE
+	p1_decor.self_modulate = Globals.p1_color.lerp(Color.WHITE, Globals.p1_white_blend_intensity)
+	p2_decor.self_modulate = Color.WHITE
+	p2_decor.self_modulate = Globals.p2_color.lerp(Color.WHITE, Globals.p2_white_blend_intensity)
 	
 func update_color(color: Color) -> void:
 	# Sprite
