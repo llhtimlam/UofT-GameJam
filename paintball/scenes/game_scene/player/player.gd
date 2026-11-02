@@ -307,21 +307,26 @@ func _physics_process(delta: float) -> void:
 	else:
 		is_crouching = false
 	if is_crouching:
-		hurtbox.shape.size = Vector2(52,36)
+		hurtbox.shape.size = Vector2(45,42)
 		if facing_dir == -1.0:
-			hurtbox.position = Vector2(-10,14)
-			bucket_slot.position = Vector2(-20,-20)
+			hurtbox.position = Vector2(0.5,11.0)
+			bucket_slot.position = Vector2(-10,-28)
 		else:
-			hurtbox.position = Vector2(10,14)
-			bucket_slot.position = Vector2(20,-20)
+			hurtbox.position = Vector2(-0.5,11.0)
+			bucket_slot.position = Vector2(10,-28)
 	else:
-		hurtbox.shape.size = Vector2(32,64)
-		hurtbox.position = Vector2.ZERO
-		bucket_slot.position = Vector2(0,-48)
+		hurtbox.position = Vector2(0, 3)
+		hurtbox.shape.size = Vector2(44,58)
+		if facing_dir == -1.0:
+			bucket_slot.position = Vector2(6,42)
+		else:
+			bucket_slot.position = Vector2(-6,42)
+		
 	# Horizontal movement
 	if input_right:
 		facing_dir = 1.0
 		dir = 1.0
+		
 	elif input_left:
 		facing_dir = -1.0
 		dir = -1.0

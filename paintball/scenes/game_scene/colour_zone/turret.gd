@@ -40,7 +40,7 @@ var vertical_x_preset1: Array[float] = [-432, -216, 0, 216, 432]
 var vertical_x_preset2: Array[float] = [-360, -144, 72, 288]
 var vertical_x_preset3: Array[float] = [-288, -72, 144, 360]
 var horizontal_y_preset1: Array[float] = [-1056]
-var horizontal_y_preset2: Array[float] = [-1090]
+var horizontal_y_preset2: Array[float] = [-1084]
 var horizontal_y_preset3: Array[float] = [-1130]
 
 var aimable_targets: Array[CharacterBody2D]

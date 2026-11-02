@@ -127,13 +127,13 @@ animations = [{
 }]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_xrivr"]
-size = Vector2(32, 64)
+size = Vector2(44, 58)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_b1lj4"]
-size = Vector2(32, 65)
+size = Vector2(44, 59)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_13qdw"]
-size = Vector2(32, 64)
+size = Vector2(44, 58)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_xstgt"]
 atlas = ExtResource("2_7p8hl")
@@ -183,11 +183,12 @@ z_index = 30
 z_as_relative = false
 scale = Vector2(2, 2)
 sprite_frames = SubResource("SpriteFrames_28kot")
-animation = &"crouch"
+animation = &"idle"
 autoplay = "idle"
 
 [node name="Hurtbox" type="CollisionShape2D" parent="." unique_id=962338468]
 z_as_relative = false
+position = Vector2(0, 3)
 shape = SubResource("RectangleShape2D_xrivr")
 debug_color = Color(0.7882353, 0, 0.30980393, 0.41960785)
 
@@ -199,6 +200,7 @@ collision_layer = 0
 collision_mask = 8
 
 [node name="ClimbDownHitbox" type="CollisionShape2D" parent="ClimbDownDetector" unique_id=1466038387]
+position = Vector2(0, 3)
 shape = SubResource("RectangleShape2D_b1lj4")
 
 [node name="ClimbUpDetector" type="Area2D" parent="." unique_id=715796249]
@@ -206,6 +208,7 @@ collision_layer = 0
 collision_mask = 8
 
 [node name="ClimbUpHitbox" type="CollisionShape2D" parent="ClimbUpDetector" unique_id=1186343360]
+position = Vector2(0, 3)
 shape = SubResource("RectangleShape2D_13qdw")
 
 [node name="Center" type="Marker2D" parent="." unique_id=1906815753]
@@ -221,7 +224,7 @@ texture = SubResource("AtlasTexture_xstgt")
 
 [node name="BucketPosition" type="Marker2D" parent="." unique_id=1041089716]
 z_index = 26
-position = Vector2(0, -48)
+position = Vector2(6, -26)
 
 [node name="StunBar" type="TextureProgressBar" parent="." unique_id=643186231]
 texture_filter = 2
