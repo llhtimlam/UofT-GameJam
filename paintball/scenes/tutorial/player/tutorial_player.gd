@@ -289,8 +289,12 @@ func _physics_process(delta: float) -> void:
 	if is_climbing:
 		if input_up:
 			velocity.y = move_toward(velocity.y, -CLIMB_SPEED, CLIMB_ACCELERATION)
+			if held_bucket:
+				velocity.y = move_toward(velocity.y, -CLIMB_SPEED, CLIMB_ACCELERATION/2)
 		elif input_down:
 			velocity.y = move_toward(velocity.y, CLIMB_SPEED, CLIMB_ACCELERATION)
+			if held_bucket:
+				velocity.y = move_toward(velocity.y, CLIMB_SPEED, CLIMB_ACCELERATION/2)
 		else:
 			velocity.y = move_toward(velocity.y, 0, CLIMB_DECELERATION)
 		base_velocity = 0
