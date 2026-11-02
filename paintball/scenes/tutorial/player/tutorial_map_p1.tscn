@@ -519,7 +519,7 @@ tile_set = ExtResource("5_2ykr1")
 [node name="TutorialText" type="TileMapLayer" parent="." unique_id=1740265100]
 z_index = 29
 z_as_relative = false
-tile_map_data = PackedByteArray("AAD//9v/AQAAAAAAAAD+/9z/AQAAAAEAAAD//9z/AQABAAAAAAAAANz/AQABAAEAAAD6//H/AAAFAAAAAAAGAO//AAADAAEAAAAAAOz/AAAAAAAAAAD//+3/AAAAAAEAAAAAAO3/AAABAAAAAAABAO3/AAABAAEAAAALAO//AQABAAAAAAArAO//AAABAAAAAAAYAOf/AAAAAAAAAAAYAOn/AAABAAAAAAA3AOz/AAADAAIAAAA4AOz/AAAEAAIAAAA5AOz/AAAFAAIAAABDAOz/AAADAAIAAABEAOz/AAAEAAIAAABFAOz/AAAFAAIAAABOAO//AAACAAAAAAA/AOv/AAAAAAAAAAA/AO3/AAABAAAAAAA5AOj/AAAAAAEAAAA7AOj/AAABAAEAAABcAO//AAAAAAAAAABsAO//AAADAAMAAABtAO//AAAEAAMAAAAGAPX/AAABAAMAAAAFAPX/AAAAAAMAAAAHAPX/AAACAAMAAACiAPH/AAAFAAAAAACMAOf/AAAAAAAAAACBAOT/AAACAAAAAAA7AOz/AQAAAAAAAAAjAO7/AAAAAAEAAAAkAOr/AQABAAAAAAAkAOz/AAAFAAEAAAAlAO7/AAABAAEAAABVAO3/AQABAAAAAABBAOz/AAACAAAAAAA=")
+tile_map_data = PackedByteArray("AAD6//H/AAAFAAAAAAAGAO//AAADAAEAAAAAAOz/AAAAAAAAAAD//+3/AAAAAAEAAAAAAO3/AAABAAAAAAABAO3/AAABAAEAAAALAO//AQABAAAAAAArAO//AAABAAAAAAAYAOf/AAAAAAAAAAAYAOn/AAABAAAAAABOAO//AAACAAAAAABcAO//AAAAAAAAAAAGAPX/AAABAAMAAAAFAPX/AAAAAAMAAAAHAPX/AAACAAMAAACiAPH/AAAFAAAAAACMAOf/AAAAAAAAAACBAOT/AAACAAAAAAAjAO7/AAAAAAEAAAAkAOr/AQABAAAAAAAkAOz/AAAFAAEAAAAlAO7/AAABAAEAAABsAO//AQABAAAAAAA7AOr/AQAAAAAAAAA/AOr/AAAAAAEAAABAAOr/AAABAAEAAAA/AOz/AAAAAAAAAABAAOz/AAABAAAAAAA=")
 tile_set = ExtResource("102_fb2wd")
 
 [node name="Text" type="Control" parent="." unique_id=1104511368]
@@ -633,7 +633,9 @@ offset_left = 1812.0
 offset_top = -699.0
 offset_right = 1930.0
 offset_bottom = -676.0
-text = "Aim"
+text = "Hold     
+
+To  Aim"
 horizontal_alignment = 1
 vertical_alignment = 1
 
@@ -641,12 +643,26 @@ vertical_alignment = 1
 z_index = 29
 z_as_relative = false
 layout_mode = 0
-offset_left = 2131.0
-offset_top = -699.0
-offset_right = 2249.0
-offset_bottom = -676.0
-text = "Fine tune"
-horizontal_alignment = 1
+offset_left = 1952.0
+offset_top = -738.0
+offset_right = 2202.0
+offset_bottom = -610.0
+text = "Use 	           to 
+
+flip directions"
+vertical_alignment = 1
+
+[node name="Label22" type="Label" parent="Text" unique_id=1737368119]
+z_index = 29
+z_as_relative = false
+layout_mode = 0
+offset_left = 1952.0
+offset_top = -670.0
+offset_right = 2202.0
+offset_bottom = -542.0
+text = "And
+
+to fine tune angle"
 vertical_alignment = 1
 
 [node name="Label12" type="Label" parent="Text" unique_id=660920565]
@@ -690,10 +706,10 @@ vertical_alignment = 1
 z_index = 29
 z_as_relative = false
 layout_mode = 0
-offset_left = 3429.0
-offset_top = -582.0
-offset_right = 3547.0
-offset_bottom = -559.0
+offset_left = 3415.0
+offset_top = -581.0
+offset_right = 3533.0
+offset_bottom = -558.0
 text = "Jump"
 horizontal_alignment = 1
 vertical_alignment = 1
