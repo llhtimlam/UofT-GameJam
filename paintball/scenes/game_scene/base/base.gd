@@ -22,9 +22,9 @@ const MAX_HP: float = 40
 var hp: float = MAX_HP
 
 var is_harvesting: bool = false
-var SIPHON_AMOUNT: float = 0.4
+var SIPHON_AMOUNT: float = 0.8
 
-var REGEN_AMOUNT: float = 0.2
+var REGEN_AMOUNT: float = 0.5
 var REGEN_CD: float = 0.2
 var regen_timer : float = 0.0
 
