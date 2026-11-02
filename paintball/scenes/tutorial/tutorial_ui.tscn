@@ -3,6 +3,7 @@
 [ext_resource type="Script" uid="uid://b1ig2okrgdmev" path="res://scenes/tutorial/tutorial_ui.gd" id="1_5h3r2"]
 [ext_resource type="PackedScene" uid="uid://pa5m0tkkqu7f" path="res://scenes/tutorial/player/tutorial_map_p1.tscn" id="2_7aaay"]
 [ext_resource type="PackedScene" uid="uid://bispn0b063p0t" path="res://scenes/tutorial/player/tutorial_map_p2.tscn" id="3_7aaay"]
+[ext_resource type="AudioStream" uid="uid://cs4wjlvxvtn1p" path="res://assets/sounds/bgm/paintgame-drums.ogg" id="4_ug1mn"]
 
 [sub_resource type="Environment" id="Environment_6amc0"]
 background_mode = 3
@@ -28,6 +29,12 @@ glow_hdr_threshold = 0.4
 [node name="UI" type="CanvasLayer" unique_id=2008955717]
 follow_viewport_enabled = true
 script = ExtResource("1_5h3r2")
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="." unique_id=1670424828]
+stream = ExtResource("4_ug1mn")
+volume_db = 10.0
+autoplay = true
+parameters/looping = true
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=1182529437]
 environment = SubResource("Environment_6amc0")

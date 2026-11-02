@@ -1,6 +1,7 @@
 extends Area2D
 
 signal win_team(team_id: int)
+signal intense
 
 var TEAM_ID: int = 1
 var defender: CharacterBody2D
@@ -35,6 +36,8 @@ var INVADE_PERCENTAGE: = 0.3
 var LOSS_PERCENTAGE: = 0.05
 var OVERFLOWN_PERCENTAGE: = 0.7
 
+const MIN_INTENSE_SCORE = 75
+
 func _ready() -> void:
 	add_to_group("base")
 	if colorwheel:
@@ -55,6 +58,8 @@ func _physics_process(delta: float) -> void:
 func update_score(add_score: Vector3 = Vector3.ZERO) -> void:
 	var combined_score = score + add_score
 	score = combined_score
+	if min(score.x, score.y, score.z) > MIN_INTENSE_SCORE:
+		intense.emit()
 	if score == Vector3(255., 255., 255.) and is_harvesting:
 		win()
 	

@@ -72,7 +72,7 @@ const BUCKET_SCENE = preload("res://scenes/game_scene/paint_bucket/paint_bucket.
 
 # Audio
 @onready var melee: AudioStreamPlayer = $AudioController/Melee
-
+@onready var bgm: AudioStreamPlayer = $AudioController/Bgm
 
 func _ready() -> void:
 	# Player
@@ -163,6 +163,10 @@ func _ready() -> void:
 	# Debug
 	#await get_tree().create_timer(5.0).timeout
 	#p1_base_instance.win()
+	
+	# Music
+	p1_base_instance.intense.connect(bgm.intense)
+	p2_base_instance.intense.connect(bgm.intense)
 	
 func win(team_id: int):
 	turret.ai_enabled = false

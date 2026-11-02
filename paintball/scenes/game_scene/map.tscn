@@ -103,9 +103,12 @@
 [ext_resource type="PackedScene" uid="uid://u1ulorklcu5g" path="res://scenes/tutorial/entity/tutorial_player.tscn" id="100_x51vt"]
 [ext_resource type="Script" uid="uid://b0iohuh6rl7g5" path="res://scenes/game_scene/player/player.gd" id="101_x51vt"]
 [ext_resource type="AudioStream" uid="uid://16to76ukj1fv" path="res://assets/sounds/sfx/blackhole.ogg" id="102_4w5tc"]
-[ext_resource type="AudioStream" uid="uid://cpd3bhba5q3cn" path="res://assets/sounds/bgm/bgm1.ogg" id="103_um714"]
-[ext_resource type="AudioStream" uid="uid://dis4uk21v4xnq" path="res://assets/sounds/bgm/bgm2.ogg" id="104_x51vt"]
+[ext_resource type="AudioStream" uid="uid://0t7n0msponpk" path="res://assets/sounds/bgm/paintgame-1.ogg" id="104_um714"]
+[ext_resource type="AudioStream" uid="uid://d3qiswl1umd6d" path="res://assets/sounds/bgm/paintgame-2.ogg" id="105_pu1w6"]
 [ext_resource type="AudioStream" uid="uid://b363j5sswbq4i" path="res://assets/sounds/sfx/melee.ogg" id="105_um714"]
+[ext_resource type="AudioStream" uid="uid://hl0o1r7bm52b" path="res://assets/sounds/bgm/paintgame-3.ogg" id="106_4ji5y"]
+[ext_resource type="AudioStream" uid="uid://ndtodbri020" path="res://assets/sounds/bgm/paintgame-4.ogg" id="107_o45np"]
+[ext_resource type="Script" uid="uid://bqmjqsu8dvq71" path="res://scenes/game_scene/bgm.gd" id="108_u72jr"]
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_xrivr"]
 animations = [{
@@ -403,6 +406,33 @@ animations = [{
 "speed": 60.0
 }]
 
+[sub_resource type="AudioStreamInteractive" id="AudioStreamInteractive_bgvnt"]
+clip_count = 6
+clip_0/name = &"1"
+clip_0/stream = ExtResource("104_um714")
+clip_0/auto_advance = 1
+clip_0/next_clip = 1
+clip_1/name = &"2"
+clip_1/stream = ExtResource("105_pu1w6")
+clip_1/auto_advance = 1
+clip_1/next_clip = 2
+clip_2/name = &"d2"
+clip_2/stream = ExtResource("105_pu1w6")
+clip_2/auto_advance = 1
+clip_2/next_clip = 1
+clip_3/name = &"3"
+clip_3/stream = ExtResource("106_4ji5y")
+clip_3/auto_advance = 1
+clip_3/next_clip = 4
+clip_4/name = &"4"
+clip_4/stream = ExtResource("107_o45np")
+clip_4/auto_advance = 1
+clip_4/next_clip = 5
+clip_5/name = &"d4"
+clip_5/stream = ExtResource("107_o45np")
+clip_5/auto_advance = 1
+clip_5/next_clip = 4
+
 [node name="Map" type="Node2D" unique_id=1264092394 node_paths=PackedStringArray("PLAYER1", "PLAYER2")]
 script = ExtResource("1_2m4d5")
 PLAYER1 = NodePath("Player1")
@@ -604,16 +634,11 @@ volume_db = -22.336
 autoplay = true
 parameters/looping = true
 
-[node name="Bgm1" type="AudioStreamPlayer" parent="AudioController" unique_id=825704576]
-stream = ExtResource("103_um714")
-volume_db = -15.356
-pitch_scale = 0.81
-
-[node name="Bgm2" type="AudioStreamPlayer" parent="AudioController" unique_id=1058829138]
-stream = ExtResource("104_x51vt")
-volume_db = -10.819
+[node name="Bgm" type="AudioStreamPlayer" parent="AudioController" unique_id=825704576]
+stream = SubResource("AudioStreamInteractive_bgvnt")
+volume_db = 10.0
 autoplay = true
-parameters/looping = true
+script = ExtResource("108_u72jr")
 
 [node name="Melee" type="AudioStreamPlayer" parent="AudioController" unique_id=571261770]
 stream = ExtResource("105_um714")

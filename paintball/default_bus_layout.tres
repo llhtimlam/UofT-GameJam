@@ -13,7 +13,7 @@ spread = 0.0
 wet = 0.36
 
 [resource]
-bus/0/volume_db = 0.0694828
+bus/0/volume_db = -5.045384
 bus/0/effect/0/effect = SubResource("AudioEffectPitchShift_j3pel")
 bus/0/effect/0/enabled = false
 bus/0/effect/1/effect = SubResource("AudioEffectFilter_j3pel")
