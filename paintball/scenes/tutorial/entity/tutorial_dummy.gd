@@ -444,6 +444,7 @@ func _physics_process(delta: float) -> void:
 		take_damage(100,0,0)
 	
 func take_damage(amount: float, attacker_id: int, attacker_team: int) -> void:
+	$PlayerHit.play()
 	if is_dead:
 		return
 	if iframe > 0 and attacker_team != 0:
